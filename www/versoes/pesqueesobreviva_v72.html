@@ -1,0 +1,1783 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pesque e Sobreviva</title><meta name="description" content="Pesque e Sobreviva: jogo de pesca em mar aberto"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%234fe0cf'/><stop offset='1' stop-color='%23075174'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><path d='M6 46c6-4 10-4 16 0s10 4 16 0 10-4 16 0' fill='none' stroke='%23e8fff9' stroke-width='3' stroke-linecap='round'/><path d='M12 30c7-10 22-10 30 0-8 10-23 10-30 0z' fill='%23ffe08a'/><path d='M41 30l12-8v16z' fill='%23ffe08a'/><circle cx='20' cy='28' r='2.4' fill='%23062a3a'/><path d='M30 3v13a5 5 0 1 1-5 5' fill='none' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round'/></svg>">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#061e2d;color:#e8f8ff;font:14px system-ui,Arial;overflow:hidden}.app{height:100vh;display:flex;flex-direction:column}.top{flex:0 0 auto}.top{min-height:76px;height:auto;display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#092c40;border-bottom:1px solid #286076;gap:8px;flex-wrap:nowrap;overflow:visible}.stats{margin-left:auto;gap:10px;flex-wrap:nowrap}.stat{white-space:nowrap}.logo{white-space:nowrap}.settingsWrap{position:relative;flex:0 0 auto}.settingsMenu{display:none;position:absolute;right:0;top:42px;z-index:20;padding:8px;background:#082b3e;border:1px solid #54899a;border-radius:10px;box-shadow:0 8px 24px #001722aa;min-width:180px}.settingsMenu.open{display:grid;gap:6px}.settingsMenu .btn{white-space:nowrap}.logo{font-weight:900;font-size:20px}.logo span{color:#58e0d0}.stats{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.stat{font-size:12px;color:#acd0dd}.stat b{display:block;font-size:16px;color:white}.stat.moneyStat{background:linear-gradient(135deg,#244b3d,#183d3d);border:1px solid #d5b85d;border-radius:10px;padding:6px 13px;min-width:116px;box-shadow:0 0 14px #e4c45a33}.stat.moneyStat span{color:#ffe08a;font-weight:900;letter-spacing:.7px}.stat.moneyStat b{font-size:22px;color:#ffe58a;text-shadow:0 1px 8px #e8c65b55}.bar{height:6px;width:100px;background:#173e50;border-radius:9px;overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:#66e0a3}.bar.red i{background:#ff7777}.main{position:relative;flex:1;min-height:0;overflow:hidden;background:#087da3}canvas{width:100%;height:100%;display:block;cursor:crosshair}.panel{position:absolute;background:#062638df;border:1px solid #4c8799;border-radius:12px;padding:11px;box-shadow:0 8px 24px #00172266;backdrop-filter:blur(5px)}.lefttop{left:12px;top:12px;width:205px}.righttop{right:12px;top:12px;width:205px}.leftbottom{left:12px;bottom:12px;width:265px}.radarPanel{left:12px;top:190px;bottom:auto;width:214px;padding:9px;z-index:8}.radarPanel h3{margin:0 0 5px;font-size:13px}.radarPanel canvas{width:194px;height:146px;border-radius:8px;background:#052638;display:block}.radarLegend{display:flex;justify-content:space-between;font-size:10px;color:#b9d7df;margin-top:5px}.radarLegend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}.rightbottom{right:12px;bottom:12px;width:220px}.settingsCard{width:154px;height:42px;overflow:hidden;padding:0;z-index:24;transition:width .22s ease,height .22s ease,box-shadow .22s ease}.settingsCard:hover,.settingsCard:focus-within{width:258px;height:auto;max-height:min(78vh,620px);overflow-y:auto;padding:11px;box-shadow:0 12px 34px #00121ddd}.settingsHeading{height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 11px;font-weight:900;color:#ffe08a;white-space:nowrap;cursor:default}.settingsCard:hover .settingsHeading,.settingsCard:focus-within .settingsHeading{height:26px;padding:0 0 6px;border-bottom:1px solid #47788a;margin-bottom:8px}.settingsChevron{font-size:16px;color:#8edbd6;transition:transform .2s}.settingsCard:hover .settingsChevron,.settingsCard:focus-within .settingsChevron{transform:rotate(180deg)}.settingsContent{opacity:0;pointer-events:none;transition:opacity .15s}.settingsCard:hover .settingsContent,.settingsCard:focus-within .settingsContent{opacity:1;pointer-events:auto}.settingsContent h3{margin:8px 0;font-size:13px}.settingsContent .actions{margin:5px 0}.settingsContent .btn{font-size:11px;padding:7px 8px}.panel h3{margin:0 0 8px;font-size:14px}.muted{color:#a9cbd7;font-size:12px}.money{color:#ffdc71;font-size:20px;font-weight:900}.row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0}.btn{background:#4fe0cf;color:#062a3a;border:0;border-radius:8px;padding:8px 10px;font-weight:800;cursor:pointer}.btn:hover{filter:brightness(1.08)}.btn.secondary{background:#d8eaf1}.btn.gold{background:#ffdc71}.btn.red{background:#ff8888}.btn:disabled{opacity:.4;cursor:not-allowed}.actions{display:flex;gap:6px;flex-wrap:wrap}.baitChoices{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:7px 0}.baitChoice{border:1px solid #47788a;background:#0a3348;color:#e8f8ff;border-radius:9px;padding:7px 3px;cursor:pointer;font-size:19px;line-height:1.1;min-width:0}.baitChoice small{display:block;font-size:9px;color:#b9d7df;margin-top:4px}.baitChoice.active{border:2px solid #ffe08a;background:#285344;box-shadow:0 0 10px #ffe08a55}.baitChoice:focus-visible{outline:2px solid #fff;outline-offset:2px}.legend{display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:12px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}.equipment{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.eq{padding:7px 5px;background:#0a3348;border-radius:8px;text-align:center;font-size:11px}.eq strong{display:block;font-size:12px}.eq .bar{width:100%;margin-top:5px}.feed{position:absolute;left:50%;top:14px;transform:translateX(-50%);background:#031d2df0;border:1px solid #79e8df;padding:10px 17px;border-radius:11px;max-width:62%;text-align:center;pointer-events:none;color:#f2ffff;font-weight:800;font-size:14px;box-shadow:0 5px 18px #00172299;z-index:12}.bottomrow{display:flex;gap:8px;align-items:center;justify-content:space-between}.key{background:#e4f2f6;color:#123546;border-radius:4px;padding:2px 6px;font-weight:900;display:inline-block;min-width:22px;text-align:center}.toast{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);padding:15px 22px;border-radius:14px;background:linear-gradient(135deg,#062638f5,#0b4055f5);border:2px solid #ffe08a;box-shadow:0 8px 30px #00121ddd,0 0 22px #ffe08a55;color:#fff4c7;font-size:17px;font-weight:900;line-height:1.35;display:none;max-width:min(780px,88%);text-align:center;z-index:30;text-shadow:0 2px 4px #00131c}.modal{position:absolute;inset:0;background:#001521b8;display:none;align-items:center;justify-content:center;padding:15px}.modalbox{background:#0a3044;border:1px solid #5b9aaa;border-radius:15px;padding:18px;width:min(520px,95vw);max-height:85%;overflow:auto}.modalbox h2{margin-top:0}.shopitem{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #285064}.shopitem small{display:block;color:#a9cbd7}.shopitem.critical{background:#4a242b;border:1px solid #ff7777;border-radius:8px;padding:10px;margin:5px 0}.shopitem.warning{background:#493b20;border:1px solid #ffcf67;border-radius:8px;padding:10px;margin:5px 0}.status{display:inline-block;border-radius:5px;padding:2px 5px;font-size:11px;font-weight:900;margin-top:4px}.status.bad{background:#ff7777;color:#301016}.status.warn{background:#ffcf67;color:#332607}.status.good{background:#74e1a4;color:#08291a}.catch{background:#0b394c;padding:8px;border-radius:8px;margin:6px 0}.depthnote{font-size:11px;color:#b2d4e0;margin-top:6px}@media(max-width:900px){.top{flex-wrap:wrap;justify-content:flex-start}.stats{margin-left:0;flex-wrap:wrap}.logo{margin-right:auto}}@media(max-width:720px){.radarPanel{left:8px;top:190px;bottom:auto;width:174px;padding:7px}.radarPanel canvas{width:158px;height:118px}.radarPanel h3{font-size:11px}.radarLegend{font-size:9px}.top{height:auto;min-height:64px}.logo{font-size:16px}.stats{gap:8px}.lefttop{width:155px}.righttop{width:145px}.leftbottom{width:220px}.rightbottom{width:154px}.settingsCard:hover,.settingsCard:focus-within{width:min(258px,92vw)}.panel{padding:8px}.feed{top:160px;max-width:90%}.equipment{grid-template-columns:repeat(2,1fr)}.stat b{font-size:13px}.bar{width:75px}}@media(max-height:570px){.leftbottom{display:none}.rightbottom{bottom:8px}.settingsCard{height:42px}.panel h3{margin-bottom:4px}}
+/* v67: HUD enxuto, botão de ação, joystick, coleção e animações */
+.radarPanel{top:12px}.radarPanel .radarLegend{flex-wrap:wrap;gap:3px 8px;justify-content:flex-start}.radarPanel .row{margin:4px 0;font-size:12px}
+.righttop{width:232px;max-height:calc(100% - 80px);overflow-y:auto}
+.baitChoice em{display:block;font-style:normal;font-size:10px;color:#ffe08a;font-weight:800;margin-top:2px}
+.baitChoice.empty{opacity:.45}
+.missions{margin-top:9px;border-top:1px solid #2d5f72;padding-top:7px}
+.mission{display:flex;justify-content:space-between;gap:6px;font-size:11px;color:#cfe7ee;padding:3px 0;border-bottom:1px dashed #1f4a5c}
+.mission b{color:#ffe08a;white-space:nowrap}.mission .prog{color:#8ff0c8;white-space:nowrap;font-weight:800}
+.leftbottom{width:auto;padding:8px}.leftbottom h3{margin-bottom:5px}
+.equipment{grid-template-columns:repeat(4,74px)}.eq{padding:5px 4px}
+.toast.pop{animation:toastPop .25s ease}
+@keyframes toastPop{from{transform:translateX(-50%) translateY(10px);opacity:.3}to{transform:translateX(-50%);opacity:1}}
+.actionBtn{position:absolute;right:18px;bottom:66px;width:86px;height:86px;border-radius:50%;border:3px solid #ffe08a;background:radial-gradient(circle at 35% 30%,#ffe9a8,#e0a93a);color:#3a2306;font-weight:900;font-size:12px;line-height:1.1;display:none;z-index:26;box-shadow:0 6px 20px #0009;touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer;padding:0}
+.actionBtn.show{display:flex;align-items:center;justify-content:center;flex-direction:column}
+.actionBtn span{font-size:26px;line-height:1}
+.actionBtn.bite{animation:pulse .45s infinite alternate;background:radial-gradient(circle at 35% 30%,#fff2b8,#ff9f43)}
+.actionBtn.fight{background:radial-gradient(circle at 35% 30%,#c9fff4,#33c6b4);border-color:#e9fff9;color:#05302a}
+.actionBtn.held{transform:scale(.93);filter:brightness(1.12)}
+@keyframes pulse{to{transform:scale(1.09);box-shadow:0 0 28px #ffcf67}}
+.joy{position:absolute;left:18px;bottom:18px;width:130px;height:130px;border-radius:50%;background:#ffffff18;border:2px solid #ffffff44;display:none;z-index:25;touch-action:none}
+.joy i{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:#e8f8ffcc;box-shadow:0 2px 10px #0007}
+@media (pointer:coarse){.joy{display:block}.leftbottom{display:none}}
+.collection{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.specCard{background:#0b394c;border-radius:9px;padding:9px;font-size:12px;color:#cfe7ee}
+.specCard b{display:block;font-size:14px;color:#fff;margin:3px 0}.specCard.unknown{opacity:.6}.specCard .big{font-size:24px}
+.tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:9px;background:#164d63;color:#a9e6ee;margin-top:4px}
+.modalbox h3{margin:16px 0 4px;color:#ffe08a}
+/* Guia de primeira vez (onboarding) */
+.ob{position:fixed;inset:0;z-index:100;display:none}.ob.on{display:block}
+.obHole{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px rgba(1,14,24,.74),0 0 0 3px #ffe08a,0 0 26px 6px rgba(255,224,138,.45);transition:all .35s ease;pointer-events:none}
+.obHole.none{width:0!important;height:0!important;left:50%!important;top:50%!important;box-shadow:0 0 0 9999px rgba(1,14,24,.74)}
+.obCard{position:fixed;left:50%;top:50%;width:min(370px,calc(100vw - 24px));background:linear-gradient(160deg,#0c3a50,#082a3b);border:2px solid #ffe08a;border-radius:16px;padding:16px 16px 12px;color:#e8f8ff;box-shadow:0 14px 40px #000a;transition:left .35s ease,top .35s ease;animation:obIn .3s ease}
+@keyframes obIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.obStep{font-size:11px;font-weight:800;color:#8edbd6;letter-spacing:.6px;text-transform:uppercase}
+.obCard h2{margin:4px 0 8px;font-size:19px;color:#ffe08a}
+.obCard p{margin:6px 0;line-height:1.45;font-size:13.5px;color:#d7eef5}
+.obCard .key{margin:0 1px}
+.obMock{margin:10px 0 4px;padding:10px;border-radius:10px;background:#062638;border:1px solid #2d5f72}
+.obNav{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.obDots{display:flex;gap:4px;flex-basis:100%;margin-bottom:2px}.obNav .obSkip{margin-right:auto}.obNav .btn.gold{margin-left:auto}.obNav .obSkip~.btn.gold,.obNav .btn.secondary~.btn.gold{margin-left:0}.obDots i{width:7px;height:7px;border-radius:50%;background:#2d5f72}.obDots i.on{background:#ffe08a}
+.obSkip{background:none;border:0;color:#9cc3cf;font-size:12px;cursor:pointer;text-decoration:underline;padding:4px}
+.obBar{height:12px;border-radius:6px;background:#0b3447;overflow:hidden;position:relative}
+.obBar i{position:absolute;left:0;top:0;bottom:0;width:30%;background:linear-gradient(90deg,#5fe0a0,#ffd36b 60%,#ff4f4f);background-size:300px 100%;animation:obTension 3.2s ease-in-out infinite}
+@keyframes obTension{0%{width:25%}45%{width:90%}55%{width:90%}100%{width:25%}}
+.obLabel{display:flex;justify-content:space-between;font-size:11px;margin-top:6px}
+.obLabel b.hold{animation:obHold 3.2s infinite}.obLabel b.rel{animation:obRel 3.2s infinite}
+@keyframes obHold{0%,44%{color:#5fe0a0}50%,100%{color:#46606b}}
+@keyframes obRel{0%,44%{color:#46606b}50%,100%{color:#ff7b7b}}
+.obBob{font-size:28px;text-align:center}.obBob span{display:inline-block;animation:obBob .9s ease-in-out infinite}
+@keyframes obBob{50%{transform:translateY(7px)}}
+@media(max-width:600px){.obCard{left:12px!important;right:12px;top:auto!important;bottom:12px;width:auto}}
+.foot{flex:0 0 auto;display:flex;justify-content:space-between;gap:10px;padding:3px 14px;font-size:11px;color:#8fb8c6;background:#072636;border-top:1px solid #1d4a5c}
+.foot a{color:#8edbd6;text-decoration:none;font-weight:700}.foot a:hover{color:#ffe08a;text-decoration:underline}.foot b{color:#e8f8ff}
+@media(max-width:720px){.foot{flex-wrap:wrap;justify-content:center}}
+/* v72: cartões de missão */
+.mission{display:block;padding:6px 7px;margin:5px 0;border-radius:8px;background:#0a3348;border:1px solid #1f4a5c}
+.mission .mHead{display:flex;justify-content:space-between;gap:6px;font-size:10px;color:#8edbd6;font-weight:700}
+.mission .mHead em{font-style:normal;background:#ffe08a;color:#3a2a00;border-radius:6px;padding:0 5px;font-weight:900}
+.mission .mBody{display:flex;justify-content:space-between;gap:6px;font-size:11.5px;color:#e8f8ff;margin-top:2px}
+.mission .mBody b{color:#ffe08a;white-space:nowrap}
+.mission .mBar{height:4px;border-radius:3px;background:#06283a;margin-top:4px;overflow:hidden}.mission .mBar i{display:block;height:100%;background:#5fe0a0}
+.mission .mProg{font-size:10px;color:#8ff0c8;margin-top:2px;text-align:right;font-weight:800}
+.mission.done{background:#1e4a33;border-color:#5fe0a0}.mission.done .mBody b{color:#8ff0c8}
+.mission.new{border-color:#ffe08a;box-shadow:0 0 10px #ffe08a44}
+/* v72: abertura animada e perfis */
+.splash{position:fixed;inset:0;z-index:200;background:#020d18;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease;padding:16px}
+.splash.hide{opacity:0;pointer-events:none}
+.splash canvas{position:absolute;inset:0;width:100%;height:100%}
+.spTitle{position:relative;text-align:center;pointer-events:none;transition:transform .8s ease;transform-origin:center bottom}
+.splash.panel .spTitle{transform:scale(.6)}
+.spLine1,.spLine2{font-weight:900;letter-spacing:.06em;line-height:1;white-space:nowrap}
+.spLine1{font-size:clamp(46px,11vw,128px);color:#f6fffb;text-shadow:0 4px 0 #0b5d74,0 8px 0 #073f52,0 14px 30px #000a}
+.spLine2{font-size:clamp(26px,6vw,64px);color:#ffe08a;text-shadow:0 3px 0 #8a5a12,0 10px 24px #000a;margin-top:.15em}
+.spTitle span{display:inline-block;opacity:0;animation:spDrop .75s cubic-bezier(.2,1.5,.4,1) forwards,spWave 3.2s ease-in-out infinite;animation-delay:var(--d),calc(var(--d) + .9s)}
+@keyframes spDrop{from{opacity:0;transform:translateY(-90px) rotate(-14deg) scale(.5)}to{opacity:1;transform:none}}
+@keyframes spWave{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.spTag{margin-top:14px;font-size:clamp(11px,1.7vw,16px);color:#9fd6e6;letter-spacing:.3em;text-transform:uppercase;opacity:0;animation:spFade 1s 1.9s forwards}
+@keyframes spFade{to{opacity:1}}
+.spHint{position:absolute;bottom:11vh;color:#e8f8ff;font-weight:800;letter-spacing:.14em;font-size:14px;text-transform:uppercase;opacity:0;animation:spFade .8s 2.6s forwards,spPulse 1.6s 3.4s ease-in-out infinite}
+@keyframes spPulse{50%{opacity:.3}}
+.splash.panel .spHint{display:none}
+.spPanel{position:relative;display:none;width:min(560px,100%);max-height:58vh;overflow:auto;margin-top:6px;padding:16px;border-radius:18px;background:rgba(4,30,44,.85);border:1px solid #3d7f93;box-shadow:0 18px 50px #000b;backdrop-filter:blur(6px);color:#e8f8ff}
+.splash.panel .spPanel{display:block;animation:spUp .5s ease}
+@keyframes spUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.spPanel h3{margin:0 0 10px;color:#ffe08a;font-size:17px}
+.spPanel p{margin:6px 0;line-height:1.45}
+.spList{display:grid;gap:8px}
+.spRow{display:flex;gap:8px;align-items:center}
+.spCard{flex:1;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:#0a3348;border:1px solid #2d5f72;cursor:pointer;transition:transform .15s,border-color .15s;text-align:left;color:#e8f8ff;font:inherit;min-width:0}
+.spCard:hover,.spCard:focus-visible{border-color:#ffe08a;transform:translateY(-2px);outline:none}
+.spAv{font-size:28px;width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border-radius:50%;background:#062638}
+.spInfo{flex:1;min-width:0}.spInfo b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.spInfo small{color:#9cc3cf;font-size:11.5px}
+.spPlay{color:#ffe08a;font-weight:900;font-size:18px}
+.spDel{background:none;border:1px solid #6a2f38;color:#ff9a9a;border-radius:10px;padding:10px;cursor:pointer;font-size:16px;align-self:stretch}
+.spDel:hover,.spDel:focus-visible{background:#4a242b}
+.spNew{margin-top:10px;width:100%;padding:11px}
+.spForm{display:grid;gap:10px}
+.spForm input{padding:11px;border-radius:10px;border:1px solid #47788a;background:#062638;color:#fff;font:inherit;font-size:16px}
+.spAvatars{display:flex;flex-wrap:wrap;gap:6px}.spAvatars button{font-size:22px;width:44px;height:44px;border-radius:10px;border:1px solid #2d5f72;background:#0a3348;cursor:pointer}.spAvatars button.on{border:2px solid #ffe08a;background:#285344}
+.spErr{color:#ff9a9a;font-size:12px;min-height:15px}
+.spVer{position:absolute;bottom:10px;right:14px;font-size:11px;color:#6f98a6}
+.spSkip{position:absolute;top:14px;right:16px;color:#9fd6e6;font-size:12px;opacity:.7}
+.splash.panel .spSkip{display:none}
+@media(max-width:720px){.righttop{width:172px}.baitChoice{font-size:15px}.baitChoice small{display:none}.actionBtn{width:74px;height:74px;bottom:60px}.equipment{grid-template-columns:repeat(2,74px)}.radarPanel .row{font-size:10px}}
+</style></head><body><div class="app">
+<header class="top"><div class="logo">🎣 PESQUE <span>E SOBREVIVA</span></div><div class="stats"><div class="stat moneyStat"><span>💰 SEU DINHEIRO</span><b id="money">R$ 500</b></div><div class="stat">BARCO <b id="hullText">230 / 250</b><div class="bar red"><i id="hullBar" style="width:92%"></i></div></div><div class="stat">PROFUNDIDADE<b id="depth">Águas rasas</b></div><div class="stat">PORÃO<b id="fishCount">0 / 8</b></div><div class="stat">ISCA<b id="baitName">Sardinha × 12</b></div></div></header>
+<main class="main" id="main"><canvas id="game"></canvas>
+<div class="panel radarPanel"><h3>📡 Radar marítimo</h3><canvas id="radar" width="388" height="292"></canvas><div class="radarLegend"><span><i style="background:#ffe08a"></i>Ilha</span><span><i style="background:#ff6262"></i>Peixes &gt;100 kg</span><span><i style="background:#fff"></i>Barco</span><span><i style="background:#ffd34d"></i>Missão</span></div><div class="row"><span class="muted">Velocidade</span><b id="speed">0 km/h</b></div><div class="row"><span class="muted">Alcance da linha</span><b id="rangeText">180 m</b></div><div class="bar" style="width:100%"><i id="rangeBar" style="width:45%"></i></div></div>
+<div class="panel righttop"><h3>🦐 Escolha a isca</h3><div class="baitChoices" id="baitChoices"><button class="baitChoice active" title="Sardinha" aria-label="Selecionar sardinha" onclick="changeBait(0)">🐟<small>Sardinha</small><em id="bc0">× 12</em></button><button class="baitChoice" title="Camarão" aria-label="Selecionar camarão" onclick="changeBait(1)">🦐<small>Camarão</small><em id="bc1">× 6</em></button><button class="baitChoice" title="Lula" aria-label="Selecionar lula" onclick="changeBait(2)">🦑<small>Lula</small><em id="bc2">× 0</em></button><button class="baitChoice" title="Artificial" aria-label="Selecionar isca artificial" onclick="changeBait(3)">🎣<small>Artificial</small><em id="bc3">× 0</em></button></div><div class="actions"><button class="btn secondary" onclick="showBag()">🐟 Porão</button><button class="btn secondary" onclick="showCollection()">📖 Coleção</button></div><div class="missions"><h3 style="margin:0 0 4px;font-size:13px">🎯 Missões</h3><div id="missionList"></div></div><div class="depthnote">Peixes raros vivem longe da ilha. De longe você só vê as sombras deles.</div></div>
+<div class="panel leftbottom"><h3>🧰 Equipamentos</h3><div class="equipment" id="equipment"></div></div>
+<button class="actionBtn" id="actionBtn" aria-label="Ação de pesca"><span>🎣</span><small id="actionLabel">Fisgar</small></button>
+<div class="joy" id="joy" aria-hidden="true"><i id="joyKnob"></i></div>
+<div class="panel rightbottom settingsCard" id="settingsCard">
+<div class="settingsHeading"><span>⚙ Configurações</span><span class="settingsChevron">⌃</span></div>
+<div class="settingsContent">
+<h3>🎮 Controles</h3>
+<div class="row"><span><span class="key">↑</span> <span class="key">↓</span> <span class="key">←</span> <span class="key">→</span> / <span class="key">WASD</span></span><span class="muted">Pilotar</span></div>
+<div class="row"><span class="key">Clique</span><span class="muted">Arremessar no ponto</span></div>
+<div class="row"><span><span class="key">E</span> <span class="key">Espaço</span></span><span class="muted">Fisgar / segurar para puxar</span></div>
+<div class="row"><span class="key">Segurar clique</span><span class="muted">Puxar durante a briga</span></div>
+<div class="row"><span class="key">R</span><span class="muted">Alternar isca</span></div>
+<div class="row"><span class="key">Esc</span><span class="muted">Menu</span></div>
+<h3>🔊 Áudio</h3>
+<div class="actions"><button id="soundToggle" class="btn secondary" onclick="toggleSound()">🔊 Som ligado</button><button id="musicToggle" class="btn secondary" onclick="toggleMusic()">♫ Música ligada</button><button id="waterToggle" class="btn secondary" onclick="toggleWater()">≈ Água ligada</button><button id="engineToggle" class="btn secondary" onclick="toggleEngine()">🛥 Motor ligado</button></div>
+<h3>💾 Jogo</h3>
+<div class="actions"><button class="btn secondary" onclick="saveGame()">Salvar</button><button class="btn secondary" onclick="loadGame()">Carregar</button><button class="btn red" onclick="restartGame()">Reiniciar</button><button class="btn gold" onclick="startOnboarding()">📘 Guia</button></div>
+<div class="actions" style="margin-top:8px"><button class="btn gold" onclick="openMenu()">☰ Menu</button><button class="btn secondary" onclick="dock()">⚓ Atracar</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal"><div class="modalbox" id="modalbox"></div></div>
+</main>
+<footer class="foot"><span>🎣 Pesque e Sobreviva · <b id="profileName"></b></span><span><a href="https://pesque-e-sobreviva.serverfrontend.workers.dev/" target="_blank" rel="noopener">☁ Jogar online (Cloudflare)</a> · <a id="repoLink" href="https://github.com/joaoluispoffo/pesque-e-sobreviva" target="_blank" rel="noopener">@joaoluispoffo/pesque-e-sobreviva</a></span><span id="gameVersion"></span></footer></div>
+<div id="splash" class="splash" role="dialog" aria-label="Abertura do jogo"><canvas id="splashCanvas"></canvas><div class="spSkip">Clique para pular</div><div class="spTitle" id="spTitle"></div><div class="spHint">Toque ou clique para começar</div><div class="spPanel" id="spPanel"></div><div class="spVer" id="spVer"></div></div>
+<script>
+const GAME_VERSION='v72';document.getElementById('gameVersion').textContent='versão '+GAME_VERSION;
+const canvas=document.getElementById('game');let ctx=canvas.getContext('2d');let W=1000,H=700,scale=1;
+const world={w:4800,h:3600,island:{x:2400,y:1800,rx:205,ry:140},boat:{x:2700,y:2040,vx:0,vy:0,angle:.3},target:null,line:null};
+// lenK: fator de comprimento (cm) em relação à raiz cúbica do peso.
+const species=[
+{name:'Piava',baitPref:[60, 40, 20, 80],color:'#e8d9a1',min:.2,max:2.5,rarity:42,depth:0,price:12,lenK:38,emoji:'🐟'},
+{name:'Tilápia',baitPref:[20, 40, 60, 80],color:'#c5d6cf',min:.3,max:4,rarity:36,depth:0,price:11,lenK:30,emoji:'🐠'},
+{name:'Traíra',baitPref:[40, 60, 80, 20],color:'#6b9c70',min:.5,max:8,rarity:25,depth:1,price:20,lenK:42,emoji:'🐟'},
+{name:'Bagre',baitPref:[60, 80, 40, 20],color:'#8c9bb2',min:1,max:15,rarity:20,depth:1,price:22,lenK:40,emoji:'🐟'},
+{name:'Dourado',baitPref:[40, 20, 60, 80],color:'#f4bd43',min:2,max:30,rarity:13,depth:1,price:38,lenK:42,emoji:'🐠'},
+{name:'Enguia elétrica',baitPref:[20, 40, 80, 60],color:'#9f7de0',min:5,max:70,rarity:7,depth:2,price:62,attack:1,lenK:62,emoji:'⚡'},
+{name:'Tubarão',baitPref:[80, 60, 40, 20],color:'#829bac',min:15,max:250,rarity:4,depth:2,price:80,attack:2,lenK:48,emoji:'🦈'},
+{name:'Sea Beast',baitPref:[20, 40, 80, 60],color:'#644a9e',min:100,max:1200,rarity:1,depth:3,price:220,attack:3,lenK:125,emoji:'🐉'}
+];
+let fish=[],game,keys={},last=0,islandCache=null;
+// ===================== Áudio (v69) =====================
+// Mixagem: efeitos, música, ambiente e motor → master → compressor → saída, com reverb curto de ambiente aberto.
+let audioCtx=null,soundEnabled=true,musicEnabled=true,musicStarted=false,musicTimer=null,musicNodes=[],waterEnabled=true,engineEnabled=true;
+let bus=null,noiseBuf=null,brownBuf=null,amb=null,engine=null,audioTick=0,slapTimer=0,gullTimer=6000;
+function audioReady(){
+ if(!soundEnabled)return null;
+ try{
+   const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
+   if(!audioCtx){audioCtx=new AC();buildAudioGraph()}
+   if(audioCtx.state==='suspended')audioCtx.resume();
+   if(musicEnabled)startAmbientMusic();if(waterEnabled)startWaterAmbience();if(engineEnabled&&gameStarted)startEngine();
+   return audioCtx;
+ }catch(e){return null}
+}
+function buildAudioGraph(){
+ const ac=audioCtx,master=ac.createGain(),comp=ac.createDynamicsCompressor();master.gain.value=.9;
+ comp.threshold.value=-18;comp.knee.value=12;comp.ratio.value=3;comp.attack.value=.005;comp.release.value=.2;
+ master.connect(comp);comp.connect(ac.destination);
+ const sfx=ac.createGain(),music=ac.createGain(),ambG=ac.createGain(),eng=ac.createGain();
+ const verb=ac.createConvolver(),len=Math.floor(ac.sampleRate*1.6),ir=ac.createBuffer(2,len,ac.sampleRate);
+ for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3)}
+ verb.buffer=ir;const verbG=ac.createGain();verbG.gain.value=.16;verb.connect(verbG);verbG.connect(master);
+ for(const g of [sfx,music,ambG,eng])g.connect(master);
+ sfx.connect(verb);music.connect(verb);
+ bus={master,sfx,music,amb:ambG,eng,verb};
+ // Ruídos pré-gerados e reaproveitados (branco e marrom/grave).
+ const n=ac.sampleRate*2;noiseBuf=ac.createBuffer(1,n,ac.sampleRate);brownBuf=ac.createBuffer(1,n,ac.sampleRate);
+ const w=noiseBuf.getChannelData(0),br=brownBuf.getChannelData(0);let last=0;
+ for(let i=0;i<n;i++){w[i]=Math.random()*2-1;last=(last+.02*w[i])/1.02;br[i]=last*3.5}
+}
+function noiseSrc(brown){const s=audioCtx.createBufferSource();s.buffer=brown?brownBuf:noiseBuf;s.loop=true;return s}
+// Rajada de ruído filtrado: base de respingos, cliques de molinete, vento, batidas de onda.
+function noiseBurst({dur=.2,type='bandpass',f0=1000,f1=null,q=1,vol=.1,attack=.005,brown=false,when=0,dest=null}={}){
+ if(!audioCtx||!bus)return;const ac=audioCtx,now=ac.currentTime+when,src=noiseSrc(brown),flt=ac.createBiquadFilter(),g=ac.createGain();
+ flt.type=type;flt.frequency.setValueAtTime(f0,now);if(f1)flt.frequency.exponentialRampToValueAtTime(f1,now+dur);flt.Q.value=q;
+ g.gain.setValueAtTime(.0001,now);g.gain.linearRampToValueAtTime(vol,now+attack);g.gain.exponentialRampToValueAtTime(.0001,now+dur);
+ src.connect(flt);flt.connect(g);g.connect(dest||bus.sfx);src.start(now,Math.random()*1.5);src.stop(now+dur+.05);
+}
+function tone(freq,duration,type='sine',volume=.045,slide=0,when=0,dest=null){
+ const ac=audioReady();if(!ac)return;const osc=ac.createOscillator(),gain=ac.createGain(),now=ac.currentTime+when;
+ osc.type=type;osc.frequency.setValueAtTime(freq,now);if(slide)osc.frequency.exponentialRampToValueAtTime(Math.max(30,freq+slide),now+duration);
+ gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(volume,now+.012);gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
+ osc.connect(gain);gain.connect(dest||bus.sfx);osc.start(now);osc.stop(now+duration+.03);
+}
+function startAmbientMusic(){
+ if(!musicEnabled||!audioCtx||musicStarted)return;
+ musicStarted=true;
+ const chords=[[196,246.94,293.66],[174.61,220,261.63],[146.83,196,246.94],[164.81,207.65,246.94]];
+ let step=0;
+ function playChord(){
+  if(!musicEnabled||!audioCtx){musicStarted=false;return}
+  const now=audioCtx.currentTime,notes=chords[step%chords.length],group=[];
+  notes.forEach((hz,i)=>{
+   const osc=audioCtx.createOscillator(),gain=audioCtx.createGain(),filter=audioCtx.createBiquadFilter();
+   osc.type=i===0?'sine':'triangle';osc.frequency.value=hz;
+   filter.type='lowpass';filter.frequency.value=650;filter.Q.value=.35;
+   gain.gain.setValueAtTime(.0001,now);gain.gain.linearRampToValueAtTime(i===0?.016:.01,now+2.8);gain.gain.setValueAtTime(i===0?.016:.01,now+7.1);gain.gain.exponentialRampToValueAtTime(.0001,now+9.5);
+   osc.connect(filter);filter.connect(gain);gain.connect(bus.music);osc.start(now);osc.stop(now+9.6);group.push(osc);
+  });
+  musicNodes=group;step++;musicTimer=setTimeout(playChord,8500);
+ }
+ playChord();
+}
+function stopAmbientMusic(){musicEnabled=false;musicStarted=false;if(musicTimer)clearTimeout(musicTimer);musicTimer=null;musicNodes.forEach(n=>{try{n.stop()}catch(e){}});musicNodes=[]}
+function toggleMusic(){musicEnabled=!musicEnabled;const b=document.getElementById('musicToggle');if(b)b.textContent=musicEnabled?'♫ Música ligada':'♫ Música desligada';if(musicEnabled){audioReady();startAmbientMusic()}else stopAmbientMusic()}
+// Mar ao fundo: grave contínuo + "lavado" que sobe e desce como ondas; água no casco conforme a velocidade.
+function startWaterAmbience(){
+ if(!waterEnabled||!audioCtx||amb)return;const ac=audioCtx,now=ac.currentTime,g=()=>{const x=ac.createGain();x.gain.value=.0001;return x};
+ const low=noiseSrc(true),lowF=ac.createBiquadFilter(),lowG=g();lowF.type='lowpass';lowF.frequency.value=380;
+ const wash=noiseSrc(false),washF=ac.createBiquadFilter(),washG=g();washF.type='bandpass';washF.frequency.value=700;washF.Q.value=.6;
+ const lfo=ac.createOscillator(),lfoG=ac.createGain();lfo.frequency.value=.11;lfoG.gain.value=.009;lfo.connect(lfoG);lfoG.connect(washG.gain);
+ const lfo2=ac.createOscillator(),lfo2G=ac.createGain();lfo2.frequency.value=.07;lfo2G.gain.value=250;lfo2.connect(lfo2G);lfo2G.connect(washF.frequency);
+ const spr=noiseSrc(false),sprF=ac.createBiquadFilter(),spray=g();sprF.type='bandpass';sprF.frequency.value=2300;sprF.Q.value=.7;
+ const rum=noiseSrc(true),rumF=ac.createBiquadFilter(),rumble=g();rumF.type='lowpass';rumF.frequency.value=260;
+ low.connect(lowF);lowF.connect(lowG);wash.connect(washF);washF.connect(washG);spr.connect(sprF);sprF.connect(spray);rum.connect(rumF);rumF.connect(rumble);
+ for(const x of [lowG,washG,spray,rumble])x.connect(bus.amb);
+ for(const x of [low,wash,lfo,lfo2,spr,rum])x.start(now);
+ lowG.gain.setTargetAtTime(.05,now,1.5);washG.gain.setTargetAtTime(.011,now,1.5);
+ amb={nodes:[low,wash,lfo,lfo2,spr,rum],lowG,washG,spray,rumble};
+}
+function stopWaterAmbience(){waterEnabled=false;if(!amb||!audioCtx){amb=null;return}const t=audioCtx.currentTime,a=amb;amb=null;[a.lowG,a.washG,a.spray,a.rumble].forEach(x=>x.gain.setTargetAtTime(.0001,t,.25));setTimeout(()=>a.nodes.forEach(n=>{try{n.stop()}catch(e){}}),1500)}
+function toggleWater(){waterEnabled=!waterEnabled;const b=document.getElementById('waterToggle');if(b)b.textContent=waterEnabled?'≈ Água ligada':'≈ Água desligada';if(waterEnabled){audioReady();startWaterAmbience()}else stopWaterAmbience()}
+// Motor de popa: dente-de-serra + harmônicos, pulsos de combustão (modulação de volume) e chiado da hélice.
+function startEngine(){
+ if(!engineEnabled||!audioCtx||engine)return;const ac=audioCtx,now=ac.currentTime;
+ const out=ac.createGain();out.gain.value=.0001;out.connect(bus.eng);
+ const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=420;lp.Q.value=1.2;lp.connect(out);
+ const am=ac.createGain();am.gain.value=.6;am.connect(lp);
+ const o1=ac.createOscillator();o1.type='sawtooth';o1.frequency.value=42;o1.connect(am);
+ const o2=ac.createOscillator(),o2g=ac.createGain();o2.type='square';o2.frequency.value=85;o2g.gain.value=.3;o2.connect(o2g);o2g.connect(am);
+ const o3=ac.createOscillator(),o3g=ac.createGain();o3.type='triangle';o3.frequency.value=21;o3g.gain.value=.5;o3.connect(o3g);o3g.connect(am);
+ const lfo=ac.createOscillator(),lfoG=ac.createGain();lfo.frequency.value=10;lfoG.gain.value=.42;lfo.connect(lfoG);lfoG.connect(am.gain);
+ const hiss=noiseSrc(false),hf=ac.createBiquadFilter(),hg=ac.createGain();hf.type='bandpass';hf.frequency.value=1700;hf.Q.value=.8;hg.gain.value=.0001;hiss.connect(hf);hf.connect(hg);hg.connect(out);
+ for(const x of [o1,o2,o3,lfo,hiss])x.start(now);
+ out.gain.setTargetAtTime(.02,now,.6);
+ engine={out,lp,o1,o2,o3,lfo,hg,nodes:[o1,o2,o3,lfo,hiss],rpm:.15};
+ tone(55,.5,'sawtooth',.03,40,0,bus.eng); // partida
+}
+function stopEngine(){if(!engine||!audioCtx){engine=null;return}const t=audioCtx.currentTime,e=engine;engine=null;e.out.gain.setTargetAtTime(.0001,t,.3);setTimeout(()=>e.nodes.forEach(n=>{try{n.stop()}catch(err){}}),1500)}
+function toggleEngine(){engineEnabled=!engineEnabled;const b=document.getElementById('engineToggle');if(b)b.textContent=engineEnabled?'🛥 Motor ligado':'🛥 Motor desligado';if(engineEnabled){audioReady();startEngine()}else stopEngine()}
+function gullCall(vol){
+ if(!audioCtx||!bus)return;const n=2+Math.floor(Math.random()*3);
+ for(let i=0;i<n;i++){const t=audioCtx.currentTime+i*.28+Math.random()*.05,o=audioCtx.createOscillator(),g=audioCtx.createGain(),flt=audioCtx.createBiquadFilter();
+   o.type='sawtooth';o.frequency.setValueAtTime(1500,t);o.frequency.linearRampToValueAtTime(2300,t+.05);o.frequency.exponentialRampToValueAtTime(1100,t+.22);
+   flt.type='bandpass';flt.frequency.value=1800;flt.Q.value=3;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.022*vol,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+.25);
+   o.connect(flt);flt.connect(g);g.connect(bus.amb);g.connect(bus.verb);o.start(t);o.stop(t+.3)}
+}
+// Atualiza motor e água conforme acelerador e velocidade do barco (chamado a cada quadro).
+function updateBoatAudio(dt){
+ if(!audioCtx||!bus||!soundEnabled||audioCtx.state!=='running'||!game)return;
+ const b=world.boat,v=Math.hypot(b.vx,b.vy),s=Math.min(1,v/.425),over=game.over;
+ const throttle=(keys.ArrowUp||keys.ArrowDown||keys.ArrowLeft||keys.ArrowRight||keys.w||keys.a||keys.s||keys.d||keys.W||keys.A||keys.S||keys.D||Math.hypot(joy.x,joy.y)>.12)?1:0;
+ audioTick+=dt;
+ if(audioTick>=50){audioTick=0;const t=audioCtx.currentTime;
+   if(engine){const target=over?0:.15+.85*Math.max(throttle*.9,s);engine.rpm+=(target-engine.rpm)*.25;const r=engine.rpm,f=34+r*62;
+     engine.o1.frequency.setTargetAtTime(f,t,.12);engine.o2.frequency.setTargetAtTime(f*2.02,t,.12);engine.o3.frequency.setTargetAtTime(f*.5,t,.12);
+     engine.lfo.frequency.setTargetAtTime(7+r*16,t,.12);engine.lp.frequency.setTargetAtTime(320+r*1300,t,.15);
+     engine.out.gain.setTargetAtTime(over?.0001:.016+r*.042,t,.2);engine.hg.gain.setTargetAtTime(.002+r*r*.03,t,.2)}
+   if(amb){amb.spray.gain.setTargetAtTime(.0001+Math.pow(s,1.4)*.055,t,.25);amb.rumble.gain.setTargetAtTime(.0001+s*.08,t,.3)}
+ }
+ // Batidas de onda no casco quando o barco anda.
+ if(amb&&s>.15){slapTimer-=dt;if(slapTimer<=0){slapTimer=250+Math.random()*900*(1.2-s);noiseBurst({dur:.18+Math.random()*.12,type:'lowpass',f0:900+Math.random()*500,f1:180,q:.7,vol:.05+s*.07,attack:.01,brown:true,dest:bus.amb})}}
+ // Gaivotas perto da ilha.
+ gullTimer-=dt;if(gullTimer<=0){gullTimer=7000+Math.random()*12000;const d=Math.hypot(b.x-2400,b.y-1800);if(amb&&d<900)gullCall(Math.max(.2,1-d/900))}
+}
+function playSound(kind){
+ if(!soundEnabled)return;const ac=audioReady();if(!ac||!bus)return;
+ switch(kind){
+  case 'cast': // assobio da vara + linha saindo do molinete
+   noiseBurst({dur:.35,type:'bandpass',f0:2600,f1:700,q:1.4,vol:.07,attack:.03});
+   for(let i=0;i<7;i++)noiseBurst({dur:.022,type:'highpass',f0:3500,q:.7,vol:.035,when:.04+i*.035});break;
+  case 'plop': // isca/boia caindo na água
+   tone(420,.1,'sine',.05,-260);noiseBurst({dur:.14,type:'bandpass',f0:1100,f1:380,q:1.2,vol:.05});break;
+  case 'splash': // peixe se debatendo
+   noiseBurst({dur:.45,type:'lowpass',f0:2200,f1:350,q:.8,vol:.15,attack:.01});tone(300,.14,'sine',.05,-180,.01);break;
+  case 'bite': // boia afundando duas vezes
+   tone(380,.09,'sine',.05,-240);noiseBurst({dur:.1,type:'bandpass',f0:900,f1:350,q:1.2,vol:.04});
+   tone(360,.1,'sine',.05,-230,.2);noiseBurst({dur:.12,type:'bandpass',f0:850,f1:330,q:1.2,vol:.05,when:.2});tone(880,.07,'triangle',.015,-100,.05);break;
+  case 'reel': // catraca do molinete
+   for(let i=0;i<8;i++)noiseBurst({dur:.018,type:'bandpass',f0:3000+Math.random()*500,q:4,vol:.045,when:i*.045});break;
+  case 'drag': // fricção do molinete soltando linha no puxão
+   noiseBurst({dur:.06,type:'bandpass',f0:4200,q:6,vol:.03});tone(2300+Math.random()*300,.05,'square',.005);break;
+  case 'catch': // peixe saindo da água + arpejo
+   noiseBurst({dur:.6,type:'lowpass',f0:2600,f1:300,q:.7,vol:.17,attack:.01});
+   [523.25,659.25,783.99,1046.5].forEach((fq,i)=>{tone(fq,.35,'sine',.03,0,.12+i*.09);tone(fq*2,.2,'triangle',.007,0,.12+i*.09)});break;
+  case 'miss':
+   noiseBurst({dur:.3,type:'lowpass',f0:1400,f1:300,q:.6,vol:.07});tone(330,.25,'sine',.028,-120,.05);break;
+  case 'snap': // linha arrebentando
+   noiseBurst({dur:.05,type:'highpass',f0:2500,q:.5,vol:.16,attack:.002});tone(1700,.35,'triangle',.028,-1300,.01);break;
+  case 'hit': // pancada no casco + rangido da madeira
+   noiseBurst({dur:.35,type:'lowpass',f0:500,f1:90,q:.8,vol:.26,attack:.004,brown:true});tone(85,.3,'sine',.11,-40);tone(190,.18,'triangle',.03,-90,.03);
+   noiseBurst({dur:.5,type:'bandpass',f0:420,f1:260,q:6,vol:.03,when:.08});break;
+  case 'coin':
+   tone(988,.1,'square',.018);tone(1319,.22,'square',.018,0,.08);tone(1976,.25,'sine',.01,0,.08);break;
+  case 'click':
+   tone(660,.04,'sine',.02,40);break;
+ }
+}
+function toggleSettings(){const m=document.getElementById('settingsMenu');m.classList.toggle('open')}
+function toggleSound(){
+ soundEnabled=!soundEnabled;
+ const b=document.getElementById('soundToggle');
+ if(b)b.textContent=soundEnabled?'🔊 Som ligado':'🔇 Som desligado';
+ // Suspender o contexto silencia tudo de uma vez: efeitos, música e água.
+ if(soundEnabled){if(audioCtx)audioCtx.resume();audioReady();playSound('click')}
+ else if(audioCtx)audioCtx.suspend();
+}
+function fresh(){
+ game={version:4,money:500,hull:230,maxHull:250,boatLevel:1,gear:{Vara:{lv:1,hp:100,cost:100},Molinete:{lv:1,hp:100,cost:90},Linha:{lv:1,hp:100,cost:80},Anzol:{lv:1,hp:100,cost:70}},baits:[12,6,0,0],baitType:0,holdCap:8,catch:[],journal:{},missions:[],maxDepth:0,fightFails:0,over:false,playTime:0,beastTimer:480000+Math.random()*240000};
+ world.boat={x:2700,y:2040,vx:0,vy:0,angle:.3};world.target=null;world.line=null;world.baitIgnores={};world.escapeAnim=null;world.fx=[];world.wake=[];world.shake=0;marketSale=null;
+ fish=[];for(let i=0;i<48;i++)spawnFish();
+ // O Sea Beast não nasce no início: ele emerge raramente (ver updateSeaBeast).
+ const eel=species.find(s=>s.name==='Enguia elétrica');spawnFish(eel);spawnFish(eel);spawnFish(eel);
+ for(let i=0;i<3;i++)game.missions.push(genMission());
+ renderHUD();
+ toast('Você começa com R$ 500. Clique no mar, dentro do círculo pontilhado, para arremessar.');
+ toast('Quando o peixe morder, aperte E para fisgar. Segure E para puxar e solte quando a linha ficar vermelha.');
+}
+function resize(){let r=canvas.getBoundingClientRect();let d=Math.min(devicePixelRatio||1,2);canvas.width=Math.floor(r.width*d);canvas.height=Math.floor(r.height*d);W=r.width;H=r.height;scale=d;ctx.setTransform(d,0,0,d,0,0);islandCache=null}
+window.addEventListener('resize',resize);
+function spawnFish(forceSpecies=null,awayFromBoat=false){
+ // Enguia elétrica e Sea Beast são garantidas no início; depois continuam raras.
+ let pool=species.filter(sp=>sp.name!=='Sea Beast').map(sp=>({sp,w:Math.pow(sp.rarity,1.35)*(sp.name==='Enguia elétrica'?3.2:1)}));let total=pool.reduce((a,v)=>a+v.w,0),pick=Math.random()*total,sp=forceSpecies||pool[0].sp;
+ if(!forceSpecies){for(const entry of pool){pick-=entry.w;if(pick<=0){sp=entry.sp;break}}}
+ // Cada espécie tende a surgir na sua faixa de profundidade, mas com variação natural.
+ let x,y,tries=0;do{x=50+Math.random()*(world.w-100);y=50+Math.random()*(world.h-100);tries++}while((isIslandLand(x,y)||Math.abs(depthAt(x,y)-sp.depth)>(tries<70?0:1)||(awayFromBoat&&Math.hypot(x-world.boat.x,y-world.boat.y)<700))&&tries<120);if(isIslandLand(x,y)){x=2400+(Math.random()<.5?-1:1)*300;y=1800+(Math.random()-.5)*260;}
+ const heading=Math.random()*Math.PI*2;
+ fish.push({sp,x,y,heading,speed:.006+Math.random()*.012,turnRate:.00025+Math.random()*.00055,changeIn:900+Math.random()*2600,drift:Math.random()*Math.PI*2,size:.65+Math.random()*1.2,weight:+(sp.min+Math.pow(Math.random(),2)*(sp.max-sp.min)).toFixed(1),phase:Math.random()*7,alive:true})
+}
+function camera(){return {x:Math.max(0,Math.min(world.w-W,world.boat.x-W/2)),y:Math.max(0,Math.min(world.h-H,world.boat.y-H/2))}}
+function sx(x,c){return x-c.x}function sy(y,c){return y-c.y}
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function depthAt(x,y){let d=Math.hypot(x-2400,y-1800);if(d<300)return 0;if(d<650)return 1;if(d<1050)return 2;return 3}
+function isIslandLand(x,y){const dx=(x-2400)/224,dy=(y-1800)/158;return dx*dx+dy*dy<1.0;}
+function zoneName(d){return ['Águas rasas','Águas médias','Águas profundas','Zona abissal'][d]}
+function draw(){if(!W||!H)return;let c=camera();if(world.shake>0){c.x+=(Math.random()-.5)*world.shake;c.y+=(Math.random()-.5)*world.shake}ctx.clearRect(0,0,W,H);let tm=performance.now()*.00035;
+ // Mar em camadas: gradiente de profundidade, reflexos, ondulações e partículas.
+ // Cor do mar presa ao mapa: clara perto da ilha e escura na zona abissal.
+ const icx=sx(2400,c),icy=sy(1800,c);let g=ctx.createRadialGradient(icx,icy,0,icx,icy,1500);
+ g.addColorStop(0,'#6ad8c6');g.addColorStop(.17,'#3bb7bd');g.addColorStop(.23,'#1f9db3');g.addColorStop(.41,'#0b86a8');g.addColorStop(.47,'#087399');g.addColorStop(.67,'#065a80');g.addColorStop(.74,'#04476b');g.addColorStop(1,'#031a33');
+ ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ // Ondas presas ao mapa: o mar passa por baixo do barco quando você navega.
+ const spacing=86,drift=tm*26,k0=Math.floor((c.y-drift-70)/spacing),k1=Math.ceil((c.y+H-drift+70)/spacing);
+ for(let k=k0;k<=k1;k++){
+   const k3=((k%3)+3)%3,k4=((k%4)+4)%4,speed=k3===0?1.18:k3===1?.76:.48,baseY=k*spacing+drift-c.y;
+   ctx.beginPath();
+   for(let x=-36;x<=W+36;x+=12){const wx=x+c.x,y=baseY+Math.sin(wx*.009+tm*2.7*speed+k*.72)*8.5+Math.sin(wx*.025-tm*3.4*speed+k)*3.1;if(x===-36)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+   ctx.strokeStyle=k4===0?'rgba(222,255,249,.2)':'rgba(126,224,222,.1)';ctx.lineWidth=k4===0?3:1.5;ctx.stroke();
+ }
+ // Espuma e brilhos distribuídos numa grade do mapa (posição fixa, animação local).
+ const cell=120,gx0=Math.floor(c.x/cell)-1,gx1=Math.ceil((c.x+W)/cell),gy0=Math.floor(c.y/cell)-1,gy1=Math.ceil((c.y+H)/cell);
+ ctx.lineCap='round';
+ for(let gx=gx0;gx<=gx1;gx++)for(let gy=gy0;gy<=gy1;gy++){
+   const h=hash2(gx,gy);
+   for(let j=0;j<2;j++){
+     const hx=hash2(gx*3+j,gy*7-j),hy=hash2(gx*11-j,gy*5+j);
+     const x=gx*cell+hx*cell-c.x+Math.sin(tm*1.3+h*20+j)*6,y=gy*cell+hy*cell-c.y+Math.cos(tm*1.1+h*30+j)*4;
+     if(j===0){const len=6+h*14,a=.1+.18*Math.sin(tm*2+h*9)**2;ctx.strokeStyle=`rgba(232,255,249,${a.toFixed(3)})`;ctx.lineWidth=1+h;ctx.beginPath();ctx.moveTo(x-len/2,y);ctx.quadraticCurveTo(x,y-2.4,x+len/2,y);ctx.stroke()}
+     else{const pulse=.4+.6*Math.sin(tm*4.2+h*17)**2;ctx.strokeStyle=`rgba(235,255,251,${(.06+pulse*.22).toFixed(3)})`;ctx.lineWidth=.8+hx*.8;ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+5,y-2.2,x+12,y+.5);ctx.stroke()}
+   }
+ }
+ // Faixas de profundidade suaves.
+ for(let i=0;i<5;i++){ctx.beginPath();ctx.arc(sx(2400,c),sy(1800,c),220+i*245,0,Math.PI*2);ctx.strokeStyle=['#c1fff51c','#9ef4f01c','#65c8e01c','#377ebc20','#5551a020'][i];ctx.lineWidth=65;ctx.stroke()}
+ // Reflexos da luz na superfície, em padrões de ondulação suaves.
+ for(let i=0;i<95;i++){let wx=(i*173+Math.sin(tm+i*.7)*28)%world.w,wy=(i*127+Math.cos(tm*.8+i)*20)%world.h,xx=sx(wx,c),yy=sy(wy,c);if(xx>-35&&xx<W+35&&yy>-25&&yy<H+25){ctx.save();ctx.translate(xx,yy);ctx.rotate(Math.sin(i*2.1)*.18);ctx.strokeStyle=i%4===0?'#d8fff04a':'#b7f8f025';ctx.lineWidth=i%5===0?2:1;ctx.beginPath();ctx.ellipse(0,0,8+(i%7)*3,1.2+(i%3)*.6,0,Math.PI*1.05,Math.PI*1.95);ctx.stroke();ctx.restore()}}
+ // Colunas de luz sob a superfície.
+ ctx.save();ctx.globalAlpha=.055;ctx.fillStyle='#c9fff1';for(let i=0;i<7;i++){let xx=(i*W/6+Math.sin(tm+i)*24);ctx.beginPath();ctx.moveTo(xx-18,0);ctx.lineTo(xx+18,0);ctx.lineTo(xx+105,H);ctx.lineTo(xx-105,H);ctx.closePath();ctx.fill()}ctx.restore();
+ // Partículas e detalhes do fundo marinho.
+ for(let i=0;i<125;i++){let x=(i*197+83)%world.w,y=(i*283+150)%world.h,xx=sx(x,c),yy=sy(y,c);if(xx>-30&&xx<W+30&&yy>-30&&yy<H+30){ctx.fillStyle=i%4===0?'#d3fff055':'#8bd6d52b';ctx.beginPath();ctx.arc(xx+Math.sin(tm+i)*2,yy+Math.cos(tm*.8+i)*2,i%7===0?2:1,0,Math.PI*2);ctx.fill()}}
+ // Fundo arenoso visível em regiões rasas.
+ for(let i=0;i<105;i++){let x=(i*197+83)%world.w,y=(i*283+150)%world.h,xx=sx(x,c),yy=sy(y,c);if(depthAt(x,y)===0&&xx>-30&&xx<W+30&&yy>-30&&yy<H+30){ctx.fillStyle=i%3?'#d4e4a52b':'#f0e5b52b';ctx.beginPath();ctx.ellipse(xx,yy,8+(i%6)*3,3+(i%4)*2,i*.6,0,Math.PI*2);ctx.fill()}}
+ // Ilha: costa irregular, faixa de areia, vegetação em camadas e palmeiras.
+ // A ilha é dividida em camadas: base e topo estáticos ficam em cache (desenhados uma vez);
+ // só espuma, arbustos e folhas são redesenhados a cada quadro.
+ let ix=sx(2400,c),iy=sy(1800,c);
+ function islandBase(){
+
+ // Sombra projetada na água.
+ ctx.fillStyle='rgba(0,25,35,.22)';
+ ctx.beginPath();ctx.ellipse(9,13,232,164,-.08,0,Math.PI*2);ctx.fill();
+
+ // Contorno rochoso irregular.
+ ctx.fillStyle='#806744';ctx.beginPath();
+ ctx.moveTo(-218,-20);ctx.bezierCurveTo(-225,-91,-159,-151,-77,-157);
+ ctx.bezierCurveTo(-12,-178,78,-151,143,-119);
+ ctx.bezierCurveTo(209,-83,231,-22,213,48);
+ ctx.bezierCurveTo(198,112,127,153,45,157);
+ ctx.bezierCurveTo(-42,174,-145,135,-195,78);
+ ctx.bezierCurveTo(-223,42,-234,12,-218,-20);ctx.closePath();ctx.fill();
+
+ // Praia clara com pequenas enseadas.
+ let sand=ctx.createLinearGradient(-120,-120,110,125);
+ sand.addColorStop(0,'#f4dfaa');sand.addColorStop(.55,'#e5c987');sand.addColorStop(1,'#cda96d');
+ ctx.fillStyle=sand;ctx.beginPath();
+ ctx.moveTo(-207,-22);ctx.bezierCurveTo(-206,-86,-146,-137,-69,-144);
+ ctx.bezierCurveTo(4,-160,88,-131,153,-99);
+ ctx.bezierCurveTo(199,-65,214,-13,194,42);
+ ctx.bezierCurveTo(176,98,112,136,38,141);
+ ctx.bezierCurveTo(-44,154,-130,117,-179,67);
+ ctx.bezierCurveTo(-209,35,-220,7,-207,-22);ctx.closePath();ctx.fill();
+
+ // Linha de espuma e pequenos recortes da maré.
+ ctx.strokeStyle='rgba(255,250,220,.8)';ctx.lineWidth=3;
+ ctx.beginPath();ctx.ellipse(-2,-1,199,137,-.12,0,Math.PI*2);ctx.stroke();
+ ctx.strokeStyle='rgba(255,255,255,.42)';ctx.lineWidth=1.2;
+ for(let i=0;i<12;i++){let a=i*Math.PI/6;ctx.beginPath();ctx.arc(Math.cos(a)*197,Math.sin(a)*135,5, a-.5,a+.5);ctx.stroke()}
+
+ // Textura natural da areia: grãos, pequenas marcas de maré e áreas úmidas.
+ for(let i=0;i<115;i++){
+   const a=(i*2.399)% (Math.PI*2), r=148+(i%13)*3.1;
+   const x=Math.cos(a)*r, y=Math.sin(a)*r*.69;
+   ctx.fillStyle=i%4===0?'rgba(255,246,211,.55)':'rgba(120,91,54,.20)';
+   ctx.beginPath();ctx.ellipse(x,y,1+(i%3)*.45,.65+(i%2)*.35,a,0,Math.PI*2);ctx.fill();
+ }
+ ctx.strokeStyle='rgba(255,255,255,.28)';ctx.lineWidth=2;
+ for(let j=0;j<5;j++){ctx.beginPath();ctx.arc(-115+j*17,42+j*3,13+j*2,.2,2.35);ctx.stroke()}
+ // Interior gramado irregular.
+ let grass=ctx.createLinearGradient(-100,-100,100,110);
+ grass.addColorStop(0,'#6da95d');grass.addColorStop(.55,'#47834d');grass.addColorStop(1,'#2f6845');
+ ctx.fillStyle=grass;ctx.beginPath();
+ ctx.moveTo(-164,-25);ctx.bezierCurveTo(-158,-91,-101,-119,-37,-119);
+ ctx.bezierCurveTo(28,-136,104,-104,143,-61);
+ ctx.bezierCurveTo(176,-18,148,62,97,93);
+ ctx.bezierCurveTo(34,126,-65,109,-118,70);
+ ctx.bezierCurveTo(-157,42,-178,11,-164,-25);ctx.closePath();ctx.fill();
+ // Relevo sutil: manchas de vegetação rasteira, clareiras e trilhas orgânicas.
+ for(let i=0;i<34;i++){const a=i*2.399,r=38+(i%7)*12,xx=Math.cos(a)*r*1.12,yy=Math.sin(a)*r*.68;ctx.fillStyle=i%3===0?'rgba(28,76,48,.20)':i%3===1?'rgba(164,190,103,.19)':'rgba(219,204,132,.12)';ctx.beginPath();ctx.ellipse(xx,yy,8+(i%4)*3,4+(i%3)*2,a*.3,0,Math.PI*2);ctx.fill();}
+ // Caminho de terra batida sinuoso entre o interior e os dois pequenos cais.
+ ctx.strokeStyle='rgba(185,145,91,.52)';ctx.lineWidth=13;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-6,92);ctx.quadraticCurveTo(-28,58,-55,35);ctx.quadraticCurveTo(-82,12,-65,-2);ctx.stroke();ctx.beginPath();ctx.moveTo(8,91);ctx.quadraticCurveTo(33,57,58,33);ctx.quadraticCurveTo(79,8,58,-4);ctx.stroke();
+ ctx.strokeStyle='rgba(239,211,157,.42)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-6,92);ctx.quadraticCurveTo(-28,58,-55,35);ctx.quadraticCurveTo(-82,12,-65,-2);ctx.stroke();ctx.beginPath();ctx.moveTo(8,91);ctx.quadraticCurveTo(33,57,58,33);ctx.quadraticCurveTo(79,8,58,-4);ctx.stroke();
+ // Pedras expostas, raízes e pequenos tufos na transição entre praia e mata.
+ for(let i=0;i<22;i++){const a=i*2.4,rr=112+(i%5)*8,xx=Math.cos(a)*rr,yy=Math.sin(a)*rr*.68;ctx.fillStyle='rgba(37,61,42,.22)';ctx.beginPath();ctx.ellipse(xx+2,yy+3,5+(i%3),2.8,a,0,Math.PI*2);ctx.fill();ctx.fillStyle=i%2?'#77836a':'#928b72';ctx.beginPath();ctx.ellipse(xx,yy,3.5+(i%3),2+(i%2),a,0,Math.PI*2);ctx.fill();}
+
+
+ }
+ function islandAnim(){
+ // Espuma da rebentação em pequenos arcos móveis na borda da ilha.
+ for(let k=0;k<42;k++){
+   const a=k*Math.PI*2/42 + Math.sin(tm*1.4+k)*.018;
+   const rx=202+Math.sin(tm*2+k*.7)*2.2, ry=139+Math.cos(tm*1.7+k*.6)*1.8;
+   const px=Math.cos(a)*rx, py=Math.sin(a)*ry;
+   ctx.strokeStyle=`rgba(245,255,245,${.20+.22*Math.sin(tm*3+k)**2})`;
+   ctx.lineWidth=1.2+(k%3)*.45;ctx.beginPath();
+   ctx.arc(px,py,3+(k%4),a-.45,a+.35);ctx.stroke();
+ }
+ // Arbustos mais naturais: moitas de volumes sobrepostos, folhas individuais e sombras.
+ function shrub(x,y,scale,seed){
+   ctx.save();ctx.translate(x,y);
+   // Vento contínuo com rajadas suaves: cada arbusto oscila em ritmo próprio.
+   const gust=Math.sin(tm*2.1+seed*.63)*.055+Math.sin(tm*.83+seed*.31)*.035;
+   const sway=gust*(.72+(seed%5)*.10);
+   ctx.rotate(sway);
+   ctx.scale(scale,scale);
+   const palettes=[
+     ['#214f39','#2f7048','#438b52','#78b967','#a1d17a'],
+     ['#28583b','#39794a','#4b9657','#85c36c','#b1d987'],
+     ['#244b37','#326a43','#43834c','#6eaa5d','#96c875']
+   ];
+   const p=palettes[seed%palettes.length];
+   // Sombra projetada e base escura irregular.
+   ctx.fillStyle='rgba(19,48,31,.30)';
+   ctx.beginPath();ctx.ellipse(3,7,19,8,.08,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle=p[0];ctx.beginPath();
+   ctx.moveTo(-17,2);ctx.quadraticCurveTo(-22,-8,-13,-13);
+   ctx.quadraticCurveTo(-10,-22,0,-17);ctx.quadraticCurveTo(10,-23,14,-12);
+   ctx.quadraticCurveTo(24,-6,17,3);ctx.quadraticCurveTo(7,10,-5,8);
+   ctx.closePath();ctx.fill();
+   // Camadas de folhas arredondadas, com alternância de tons.
+   for(let k=0;k<11;k++){
+     const a=k*2.399+seed*.7, rr=4+(k%4)*3.1;
+     const lx=Math.cos(a)*rr*1.35,ly=Math.sin(a)*rr*.67-3;
+     const r=4.2+(k%3)*1.25;
+     ctx.fillStyle=p[1+(k%2)];
+     ctx.beginPath();ctx.ellipse(lx,ly,r*1.15,r*.78,a*.35,0,Math.PI*2);ctx.fill();
+     ctx.fillStyle=p[3+(k%2)];
+     ctx.beginPath();ctx.ellipse(lx-1.2,ly-1.8,r*.72,r*.48,a*.35,0,Math.PI*2);ctx.fill();
+   }
+   // Pequenos ramos e nervuras discretas para quebrar o aspecto de bolhas.
+   ctx.strokeStyle='rgba(30,67,40,.55)';ctx.lineWidth=.8;
+   for(let k=0;k<5;k++){
+     const a=k*1.25+seed;
+     ctx.beginPath();ctx.moveTo(0,4);ctx.quadraticCurveTo(Math.cos(a)*5,-1,Math.cos(a)*11,Math.sin(a)*5-5);ctx.stroke();
+   }
+   ctx.restore();
+ }
+ for(let i=0;i<26;i++){
+   const a=i*2.399,rad=24+(i%8)*12;
+   const x=-10+Math.cos(a)*rad*1.42,y=-17+Math.sin(a)*rad*.79;
+   shrub(x,y,.72+(i%4)*.10,i);
+ }
+ // Folhinhas soltas atravessam a ilha nas rajadas, reforçando visualmente o vento.
+ for(let i=0;i<13;i++){
+   const phase=(tm*24+i*31)%(270);
+   const lx=-150+phase,ly=-92+((i*37+Math.sin(tm*2+i)*9)%190);
+   ctx.save();ctx.translate(lx,ly);ctx.rotate(.35+tm*2+i);
+   ctx.fillStyle='rgba(151,196,105,.82)';ctx.beginPath();
+   ctx.ellipse(0,0,3.2,1.25,.15,0,Math.PI*2);ctx.fill();
+   ctx.strokeStyle='rgba(55,111,61,.7)';ctx.lineWidth=.55;
+   ctx.beginPath();ctx.moveTo(-2,0);ctx.lineTo(2,0);ctx.stroke();ctx.restore();
+ }
+
+ }
+ function islandTop(){
+ // Pequenas moitas, folhas baixas e manchas de sombra para quebrar a aparência uniforme.
+ for(let i=0;i<48;i++){
+   const a=i*2.17, r=24+(i%9)*10;
+   const x=-8+Math.cos(a)*r*1.35, y=-13+Math.sin(a)*r*.72;
+   ctx.fillStyle=i%3===0?'rgba(27,72,43,.48)':'rgba(142,190,91,.42)';
+   ctx.beginPath();ctx.ellipse(x,y,2.2+(i%3),1.4+(i%2),a,0,Math.PI*2);ctx.fill();
+ }
+ // Palmeiras com troncos curvos, copas e folhas individuais.
+ function palm(x,y,s){
+   ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+   ctx.strokeStyle='#72502f';ctx.lineWidth=5;ctx.lineCap='round';
+   ctx.beginPath();ctx.moveTo(0,12);ctx.quadraticCurveTo(-5,-8,1,-30);ctx.stroke();
+   // Anéis discretos no tronco e pequenas variações de cor.
+   ctx.strokeStyle='rgba(55,38,25,.55)';ctx.lineWidth=1;
+   for(let k=0;k<5;k++){let yy=5-k*6;ctx.beginPath();ctx.moveTo(-2,yy);ctx.quadraticCurveTo(-1,yy-1,2,yy-2);ctx.stroke()}
+   ctx.strokeStyle='#b68a50';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-1,7);ctx.quadraticCurveTo(-5,-8,1,-30);ctx.stroke();
+   ctx.fillStyle='#4c8b49';
+   for(let j=0;j<8;j++){let a=j*Math.PI/4;
+     ctx.beginPath();ctx.moveTo(1,-30);
+     ctx.quadraticCurveTo(Math.cos(a)*17-4,Math.sin(a)*13-38,Math.cos(a)*31,Math.sin(a)*24-27);
+     ctx.quadraticCurveTo(Math.cos(a)*12,Math.sin(a)*8-28,1,-30);ctx.fill();
+     ctx.strokeStyle='#8bc96a';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(1,-30);ctx.lineTo(Math.cos(a)*28,Math.sin(a)*21-27);ctx.stroke();
+   }
+   ctx.fillStyle='#9b7444';ctx.beginPath();ctx.arc(1,-30,3,0,Math.PI*2);ctx.fill();
+   ctx.restore();
+ }
+ palm(-112,-65,.95);palm(104,-69,.82);palm(126,43,.72);palm(-128,48,.68);
+
+ // Pedras, conchas e tufos na faixa de areia.
+ for(let i=0;i<22;i++){
+   let a=i*2.4, x=Math.cos(a)*(174+(i%3)*7), y=Math.sin(a)*(111+(i%3)*5);
+   ctx.fillStyle=i%2?'#a68b62':'#c0a77a';
+   ctx.beginPath();ctx.ellipse(x,y,3+(i%3),2+(i%2),a,0,Math.PI*2);ctx.fill();
+ }
+
+ // Pedras maiores, madeira trazida pela maré e pequenas poças rasas.
+ for(let i=0;i<9;i++){
+   const a=i*2.1, x=Math.cos(a)*181, y=Math.sin(a)*119;
+   ctx.fillStyle='rgba(65,67,55,.22)';ctx.beginPath();ctx.ellipse(x+2,y+3,5,3, a,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle=i%2?'#8e8975':'#aaa18b';ctx.beginPath();ctx.ellipse(x,y,4.5,2.8,a,0,Math.PI*2);ctx.fill();
+   ctx.strokeStyle='rgba(235,226,199,.5)';ctx.lineWidth=.8;ctx.beginPath();ctx.arc(x-1,y-1,2,.2,2.5);ctx.stroke();
+ }
+ ctx.strokeStyle='#76563a';ctx.lineWidth=3;ctx.lineCap='round';
+ ctx.beginPath();ctx.moveTo(143,88);ctx.quadraticCurveTo(151,84,158,89);ctx.stroke();
+ ctx.fillStyle='rgba(126,190,191,.35)';ctx.beginPath();ctx.ellipse(-155,82,12,5,-.3,0,Math.PI*2);ctx.fill();
+
+ // Dois cais independentes avançam para águas navegáveis, cada um alinhado à sua construção.
+ function drawPier(x, startY, endY, width){
+   ctx.save();ctx.translate(x,0);
+   // Sombra submersa e laterais com vigas estruturais.
+   ctx.fillStyle='rgba(0,20,29,.28)';ctx.beginPath();ctx.moveTo(-width/2+4,startY);ctx.lineTo(width/2+4,startY);ctx.lineTo(width/2+7,endY+8);ctx.lineTo(-width/2+7,endY+8);ctx.closePath();ctx.fill();
+   ctx.fillStyle='#513b2b';ctx.fillRect(-width/2,startY,width,endY-startY);
+   ctx.fillStyle='#8c6542';ctx.fillRect(-width/2+2,startY,width-4,endY-startY-3);
+   const planks=Math.max(8,Math.round((endY-startY)/8));
+   for(let j=0;j<planks;j++){let yy=startY+2+j*((endY-startY-5)/planks);ctx.fillStyle=['#b18455','#9c7148','#ad8051'][j%3];ctx.fillRect(-width/2+3,yy,width-6,5.5);ctx.strokeStyle='#60452f';ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(-width/2+3,yy+5.5);ctx.lineTo(width/2-3,yy+5.5);ctx.stroke();}
+   // Estacas longas sob a plataforma e cabeços para amarração.
+   for(let side of [-1,1]){for(let j=0;j<4;j++){let yy=startY+14+j*((endY-startY-24)/3);ctx.fillStyle='#493629';ctx.fillRect(side*(width/2-5),yy,6,25);ctx.fillStyle='#b28a5a';ctx.fillRect(side*(width/2-6),yy,8,4)}
+     ctx.fillStyle='#4c392b';ctx.fillRect(side*(width/2-9),endY-12,7,13);ctx.fillStyle='#d0ad77';ctx.fillRect(side*(width/2-11),endY-14,11,4);
+   }
+   // Pneus de proteção na ponta e escada de embarque.
+   ctx.strokeStyle='#242d2b';ctx.lineWidth=3;for(let side of [-1,1]){ctx.beginPath();ctx.arc(side*(width/2-2),endY-4,5,0,Math.PI*2);ctx.stroke()}
+   ctx.strokeStyle='#d5b782';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(width/2+5,endY-19);ctx.lineTo(width/2+13,endY-19);ctx.lineTo(width/2+13,endY+5);ctx.moveTo(width/2+5,endY-11);ctx.lineTo(width/2+13,endY-11);ctx.stroke();
+   ctx.restore();
+ }
+ // Entradas começam na areia e terminam bem dentro da água, com espaço para manobra do barco.
+ drawPier(-65,48,190,29);drawPier(58,48,190,29);
+ // Loja e mercado com paredes, portas, janelas e telhados.
+ function hut(x,y,label,roof){
+   ctx.fillStyle='rgba(25,30,20,.26)';ctx.beginPath();ctx.ellipse(x,y+24,41,10,0,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle='#65503a';ctx.fillRect(x-32,y+18,64,5);ctx.fillStyle='#8b6845';ctx.fillRect(x-29,y+15,58,5);
+   ctx.fillStyle='#a97848';ctx.fillRect(x-29,y-8,58,30);
+   ctx.fillStyle='#d2a16a';ctx.fillRect(x-25,y-5,50,23);
+   ctx.strokeStyle='rgba(95,57,32,.38)';ctx.lineWidth=.8;for(let plank=0;plank<5;plank++){ctx.beginPath();ctx.moveTo(x-24,y-3+plank*5);ctx.lineTo(x+24,y-3+plank*5);ctx.stroke()}
+   ctx.fillStyle='#49352a';ctx.fillRect(x-7,y+5,14,17);ctx.fillStyle='#d2b17a';ctx.beginPath();ctx.arc(x+3,y+14,1,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle='#9dd8df';ctx.fillRect(x-22,y,10,9);ctx.fillRect(x+12,y,10,9);
+   ctx.strokeStyle='#69472f';ctx.lineWidth=2;ctx.strokeRect(x-22,y,10,9);ctx.strokeRect(x+12,y,10,9);
+   ctx.fillStyle=roof;ctx.beginPath();ctx.moveTo(x-37,y-8);ctx.lineTo(x-22,y-25);ctx.lineTo(x,y-34);ctx.lineTo(x+23,y-24);ctx.lineTo(x+37,y-8);ctx.closePath();ctx.fill();
+   ctx.strokeStyle='rgba(60,35,20,.35)';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle='rgba(255,220,158,.22)';ctx.beginPath();ctx.moveTo(x-22,y-24);ctx.lineTo(x,y-34);ctx.lineTo(x+23,y-24);ctx.lineTo(x+30,y-13);ctx.lineTo(x-29,y-13);ctx.closePath();ctx.fill();
+   // Beiral, telhas sugeridas e detalhes de madeira nas fachadas.
+   ctx.strokeStyle='rgba(75,39,25,.38)';ctx.lineWidth=1;
+   for(let k=0;k<4;k++){ctx.beginPath();ctx.moveTo(x-25+k*13,y-13-k%2*3);ctx.lineTo(x-13+k*13,y-23-k%2*2);ctx.stroke()}
+   ctx.strokeStyle='rgba(90,57,34,.45)';ctx.beginPath();ctx.moveTo(x-25,y+19);ctx.lineTo(x+25,y+19);ctx.stroke();
+   ctx.fillStyle='#d9bd83';ctx.fillRect(x-10,y+8,20,2);
+   ctx.fillStyle='#6d5138';ctx.fillRect(x-2,y+12,2,2);
+   // Placa de identificação, luminária e caixas de serviço na varanda.
+   ctx.fillStyle='#4c3829';ctx.fillRect(x-19,y-17,38,8);ctx.fillStyle='#f1d9a6';ctx.font='bold 6px system-ui';ctx.textAlign='center';ctx.fillText(label,x,y-11);
+   ctx.fillStyle='#e8c77f';ctx.beginPath();ctx.arc(x+25,y+1,2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#493b2b';ctx.fillRect(x-34,y+12,7,7);ctx.strokeStyle='#c79b65';ctx.strokeRect(x-34,y+12,7,7);
+   if(label==='MERCADO'){ctx.fillStyle='#b7d6d0';ctx.fillRect(x-20,y+9,9,7);ctx.strokeStyle='#e7eee0';ctx.strokeRect(x-20,y+9,9,7);ctx.fillStyle='#d9c28d';ctx.fillRect(x+14,y+12,10,6)}
+   ctx.fillStyle='white';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.fillText(label,x,y+43);
+ }
+ hut(-65,-25,'LOJA','#a94e35');hut(58,-28,'MERCADO','#c99a42');
+
+ // Pátios de acesso em pedra e madeira entre as construções e os respectivos cais.
+ for(const [hx,hy] of [[-65,18],[58,16]]){
+   ctx.fillStyle='rgba(83,68,45,.22)';ctx.beginPath();ctx.ellipse(hx,hy+5,42,19,-.08,0,Math.PI*2);ctx.fill();
+   for(let q=0;q<9;q++){const px=hx-31+(q%3)*25,py=hy-8+Math.floor(q/3)*12;ctx.fillStyle=['#b8a27c','#c7b18a','#9d9277'][q%3];ctx.beginPath();ctx.ellipse(px,py,7+(q%2),4,.1*q,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#80745f';ctx.lineWidth=.6;ctx.stroke();}
+ }
+ // Caixotes de carga, barris, redes e boias junto às fachadas.
+ for(const [bx,by] of [[-111,5],[-104,16],[102,6],[111,17]]){ctx.fillStyle='#65462e';ctx.fillRect(bx-6,by-6,12,12);ctx.strokeStyle='#c1945e';ctx.lineWidth=1;ctx.strokeRect(bx-6,by-6,12,12);ctx.beginPath();ctx.moveTo(bx-5,by-1);ctx.lineTo(bx+5,by-1);ctx.moveTo(bx,by-5);ctx.lineTo(bx,by+5);ctx.stroke();}
+
+ }
+ if(ix>-300&&ix<W+300&&iy>-260&&iy<H+260){
+   if(!islandCache)islandCache=[bakeIsland(islandBase),bakeIsland(islandTop)];
+   ctx.drawImage(islandCache[0],ix-260,iy-220,520,440);
+   ctx.save();ctx.translate(ix,iy);islandAnim();ctx.restore();
+   ctx.drawImage(islandCache[1],ix-260,iy-220,520,440);
+ }
+ // Esteira do barco fica por baixo dos peixes e do casco.
+ drawWake(c);
+ // fish swim
+ // Fora do alcance da linha o peixe aparece só como sombra; perto do barco, com todos os detalhes.
+ const rng=lineRange(),hookedF=world.line&&world.line.visualFish;
+ for(let f of fish){if(!f.alive)continue;let x=sx(f.x,c),y=sy(f.y,c);if(x<-90||x>W+90||y<-70||y>H+70)continue;let scaleF=fishScale(f);
+ const focus=f===hookedF||f.approachingLure,dB=Math.hypot(f.x-world.boat.x,f.y-world.boat.y);
+ let detail=focus?1:Math.max(0,Math.min(1,(rng+70-dB)/70));
+ if(detail<1)drawFishShadow(x,y,f,scaleF,(1-detail)*(f.sp.depth>=2?.5:.4));
+ if(detail<=.02)continue;
+ ctx.save();ctx.translate(x,y);ctx.rotate(f.heading+(f.escapeHold>0?Math.sin(performance.now()*.035+f.phase)*.22:0));ctx.scale(scaleF,scaleF);ctx.globalAlpha=(f.sp.depth===3?.88:.96)*detail;
+ drawFishBody(f,scaleF);
+ ctx.restore();
+ // Nome visível acima de cada peixe, com fundo para contrastar com a água.
+ ctx.save();ctx.font=(f.sp.name==='Sea Beast'||f.sp.name==='Enguia elétrica'?'bold 12px':'10px')+' system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
+ ctx.globalAlpha=detail;let label=(game.journal&&game.journal[f.sp.name])?f.sp.name:'???', tw=ctx.measureText(label).width, ly=y-(f.sp.name==='Sea Beast'?34:f.sp.name==='Tubarão'?28:20);
+ ctx.fillStyle='rgba(0,18,35,.76)';ctx.beginPath();ctx.roundRect(x-tw/2-5,ly-8,tw+10,16,5);ctx.fill();
+ ctx.fillStyle=(f.sp.name==='Sea Beast'?'#ffd76a':f.sp.name==='Enguia elétrica'?'#a8fff2':'#ffffff');ctx.fillText(label,x,ly);ctx.restore();
+ }
+ // Linha de pesca: a isca voa do barco até o ponto clicado e cai na água.
+ let b={x:sx(world.boat.x,c),y:sy(world.boat.y,c)};
+ // Pose do barco (com balanço) e ponta da vara: a linha sai da vara, que aponta para a isca ou o peixe.
+ const bob=Math.sin(performance.now()*.0021),pose={x:b.x,y:b.y+bob*.8,a:world.boat.angle+bob*.035,k:BOAT_SCALE};
+ let rodInfo=null,rt=b;
+ if(world.line&&world.target){const Lr=world.line,aim=(Lr.state==='fight'&&Lr.visualFish)?(mo=>({x:sx(mo.x,c),y:sy(mo.y,c)}))(fishMouth(Lr.visualFish)):{x:sx(world.target.x,c),y:sy(world.target.y,c)};rodInfo=rodTipFor(pose,aim.x,aim.y);rodInfo.bend=Lr.state==='fight'?Lr.fight.tension:Lr.state==='bite'?.3:0;rt=rodInfo}
+ // Animação de descarga: a escotilha abre e cada peixe capturado sai do porão
+ // como um sprite próprio, seguindo em arco até a área de recebimento do mercado.
+ if(marketSale){
+   const duration=marketSale.duration||3000, p=Math.min(1,marketSale.time/duration);
+   const dock={x:sx(2458,c),y:sy(1990,c)-25};
+   const hatchX=b.x-25,hatchY=b.y-43;
+   ctx.save();
+   // Escotilha do porão aberta, com dobradiças e interior escuro.
+   ctx.fillStyle='rgba(3,15,22,.9)';ctx.strokeStyle='#d9bd7a';ctx.lineWidth=2;
+   ctx.beginPath();ctx.roundRect(hatchX-25,hatchY-5,76,34,6);ctx.fill();ctx.stroke();
+   ctx.fillStyle='#172b2d';ctx.beginPath();ctx.roundRect(hatchX-19,hatchY,64,25,4);ctx.fill();
+   const lid=Math.min(1,marketSale.time/420);
+   ctx.save();ctx.translate(hatchX-23,hatchY-3);ctx.rotate(-.95*lid);
+   ctx.fillStyle='#9b7045';ctx.strokeStyle='#e0c18a';ctx.lineWidth=2;ctx.fillRect(0,-5,70,10);ctx.strokeRect(0,-5,70,10);
+   ctx.restore();
+   ctx.fillStyle='#ffe6a6';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.fillText(p<.12?'ABRINDO PORÃO':p<.94?'TRANSFERINDO PEIXES UM A UM':'CONFERINDO',b.x,b.y-58);
+   marketSale.items.forEach((it,i)=>{
+     const stagger=i*(marketSale.stagger||1120), elapsed=marketSale.time-stagger, q=Math.max(0,Math.min(1,elapsed/(marketSale.flight||1080)));
+     if(q<=0||q>=1)return;
+     const e=q*q*(3-2*q),sx0=hatchX+8,sy0=hatchY+12;
+     const x=sx0+(dock.x-sx0)*e+Math.sin(q*Math.PI*2+i*.7)*8;
+     const y=sy0+(dock.y-sy0)*e-Math.sin(q*Math.PI)*48;
+     const alpha=Math.min(1,elapsed/160)*Math.min(1,(1-q)*7);
+     const speciesInfo=species.find(sp=>sp.name===it.name), color=(speciesInfo&&speciesInfo.color)||'#74c9dc';
+     ctx.save();ctx.globalAlpha=alpha;ctx.translate(x,y);ctx.rotate(Math.atan2(dock.y-sy0,dock.x-sx0)*.12+Math.sin(elapsed*.025+i)*.08);
+     const sc=Math.max(.65,Math.min(1.35,.72+(it.weight||1)*.025));ctx.scale(sc,sc);
+     // Corpo, cauda e barbatanas animados durante o transporte.
+     const wag=Math.sin(elapsed*.035+i)*4;
+     ctx.fillStyle=color;ctx.strokeStyle='rgba(5,34,48,.9)';ctx.lineWidth=1.5;
+     ctx.beginPath();ctx.ellipse(0,0,17,8,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+     ctx.beginPath();ctx.moveTo(-13,0);ctx.lineTo(-24,wag-7);ctx.lineTo(-22,wag+8);ctx.closePath();ctx.fill();ctx.stroke();
+     ctx.beginPath();ctx.moveTo(-1,-5);ctx.lineTo(5,-12);ctx.lineTo(9,-4);ctx.closePath();ctx.fill();
+     ctx.beginPath();ctx.moveTo(-1,5);ctx.lineTo(6,11);ctx.lineTo(9,4);ctx.closePath();ctx.fill();
+     ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(10,-2,2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#10232a';ctx.beginPath();ctx.arc(10.5,-2,1,0,Math.PI*2);ctx.fill();
+     ctx.restore();
+   });
+   if(p>.78){ctx.globalAlpha=.95;ctx.fillStyle='#fff0b0';ctx.font='bold 12px system-ui';ctx.fillText('PEIXES RECEBIDOS',dock.x,dock.y-22)}
+   ctx.restore();
+ }
+ if(world.target){
+  let t={x:sx(world.target.x,c),y:sy(world.target.y,c)};
+  // Área de atração: mesmo raio usado pela lógica que avalia os peixes próximos da isca.
+  if(world.line && world.line.state==='wait'){
+   const attractionRadius=attractRadius(world.line.baitType);
+   ctx.save();
+   // Pulsos de sonar: três frentes de onda se propagam a partir da isca.
+   const sonarPeriod=2600, sonarNow=Date.now()%sonarPeriod;
+   for(let pulse=0;pulse<3;pulse++){
+     const phase=((sonarNow/sonarPeriod)+(pulse/3))%1;
+     const radius=phase*attractionRadius;
+     ctx.globalAlpha=(1-phase)*.42;
+     ctx.strokeStyle=pulse===0?'#9dfff0':'#54d9ee';
+     ctx.lineWidth=1.5+(1-phase)*1.1;
+     ctx.setLineDash([5,7]);
+     ctx.beginPath();ctx.arc(t.x,t.y,radius,0,Math.PI*2);ctx.stroke();
+   }
+   ctx.setLineDash([]);ctx.globalAlpha=1;
+   // Pequeno brilho no centro marca a origem do pulso.
+   ctx.shadowColor='#8affef';ctx.shadowBlur=13;
+   ctx.fillStyle='rgba(145,255,235,.9)';ctx.beginPath();ctx.arc(t.x,t.y,4,0,Math.PI*2);ctx.fill();
+   ctx.shadowBlur=0;
+   ctx.fillStyle='rgba(105,235,218,.075)';ctx.beginPath();ctx.arc(t.x,t.y,attractionRadius,0,Math.PI*2);ctx.fill();
+   ctx.strokeStyle='rgba(146,255,230,.9)';ctx.lineWidth=2;ctx.setLineDash([9,6]);ctx.beginPath();ctx.arc(t.x,t.y,attractionRadius,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+   ctx.fillStyle='rgba(4,35,48,.78)';ctx.strokeStyle='rgba(146,255,230,.65)';ctx.lineWidth=1;
+   ctx.font='bold 11px system-ui';ctx.textAlign='center';const tag='ÁREA DE ATRAÇÃO';const tw=ctx.measureText(tag).width+14;
+   ctx.beginPath();ctx.roundRect(t.x-tw/2,t.y-attractionRadius-23,tw,18,6);ctx.fill();ctx.stroke();
+   ctx.fillStyle='#caffed';ctx.fillText(tag,t.x,t.y-attractionRadius-10);
+   ctx.restore();
+  }
+  // Ponto da isca em cada estado: voo, espera, mordida, briga e recolhimento.
+  const L=world.line,st=L?L.state:'';
+  let progress=1,lx=t.x,ly=t.y;
+  if(st==='flight')progress=Math.min(1,L.flightTime/560);
+  else if(st==='retrieve')progress=Math.max(0,1-L.retrieveTime/1200);
+  if(st==='flight'||st==='retrieve'){lx=rt.x+(t.x-rt.x)*progress;ly=rt.y+(t.y-rt.y)*progress-(st==='flight'?Math.sin(progress*Math.PI)*Math.min(95,Math.hypot(t.x-rt.x,t.y-rt.y)*.22):0)}
+  else if(st==='fight'&&L.visualFish){const mo=fishMouth(L.visualFish);lx=sx(mo.x,c);ly=sy(mo.y,c)}
+  else if(st==='bite')ly+=Math.sin(Date.now()/70)*2.5+3;
+  ctx.save();
+  // Linha: curva frouxa com pouca tensão, reta e avermelhada perto do limite.
+  const tension=st==='fight'?L.fight.tension:.5;
+  ctx.strokeStyle=st==='fight'?(tension>.85?'#ff6b6b':tension>.6?'#ffd36b':'rgba(255,245,195,.95)'):'rgba(255,245,195,.9)';
+  ctx.lineWidth=st==='fight'?1.4+tension*1.4:1.6;
+  const mx=(rt.x+lx)/2,my=(rt.y+ly)/2+(st==='fight'?(1-tension)*34:(st==='wait'||st==='bite')?14:0);
+  ctx.beginPath();ctx.moveTo(rt.x,rt.y);ctx.quadraticCurveTo(mx,my,lx,ly);ctx.stroke();
+  if(st==='flight'||st==='retrieve'){
+   ctx.strokeStyle='#fff1a8';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(lx-5,ly-3);ctx.lineTo(lx+5,ly+3);ctx.stroke();
+   ctx.fillStyle='#ffdf70';ctx.beginPath();ctx.arc(lx,ly,3.2,0,Math.PI*2);ctx.fill();
+   if(st==='retrieve'){
+    const ripplePhase=(Date.now()%900)/900;
+    ctx.save();
+    for(let r=0;r<3;r++){
+     const phase=(ripplePhase+r/3)%1;
+     ctx.globalAlpha=(1-phase)*.48;
+     ctx.strokeStyle=r===0?'#e8fbff':'#b9e9f2';
+     ctx.lineWidth=1.3;
+     ctx.beginPath();
+     ctx.ellipse(lx,ly+3,4+phase*19,2+phase*6,0,0,Math.PI*2);
+     ctx.stroke();
+    }
+    ctx.globalAlpha=.32;
+    ctx.strokeStyle='#f3ffff';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(lx-17,ly+7);ctx.quadraticCurveTo(lx-8,ly+2,lx,ly+5);ctx.quadraticCurveTo(lx+9,ly+8,lx+18,ly+5);ctx.stroke();
+
+    // Rastro de água mais evidente: esteira em V, espuma quebrada e ondulações.
+    const dx=t.x-b.x,dy=t.y-b.y,dist=Math.max(1,Math.hypot(dx,dy));
+    const ux=dx/dist,uy=dy/dist,px=-uy,py=ux,now=Date.now();
+    // Esteira central escura, com transparência para parecer água deslocada.
+    ctx.globalAlpha=.22;ctx.strokeStyle='#123f55';ctx.lineWidth=9;
+    ctx.lineCap='round';ctx.beginPath();
+    ctx.moveTo(lx+ux*2,ly+uy*2);
+    ctx.quadraticCurveTo(lx+ux*25+px*1,ly+uy*25+py*1,lx+ux*66,ly+uy*66);
+    ctx.stroke();
+    ctx.globalAlpha=.15;ctx.strokeStyle='#bdebf0';ctx.lineWidth=4;
+    ctx.beginPath();ctx.moveTo(lx+ux*5,ly+uy*5);
+    ctx.quadraticCurveTo(lx+ux*26,ly+uy*26,lx+ux*58,ly+uy*58);ctx.stroke();
+
+    // Ondas em V abrindo atrás da isca, com leve movimento.
+    for(let side of [-1,1]){
+     const pulse=Math.sin(now/260+(side===1?0:1.3))*2;
+     ctx.globalAlpha=.34;ctx.strokeStyle='#d8f7fa';ctx.lineWidth=1.8;
+     ctx.beginPath();
+     ctx.moveTo(lx+px*side*3,ly+py*side*3);
+     ctx.quadraticCurveTo(lx+ux*19+px*side*(12+pulse),ly+uy*19+py*side*(12+pulse),
+       lx+ux*49+px*side*(25+pulse),ly+uy*49+py*side*(25+pulse));
+     ctx.stroke();
+     ctx.globalAlpha=.18;ctx.lineWidth=3.5;
+     ctx.beginPath();
+     ctx.moveTo(lx+ux*8+px*side*5,ly+uy*8+py*side*5);
+     ctx.quadraticCurveTo(lx+ux*27+px*side*17,ly+uy*27+py*side*17,
+       lx+ux*54+px*side*29,ly+uy*54+py*side*29);
+     ctx.stroke();
+    }
+
+    // Fragmentos de espuma distribuídos de forma irregular ao longo da esteira.
+    for(let k=1;k<=16;k++){
+     const along=k*4.8;
+     const side=(Math.sin(k*8.31)*.5+Math.cos(k*3.7)*.5)* (4+k*.75);
+     const wobble=Math.sin(now/180+k*1.9)*1.8;
+     const tx=lx+ux*along+px*(side+wobble);
+     const ty=ly+uy*along+py*(side+wobble)+1;
+     const fade=(1-k/19)*(.42+Math.sin(now/210+k*2)*.12);
+     ctx.globalAlpha=Math.max(.08,fade);
+     ctx.fillStyle=k%4===0?'#ffffff':'#dffbfc';
+     ctx.beginPath();
+     ctx.ellipse(tx,ty,1.5+(k%4)*.55,.8+(k%3)*.35,Math.atan2(uy,ux),0,Math.PI*2);
+     ctx.fill();
+    }
+
+    // Espuma mais clara e pequenas gotas junto à isca, onde ela corta a superfície.
+    ctx.globalAlpha=.42;ctx.strokeStyle='#ffffff';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.ellipse(lx,ly+2,9+Math.sin(now/90)*2,3.2,0,0,Math.PI*2);ctx.stroke();
+    for(let n=0;n<5;n++){
+     const phase=now/145+n*1.26;
+     const rx=lx+Math.cos(phase)*(5+n*1.5),ry=ly+Math.sin(phase)*(2+n*.55);
+     ctx.globalAlpha=.5-(n*.045);ctx.fillStyle='#ffffff';
+     ctx.beginPath();ctx.arc(rx,ry,1.1+(n%2)*.65,0,Math.PI*2);ctx.fill();
+    }
+    // Pequenas ondulações circulares que se afastam do ponto de contato.
+    for(let r=0;r<2;r++){
+     const phase=(now/850+r*.5)%1;
+     ctx.globalAlpha=(1-phase)*.28;ctx.strokeStyle='#e7ffff';ctx.lineWidth=1.1;
+     ctx.beginPath();ctx.ellipse(lx,ly+2,7+phase*23,2.5+phase*6,0,0,Math.PI*2);ctx.stroke();
+    }
+    ctx.restore();
+   }
+  }else if(st==='wait'||st==='bite'){
+   // Boia: balança na espera; na mordida afunda, treme e mostra um "!".
+   const bite=st==='bite';
+   ctx.strokeStyle='rgba(220,250,255,.8)';ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(t.x,t.y+3,7+Math.sin(Date.now()/(bite?60:100))*3,2.5,0,0,Math.PI*2);ctx.stroke();
+   ctx.fillStyle='#ff5b4a';ctx.beginPath();ctx.arc(lx,ly-2,4.2,Math.PI,0);ctx.fill();ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(lx,ly-2,4.2,0,Math.PI);ctx.fill();
+   if(bite){const pulse=(Date.now()%600)/600;ctx.strokeStyle=`rgba(255,224,138,${(1-pulse).toFixed(3)})`;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(t.x,t.y,10+pulse*26,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#ffe08a';ctx.font='900 22px system-ui';ctx.textAlign='center';ctx.fillText('!',t.x,t.y-18+Math.sin(Date.now()/90)*2)}
+  }
+  ctx.restore();
+ }
+ // O peixe fisgado é desenhado pelo renderizador normal dos peixes, usando a instância real.
+ // Na fuga, o próprio peixe real fica brevemente imobilizado e depois retoma a natação.
+ // Barco com casco sombreado, borda, convés, cabine, janelas e motor.
+ drawBoat(pose,rodInfo);
+ // distance ring
+ ctx.strokeStyle='#e5ffff66';ctx.setLineDash([4,6]);ctx.beginPath();ctx.lineWidth=1.2;ctx.arc(b.x,b.y,lineRange(),0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+ drawFx(c);drawFightUI();
+ drawRadar();
+ requestAnimationFrame(draw)}
+function drawRadar(){
+ const radar=document.getElementById('radar');if(!radar)return;const rctx=radar.getContext('2d'),rw=radar.width,rh=radar.height;
+ rctx.clearRect(0,0,rw,rh);rctx.fillStyle='#062b3b';rctx.fillRect(0,0,rw,rh);
+ rctx.strokeStyle='rgba(120,205,211,.18)';rctx.lineWidth=1;
+ for(let i=1;i<4;i++){rctx.beginPath();rctx.moveTo(rw*i/4,0);rctx.lineTo(rw*i/4,rh);rctx.stroke();rctx.beginPath();rctx.moveTo(0,rh*i/4);rctx.lineTo(rw,rh*i/4);rctx.stroke();}
+ const pad=12,sxv=(rw-2*pad)/world.w,syv=(rh-2*pad)/world.h,px=x=>pad+x*sxv,py=y=>pad+y*syv;
+ // Zonas de profundidade no radar (substituem o antigo painel de zonas).
+ [[1050,'rgba(22,129,203,.35)'],[650,'rgba(56,198,231,.32)'],[300,'rgba(98,224,184,.35)']].forEach(([r,col])=>{rctx.fillStyle=col;rctx.beginPath();rctx.ellipse(px(2400),py(1800),r*sxv,r*syv,0,0,Math.PI*2);rctx.fill()});
+ rctx.strokeStyle='rgba(229,255,255,.35)';rctx.setLineDash([4,4]);rctx.beginPath();rctx.arc(px(world.boat.x),py(world.boat.y),lineRange()*sxv,0,Math.PI*2);rctx.stroke();rctx.setLineDash([]);
+ rctx.save();rctx.translate(px(world.island.x),py(world.island.y));rctx.scale(sxv,syv);
+ rctx.fillStyle='#c9a96a';rctx.beginPath();rctx.ellipse(0,0,world.island.rx*1.14,world.island.ry*1.14,-.12,0,Math.PI*2);rctx.fill();
+ rctx.fillStyle='#6d9d59';rctx.beginPath();rctx.ellipse(0,0,world.island.rx*.94,world.island.ry*.94,-.12,0,Math.PI*2);rctx.fill();rctx.restore();
+ for(const f of fish){if(!f.alive)continue;const mass=Number.isFinite(f.weight)?f.weight:(f.sp.min+f.sp.max)*.5;if(mass<=100)continue;const x=px(f.x),y=py(f.y);rctx.beginPath();rctx.fillStyle='#ff6262';rctx.shadowColor='#ff5555';rctx.shadowBlur=10;rctx.arc(x,y,Math.max(4,Math.min(7,3+mass/450)),0,Math.PI*2);rctx.fill();rctx.shadowBlur=0;}
+ // Peixes das missões ativas em dourado, para o jogador saber onde procurar.
+ const targets=new Set((game.missions||[]).filter(m=>!m.done).flatMap(missionSpecies));
+ if(targets.size){rctx.fillStyle='#ffd34d';rctx.strokeStyle='#3a2a00';rctx.lineWidth=1.5;for(const f of fish){if(!f.alive||!targets.has(f.sp.name)||f.weight>100)continue;rctx.beginPath();rctx.arc(px(f.x),py(f.y),3.6,0,Math.PI*2);rctx.fill();rctx.stroke()}}
+ const bx=px(world.boat.x),by=py(world.boat.y);rctx.save();rctx.translate(bx,by);rctx.rotate(world.boat.angle);rctx.fillStyle='#fff';rctx.strokeStyle='#092332';rctx.lineWidth=2;rctx.beginPath();rctx.moveTo(8,0);rctx.lineTo(-6,-5);rctx.lineTo(-4,0);rctx.lineTo(-6,5);rctx.closePath();rctx.fill();rctx.stroke();rctx.restore();
+ rctx.strokeStyle='rgba(210,247,255,.65)';rctx.lineWidth=2;rctx.strokeRect(1,1,rw-2,rh-2);rctx.fillStyle='rgba(236,251,255,.72)';rctx.font='bold 18px system-ui';rctx.textAlign='right';rctx.fillText('N',rw-12,22);
+}
+// ===================== Regras do jogo (v67) =====================
+const SAVE_KEY='pescaria_mar_aberto_save';
+const BAITS=[
+ {name:'Sardinha',emoji:'🐟',price:25,qty:10,radius:100,desc:'Barata. Piavas, bagres e tubarões adoram.'},
+ {name:'Camarão',emoji:'🦐',price:40,qty:10,radius:108,desc:'Ótima para bagres, traíras e tubarões.'},
+ {name:'Lula',emoji:'🦑',price:60,qty:10,radius:118,desc:'Atrai traíras, enguias e o Sea Beast.'},
+ {name:'Artificial',emoji:'🎣',price:90,qty:5,radius:126,reuse:.75,desc:'Maior área de atração; 75% de chance de não ser gasta. Piavas, tilápias e dourados.'}
+];
+const fmt=n=>Math.round(n).toLocaleString('pt-BR');
+function hash2(x,y){const s=Math.sin(x*127.1+y*311.7)*43758.5453;return s-Math.floor(s)}
+function lineRange(){return Math.min(330,180+game.gear.Linha.lv*18)}
+function rodCap(lv=game.gear.Vara.lv){return Math.round(20*Math.pow(1.8,lv-1))}
+function attractRadius(i){return BAITS[i==null?game.baitType:i].radius}
+// Valor cresce um pouco menos que o peso: peixes grandes valem mais, sem explodir a economia.
+function fishValue(sp,w){return Math.max(1,Math.round(sp.price*Math.pow(w,.85)*(1+sp.depth*.25)))}
+function fishLength(sp,w){return Math.round((sp.lenK||40)*Math.cbrt(w))}
+function stars(d){return d<.6?'fácil':d<1.5?'média':d<3?'difícil':d<5?'muito difícil':'impossível (precisa de tudo no nível 10)'}
+// Dificuldade = peso do peixe / quanto a vara aguenta, com teto (nunca impossível)
+// e uma ajuda que cresce a cada briga perdida seguida.
+// Tamanho do peixe na tela e posição da boca (a linha prende ali, não no meio do corpo).
+function fishScale(f){return (.5+.9*Math.cbrt(Math.min(1,f.weight/f.sp.max)))*(f.sp.name==='Sea Beast'?2.2:f.sp.name==='Tubarão'?1.15:1)}
+function mouthDist(f){const lk=FISH_LOOK[f.sp.name]||FISH_LOOK['Piava'];return (lk.L*.5+(lk.shark?lk.W*.95:lk.eel?lk.W*.55:lk.W*.45))*fishScale(f)}
+function fishMouth(f){const d=mouthDist(f);return {x:f.x+Math.cos(f.heading)*d,y:f.y+Math.sin(f.heading)*d}}
+// Sea Beast: só dá para encarar com Vara, Molinete, Linha e Anzol no nível 10 ou mais.
+const BEAST_LV=10;
+function beastReady(){return Object.values(game.gear).every(g=>g.lv>=BEAST_LV)}
+function fightDifficulty(f){if(f.sp.name==='Sea Beast')return beastReady()?4.5:9;const d=f.weight/rodCap(),str=1+(f.sp.attack||0)*.15,assist=Math.max(.6,1-.12*(game.fightFails||0));return Math.min(4.5,Math.max(.25,d*str))*assist}
+function gearInfo(n,lv){
+ if(n==='Vara')return 'aguenta '+rodCap(lv)+' kg sem esforço extra';
+ if(n==='Molinete')return 'puxa '+((lv-1)*15)+'% mais rápido';
+ if(n==='Linha')return 'alcance de '+Math.min(330,180+lv*18)+' m e '+((lv-1)*12)+'% mais resistente';
+ return 'segura o peixe por '+(3+.5*(lv-1)).toFixed(1)+' s com a linha frouxa';
+}
+const upgradeCost=g=>Math.round(g.cost*(g.lv+1)*1.25), replaceCost=g=>g.cost+g.lv*20;
+
+// ---------- Mensagens em fila (uma não apaga a outra) ----------
+let toastQ=[],toastCur=null,toastAt=0,toastTimer=0;
+function say(s){}
+function toast(s){if(!s||s===toastCur||toastQ.includes(s))return;toastQ.push(s);if(toastQ.length>3)toastQ.shift();pumpToast(false)}
+function pumpToast(expired){
+ clearTimeout(toastTimer);const el=document.getElementById('toast'),shown=performance.now()-toastAt;
+ if(toastQ.length){
+   if(toastCur&&!expired&&shown<1100){toastTimer=setTimeout(()=>pumpToast(true),1100-shown);return}
+   toastCur=toastQ.shift();toastAt=performance.now();el.textContent=toastCur;el.style.display='block';el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');
+   toastTimer=setTimeout(()=>pumpToast(true),toastQ.length?1900:4300);
+ }else if(expired||!toastCur){el.style.display='none';toastCur=null}
+ else toastTimer=setTimeout(()=>pumpToast(true),Math.max(300,4300-shown));
+}
+
+// ---------- HUD: só toca no DOM quando algo mudou ----------
+function setText(id,v){const el=document.getElementById(id);if(el&&el.textContent!==v)el.textContent=v}
+function setHTML(id,v){const el=document.getElementById(id);if(el&&el._h!==v){el.innerHTML=v;el._h=v}}
+function setWidth(id,p){const el=document.getElementById(id),v=Math.max(0,Math.min(100,p)).toFixed(1)+'%';if(el&&el.style.width!==v)el.style.width=v}
+function renderHUD(){
+ setText('money','R$ '+fmt(game.money));
+ setText('hullText',Math.max(0,Math.round(game.hull))+' / '+game.maxHull);setWidth('hullBar',game.hull/game.maxHull*100);
+ const full=game.catch.length>=game.holdCap;setText('fishCount',game.catch.length+' / '+game.holdCap+(full?' cheio':''));
+ setText('depth',zoneName(depthAt(world.boat.x,world.boat.y)));
+ const r=lineRange();setText('rangeText',r+' m');setWidth('rangeBar',r/330*100);
+ setText('baitName',BAITS[game.baitType].name+' × '+game.baits[game.baitType]);
+ document.querySelectorAll('.baitChoice').forEach((el,i)=>{const a=i===game.baitType;if(el.classList.contains('active')!==a){el.classList.toggle('active',a);el.setAttribute('aria-pressed',String(a))}const e=game.baits[i]<=0;if(el.classList.contains('empty')!==e)el.classList.toggle('empty',e);setText('bc'+i,'× '+game.baits[i])});
+ setText('speed',Math.round(Math.hypot(world.boat.vx,world.boat.vy)*12)+' km/h');
+ setHTML('equipment',Object.entries(game.gear).map(([n,g])=>`<div class="eq"><strong>${n}</strong><span>Nv. ${g.lv}</span><div class="bar ${g.hp<35?'red':''}"><i style="width:${Math.round(g.hp)}%"></i></div><span>${Math.round(g.hp)}%${g.hp<=0?' QUEBROU':g.hp<35?' TROCAR':''}</span></div>`).join(''));
+ setHTML('missionList',game.missions.map(m=>`<div class="mission${m.done?' done':''}${m.isNew?' new':''}"><div class="mHead"><span>${m.icon||'🎯'} ${m.client||'Pedido'}</span>${m.isNew?'<em>NOVO</em>':''}</div><div class="mBody"><span>${missionText(m)}</span><b>${m.done?'✅ +R$ ':'R$ '}${fmt(m.reward)}</b></div><div class="mBar"><i style="width:${Math.round(missionFrac(m)*100)}%"></i></div><div class="mProg">${m.done?'Entregue!':missionProgress(m)}</div></div>`).join(''));
+ updateActionBtn();
+}
+function updateActionBtn(){
+ const btn=document.getElementById('actionBtn');if(!btn)return;const L=world.line,st=L?L.state:'';
+ let cls='',label='',icon='🎣';
+ if(st==='flight'||st==='wait'){cls=' show';label='Recolher';icon='⤺'}
+ else if(st==='bite'){cls=' show bite';label='FISGAR!'}
+ else if(st==='fight'){cls=' show fight';label='Segure';icon='⟳'}
+ const c='actionBtn'+cls+(btnReel&&st==='fight'?' held':'');if(btn.className!==c)btn.className=c;
+ setText('actionLabel',label);const sp=btn.querySelector('span');if(sp.textContent!==icon)sp.textContent=icon;
+}
+
+// ---------- Missões e coleção ----------
+// Pedidos dos moradores da ilha. Cada missão concluída fica marcada por alguns segundos
+// e só então dá lugar a um novo pedido no mesmo lugar (as outras não mudam).
+const CLIENTS=[['🍽','Restaurante da Dona Rosa'],['🐠','Aquário da Ilha'],['🔬','Bióloga Marina'],['🏪','Mercado do Porto'],['🎣','Clube de Pesca'],['👴','Seu Juca, pescador aposentado'],['🏆','Torneio da Ilha'],['📸','Revista Mar Aberto']];
+const BAIT_NAMES=['sardinha','camarão','lula','isca artificial'];
+const kgTxt=v=>String(+(+v).toFixed(1)).replace('.',',');
+const avgW=sp=>sp.min+(sp.max-sp.min)/3, roundR=v=>Math.max(50,Math.round(v/5)*5);
+function missionSpecies(m){return m.type==='combo'?m.parts.map(p=>p.species):m.species?[m.species]:[]}
+function genMission(){
+ const maxD=Math.min(3,(game.maxDepth||0)+1),active=game.missions.filter(m=>!m.done),takenSp=active.flatMap(missionSpecies),takenT=active.map(m=>m.type);
+ const ok=species.filter(s=>s.name!=='Sea Beast'&&s.depth<=maxD);
+ let pool=ok.filter(s=>!takenSp.includes(s.name));if(!pool.length)pool=ok;
+ const pick=a=>a[Math.floor(Math.random()*a.length)],ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+ const sp=pick(pool),cl=pick(CLIENTS),cnt=s=>s.rarity>=30?ri(3,5):s.rarity>=13?ri(2,3):1;
+ const types=['count','count','big','small','bait','totalkg','combo','variety','zone','streak'];
+ const rec=game.journal&&game.journal[sp.name];if(rec&&rec.best<sp.max*.8)types.push('record');
+ const type=pick(types.filter(t=>t==='count'||!takenT.includes(t)));
+ let m;
+ switch(type){
+  case 'big':{const kg=+(sp.min+(sp.max-sp.min)*.3).toFixed(1);m={type,species:sp.name,kg,n:1,reward:roundR(80+fishValue(sp,kg)*2.2)};break}
+  case 'small':{const kg=+(sp.min+(sp.max-sp.min)*.22).toFixed(1);m={type,species:sp.name,kg,n:1,reward:roundR(70+fishValue(sp,kg)*3+sp.price*5)};break}
+  case 'bait':{const b=pick(sp.baitPref.map((v,i)=>({v,i})).filter(o=>o.v>=40)).i,n=Math.max(1,cnt(sp)-1);m={type,species:sp.name,bait:b,n,reward:roundR(60+fishValue(sp,avgW(sp))*1.9*n)};break}
+  case 'totalkg':{const kg=Math.max(1,Math.round(avgW(sp)*(cnt(sp)+1)*1.1));m={type,species:sp.name,kg,n:kg,reward:roundR(60+sp.price*Math.pow(kg,.85)*1.8)};break}
+  case 'combo':{const others=ok.filter(s=>s.name!==sp.name),sp2=pick(others.length?others:ok),a=Math.max(1,cnt(sp)-1),b=Math.max(1,cnt(sp2)-1);
+    m={type,parts:[{species:sp.name,n:a,have:0},{species:sp2.name,n:b,have:0}],n:a+b,reward:roundR((60+fishValue(sp,avgW(sp))*1.6*a+fishValue(sp2,avgW(sp2))*1.6*b)*1.15)};break}
+  case 'variety':{const n=Math.min(ok.length,ri(3,4)),cheap=ok.map(x=>fishValue(x,avgW(x))).sort((a,b)=>a-b).slice(0,n);m={type,n,seen:[],reward:roundR(n*70+cheap.reduce((s,v)=>s+v,0)*1.5)};break}
+  case 'zone':{const top=Math.min(2,maxD),z=ri(Math.max(0,top-1),top),inZ=ok.filter(s=>s.depth===z),n=z>=2?ri(2,3):ri(3,5),av=inZ.reduce((s,x)=>s+fishValue(x,avgW(x)),0)/Math.max(1,inZ.length);m={type,zone:z,n,reward:roundR(60+av*1.3*n)};break}
+  case 'streak':{const n=ri(3,5);m={type,n,reward:roundR(80+n*55*(1+(game.maxDepth||0)*.6))};break}
+  case 'record':{m={type,species:sp.name,kg:+rec.best.toFixed(1),n:1,reward:roundR(120+fishValue(sp,rec.best)*2.5)};break}
+  default:{const n=cnt(sp);m={type:'count',species:sp.name,n,reward:roundR(60+fishValue(sp,avgW(sp))*1.6*n)}}
+ }
+ return Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),client:cl[1],icon:cl[0],have:0},m);
+}
+function missionText(m){
+ switch(m.type){
+  case 'big':case 'weight':return `${m.species} com ${kgTxt(m.kg)} kg ou mais`;
+  case 'small':return `${m.species} pequeno, com até ${kgTxt(m.kg)} kg`;
+  case 'bait':return `Pegue ${m.n} × ${m.species} usando ${BAIT_NAMES[m.bait]}`;
+  case 'totalkg':return `Junte ${m.kg} kg de ${m.species}`;
+  case 'combo':return m.parts.map(p=>`${p.n} × ${p.species}`).join(' + ');
+  case 'variety':return `Pegue ${m.n} espécies diferentes`;
+  case 'zone':return `Pegue ${m.n} peixes em ${zoneName(m.zone).toLowerCase()}`;
+  case 'streak':return `Pegue ${m.n} peixes seguidos sem perder nenhum`;
+  case 'record':return `Supere seu recorde de ${m.species} (${kgTxt(m.kg)} kg)`;
+  default:return `Pegue ${m.n} × ${m.species}`;
+ }
+}
+function missionProgress(m){if(m.type==='totalkg')return `${kgTxt(Math.min(m.have,m.n))} / ${m.n} kg`;if(m.type==='combo')return m.parts.map(p=>`${Math.min(p.have,p.n)}/${p.n}`).join(' + ');return `${Math.min(m.have,m.n)}/${m.n}`}
+function missionFrac(m){return m.done?1:Math.min(1,m.have/m.n)}
+// c = {name, weight, bait, zone} do peixe recém-capturado.
+function progressMissions(c){
+ for(const m of game.missions){
+   if(m.done)continue;let hit=false;
+   switch(m.type){
+    case 'count':if(m.species===c.name){m.have++;hit=true}break;
+    case 'big':case 'weight':if(m.species===c.name&&c.weight>=m.kg){m.have=1;hit=true}break;
+    case 'record':if(m.species===c.name&&c.weight>m.kg){m.have=1;hit=true}break;
+    case 'small':if(m.species===c.name&&c.weight<=m.kg){m.have=1;hit=true}break;
+    case 'bait':if(m.species===c.name&&c.bait===m.bait){m.have++;hit=true}break;
+    case 'totalkg':if(m.species===c.name){m.have=+(m.have+c.weight).toFixed(1);hit=true}break;
+    case 'combo':for(const p of m.parts)if(p.species===c.name&&p.have<p.n){p.have++;hit=true;break}if(hit)m.have=m.parts.reduce((s,p)=>s+Math.min(p.have,p.n),0);break;
+    case 'variety':m.seen=m.seen||[];if(!m.seen.includes(c.name)){m.seen.push(c.name);m.have=m.seen.length;hit=true}break;
+    case 'zone':if(c.zone===m.zone){m.have++;hit=true}break;
+    case 'streak':m.have++;hit=true;break;
+   }
+   if(hit&&m.have>=m.n)completeMission(m);
+ }
+}
+function missionsOnFail(){for(const m of game.missions)if(!m.done&&m.type==='streak'&&m.have>0){m.have=0;toast('🎯 Sequência quebrada: "'+missionText(m)+'" recomeçou do zero.')}}
+function completeMission(m){m.done=true;m.doneAt=game.playTime||0;game.money+=m.reward;playSound('coin');addFloat(world.boat.x,world.boat.y-30,'+R$ '+fmt(m.reward));toast('🎯 '+m.client+': pedido entregue! '+missionText(m)+' • +R$ '+fmt(m.reward))}
+function updateMissions(dt){
+ game.playTime=(game.playTime||0)+dt;
+ for(let i=0;i<game.missions.length;i++){const m=game.missions[i];
+   if(m.done&&game.playTime-(m.doneAt||0)>5000){const nm=genMission();nm.isNew=true;nm.newAt=game.playTime;game.missions[i]=nm;toast('📬 Novo pedido: '+nm.client+' — '+missionText(nm))}
+   else if(m.isNew&&game.playTime-(m.newAt||0)>8000)m.isNew=false}
+}
+
+// ---------- Efeitos: respingos, textos flutuantes, esteira e tremor ----------
+function addSplash(x,y,n=12,power=1){world.fx=world.fx||[];for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=(.03+Math.random()*.1)*power;world.fx.push({t:'drop',x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s*.6,z:0,vz:(.1+Math.random()*.16)*Math.min(1.6,power),life:0,max:1400})}world.fx.push({t:'ring',x,y,life:0,max:900,r:6+6*power})}
+function addFloat(x,y,text,color='#ffe58a'){world.fx=world.fx||[];world.fx.push({t:'text',x,y,text,color,life:0,max:1800})}
+function updateFx(dt){
+ if(world.fx){for(const p of world.fx){p.life+=dt;if(p.t==='drop'){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vz-=.0006*dt;p.z+=p.vz*dt;if(p.z<0)p.life=p.max}}world.fx=world.fx.filter(p=>p.life<p.max)}
+ if(world.shake>0)world.shake=Math.max(0,world.shake-dt*.02);
+}
+function drawFx(c){
+ if(!world.fx||!world.fx.length)return;ctx.save();
+ for(const p of world.fx){const k=p.life/p.max,x=sx(p.x,c),y=sy(p.y,c);
+   if(p.t==='drop'){ctx.globalAlpha=.9;ctx.fillStyle='#e9fbff';ctx.beginPath();ctx.arc(x,y-p.z,1.7,0,Math.PI*2);ctx.fill()}
+   else if(p.t==='ring'){const r=Math.max(.5,p.r+k*34);ctx.globalAlpha=(1-k)*.7;ctx.strokeStyle='#e9fbff';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(x,y,r,r*.45,0,0,Math.PI*2);ctx.stroke()}
+   else if(p.t==='text'){ctx.globalAlpha=k<.12?k/.12:1-Math.max(0,(k-.6)/.4);ctx.font='900 18px system-ui';ctx.textAlign='center';ctx.lineWidth=4;ctx.strokeStyle='#04202ecc';const yy=y-30-k*46;ctx.strokeText(p.text,x,yy);ctx.fillStyle=p.color;ctx.fillText(p.text,x,yy)}}
+ ctx.restore();
+}
+function updateWake(dt){
+ const b=world.boat,v=Math.hypot(b.vx,b.vy);world.wake=world.wake||[];world.wakeT=(world.wakeT||0)+dt;
+ if(v>.05&&world.wakeT>40){world.wakeT=0;world.wake.push({x:b.x-Math.cos(b.angle)*50,y:b.y-Math.sin(b.angle)*50,a:b.angle,age:0,s:Math.min(1,v/.425)})}
+ for(const w of world.wake)w.age+=dt;world.wake=world.wake.filter(w=>w.age<1800);
+}
+function drawWake(c){
+ if(!world.wake||!world.wake.length)return;ctx.save();ctx.fillStyle='#effcff';
+ for(const w of world.wake){const k=w.age/1800,x=sx(w.x,c),y=sy(w.y,c),px=-Math.sin(w.a),py=Math.cos(w.a),spread=5+w.age*.03;
+   ctx.globalAlpha=(1-k)*.55*w.s;
+   for(const s of [-1,1]){ctx.beginPath();ctx.ellipse(x+px*spread*s,y+py*spread*s,3-k*1.4,1.3,w.a,0,Math.PI*2);ctx.fill()}
+   if(w.age<500){ctx.globalAlpha=(1-w.age/500)*.3*w.s;ctx.beginPath();ctx.ellipse(x,y,7,3.5,w.a,0,Math.PI*2);ctx.fill()}}
+ ctx.restore();
+}
+function drawFishShadow(x,y,f,scaleF,alpha){
+ const big=f.sp.name==='Sea Beast',eel=f.sp.name==='Enguia elétrica',len=big?48:eel?26:f.sp.name==='Tubarão'?22:15,hh=big?8:eel?4.5:6,w=Math.sin(f.phase*3)*hh*.5;
+ ctx.save();ctx.translate(x,y);ctx.rotate(f.heading);ctx.scale(scaleF,scaleF);ctx.globalAlpha=alpha;ctx.fillStyle='#012233';
+ ctx.beginPath();ctx.ellipse(0,0,len,hh,0,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.moveTo(-len*.8,0);ctx.lineTo(-len*1.3,-hh*1.2+w);ctx.lineTo(-len*1.3,hh*1.2+w);ctx.closePath();ctx.fill();
+ ctx.restore();
+}
+function bakeIsland(fn){
+ const d=scale||1,oc=document.createElement('canvas');oc.width=Math.ceil(520*d);oc.height=Math.ceil(440*d);
+ const saved=ctx;ctx=oc.getContext('2d');ctx.setTransform(d,0,0,d,260*d,220*d);try{fn()}finally{ctx=saved}return oc;
+}
+
+// ---------- Peixes realistas vistos de cima ----------
+// Cada espécie: comprimento (L), meia-largura (W), cores de dorso/flanco/ventre, nadadeiras, cauda e padrão.
+const FISH_LOOK={
+ 'Piava':{L:34,W:5.2,back:'#4c6656',side:'#c8c597',belly:'#efe8c4',fin:'rgba(222,176,92,.55)',tail:'fork',pattern:'spots3',pec:5},
+ 'Tilápia':{L:30,W:6.6,back:'#445850',side:'#9db0a3',belly:'#dbe3d6',fin:'rgba(160,178,168,.5)',tail:'round',pattern:'bars',pec:5.5,dorsalSpines:true},
+ 'Traíra':{L:40,W:6,back:'#2c3a27',side:'#6a7c53',belly:'#b9b98a',fin:'rgba(96,106,72,.6)',tail:'round',pattern:'mottle',pec:5,head:'wide'},
+ 'Bagre':{L:40,W:7.2,back:'#46515c',side:'#8794a1',belly:'#d5d9dc',fin:'rgba(112,124,138,.55)',tail:'fork',pattern:'none',pec:7,head:'flat',barbels:true},
+ 'Dourado':{L:42,W:6.3,back:'#9e6f1b',side:'#f0b630',belly:'#ffe6a0',fin:'rgba(240,128,52,.62)',tail:'fork',pattern:'lines',pec:6},
+ 'Tubarão':{L:56,W:7.4,back:'#5a6b78',side:'#8496a3',belly:'#dfe6ea',fin:'rgba(78,96,110,.95)',tail:'shark',pattern:'none',pec:13,shark:true},
+ 'Enguia elétrica':{L:66,W:4.8,back:'#2b281f',side:'#4e4934',belly:'#c27a3a',fin:'rgba(130,96,60,.5)',tail:'eel',pattern:'eel',pec:3.2,eel:true},
+ 'Sea Beast':{L:112,W:8.6,back:'#1b4870',side:'#4b98c2',belly:'#bfeaf7',fin:'rgba(96,196,236,.62)',tail:'round',pattern:'scales',pec:10,eel:true,beast:true}
+};
+function smoothPath(pts,move){
+ if(move)ctx.moveTo(pts[0][0],pts[0][1]);else ctx.lineTo(pts[0][0],pts[0][1]);
+ for(let i=1;i<pts.length-1;i++){const mx=(pts[i][0]+pts[i+1][0])/2,my=(pts[i][1]+pts[i+1][1])/2;ctx.quadraticCurveTo(pts[i][0],pts[i][1],mx,my)}
+ const l=pts[pts.length-1];ctx.lineTo(l[0],l[1]);
+}
+// Desenha o peixe no sistema local (cabeça para +x). O corpo segue uma "coluna" que ondula:
+// peixes comuns movem mais a cauda; enguia e Sea Beast ondulam o corpo inteiro.
+function drawFishBody(f,scaleF){
+ const lk=FISH_LOOK[f.sp.name]||FISH_LOOK['Piava'],now=performance.now(),Lw=world.line,hooked=Lw&&Lw.visualFish===f;
+ let freq=(lk.eel?.55:lk.shark?.5:1)*(.6+f.speed*40);
+ if(f.approachingLure)freq*=1.8;
+ if(hooked&&Lw.state==='fight')freq*=Lw.fight.surge>0?3.2:2;else if(hooked&&Lw.state==='bite')freq*=1.5;
+ if(f.escapeHold>0)freq*=2.5;
+ const dtv=Math.min(50,now-(f._tt||now));f._tt=now;f.tail=(f.tail||f.drift*10)+dtv*.0075*freq;
+ const ph=f.tail,N=16,L=lk.L,W=lk.W,pts=[],ws=[];
+ for(let i=0;i<N;i++){
+   const t=i/(N-1);
+   const y=lk.eel?W*1.15*(.2+.8*t)*Math.sin(ph-t*6.5):W*(lk.shark?.7:.6)*(.08+t*t)*Math.sin(ph-t*(lk.shark?2.4:3.2));
+   pts.push([L*.5-t*L,y]);
+   let w;
+   if(lk.eel)w=W*(t<.06?.55+7.5*t:1-.8*t);
+   else{w=W*Math.pow(Math.sin(Math.PI*Math.min(.999,.04+t*.96)),lk.shark?.75:.6)*(1-.62*t*t)+W*.12*t;if(lk.head&&t<.25)w*=1+(lk.head==='flat'?.3:.18)*(1-t/.25)}
+   ws.push(Math.max(.4,w));
+ }
+ const nrm=pts.map((p,i)=>{const a=pts[Math.max(0,i-1)],b=pts[Math.min(N-1,i+1)],dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy)||1;return [-dy/l,dx/l]});
+ const left=pts.map((p,i)=>[p[0]+nrm[i][0]*ws[i],p[1]+nrm[i][1]*ws[i]]),right=pts.map((p,i)=>[p[0]-nrm[i][0]*ws[i],p[1]-nrm[i][1]*ws[i]]);
+ const nose=[pts[0][0]+(lk.shark?W*.95:lk.eel?W*.55:W*.45),pts[0][1]];
+ const body=()=>{ctx.beginPath();ctx.moveTo(nose[0],nose[1]);ctx.quadraticCurveTo(left[0][0]+(nose[0]-left[0][0])*.6,left[0][1],left[0][0],left[0][1]);smoothPath(left.slice(1),false);ctx.lineTo(right[N-1][0],right[N-1][1]);smoothPath(right.slice(0,N-1).reverse(),false);ctx.quadraticCurveTo(right[0][0]+(nose[0]-right[0][0])*.6,right[0][1],nose[0],nose[1]);ctx.closePath()};
+ // Nadadeiras pares (peitorais e pélvicas), presas à borda do corpo e batendo devagar.
+ const fins=(ti,size,spread,flapAmp)=>{const i=Math.min(N-2,Math.round(ti*(N-1))),d0=pts[i+1][0]-pts[i][0],d1=pts[i+1][1]-pts[i][1],dl=Math.hypot(d0,d1)||1,dx=d0/dl,dy=d1/dl;
+   for(const s of [1,-1]){const nx=nrm[i][0]*s,ny=nrm[i][1]*s,base=s>0?left[i]:right[i],sp=spread+Math.sin(ph*1.4+(s>0?0:1.6))*flapAmp,ux=dx*Math.cos(sp)+nx*Math.sin(sp),uy=dy*Math.cos(sp)+ny*Math.sin(sp),tx=base[0]+ux*size,ty=base[1]+uy*size;
+     ctx.beginPath();ctx.moveTo(base[0]-dx*size*.15,base[1]-dy*size*.15);ctx.quadraticCurveTo(base[0]+nx*size*.55,base[1]+ny*size*.55,tx,ty);ctx.quadraticCurveTo(base[0]+dx*size*.55,base[1]+dy*size*.55,base[0]+dx*size*.3,base[1]+dy*size*.3);ctx.closePath();ctx.fill()}};
+ // Sombra projetada no fundo/água, deslocada sempre para o mesmo lado da tela.
+ const h=f.heading,ox=(4*Math.cos(h)+7*Math.sin(h))/scaleF,oy=(-4*Math.sin(h)+7*Math.cos(h))/scaleF;
+ ctx.save();ctx.translate(ox,oy);ctx.fillStyle='rgba(0,22,34,.22)';body();ctx.fill();ctx.restore();
+ // Cauda.
+ const tb=pts[N-1],tp=pts[N-2],ta=Math.atan2(tb[1]-tp[1],tb[0]-tp[0]),tl=W*(lk.shark?2.6:lk.beast?2.2:1.9),spr=W*(lk.shark?1.2:1.35),flex=Math.sin(ph-3.6)*.35;
+ ctx.save();ctx.translate(tb[0],tb[1]);ctx.rotate(ta);ctx.fillStyle=lk.fin;ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=.5;ctx.beginPath();
+ if(lk.tail==='fork'){ctx.moveTo(0,-W*.15);ctx.quadraticCurveTo(tl*.5,-spr*.5+flex*3,tl,-spr+flex*4);ctx.quadraticCurveTo(tl*.62,flex*2,tl,spr+flex*4);ctx.quadraticCurveTo(tl*.5,spr*.5+flex*3,0,W*.15)}
+ else if(lk.tail==='round'){ctx.moveTo(0,-W*.2);ctx.quadraticCurveTo(tl*.6,-spr*.9+flex*3,tl*.95,flex*4);ctx.quadraticCurveTo(tl*.6,spr*.9+flex*3,0,W*.2)}
+ else if(lk.tail==='shark'){ctx.moveTo(0,-W*.2);ctx.quadraticCurveTo(tl*.55,-spr*.35+flex*3,tl,-spr*.15+flex*6);ctx.quadraticCurveTo(tl*.5,spr*.25+flex*2,tl*.35,spr*.7+flex*2);ctx.quadraticCurveTo(tl*.2,spr*.3,0,W*.2)}
+ else{ctx.moveTo(0,-W*.15);ctx.quadraticCurveTo(W*.9,flex*2,0,W*.15)}
+ ctx.closePath();ctx.fill();
+ if(lk.tail==='fork'||lk.tail==='round'){ctx.beginPath();for(let r=-2;r<=2;r++){ctx.moveTo(0,r*W*.06);ctx.lineTo(tl*.85,r*spr*.38+flex*3.5)}ctx.stroke()}
+ ctx.restore();
+ ctx.fillStyle=lk.fin;
+ fins(lk.shark?.3:.22,lk.pec,lk.shark?1.05:.95,lk.shark?.05:.35);
+ if(!lk.eel||lk.beast)fins(lk.beast?.62:.5,lk.pec*.6,.75,.15);
+ // Corpo: flanco claro nas bordas e dorso escuro seguindo a curva da coluna (contrassombreamento).
+ ctx.fillStyle=lk.side;body();ctx.fill();
+ ctx.save();body();ctx.clip();
+ ctx.strokeStyle=lk.belly;ctx.lineWidth=1.4;body();ctx.stroke();
+ ctx.strokeStyle=lk.back;ctx.lineCap='round';
+ for(let i=0;i<N-1;i++){ctx.lineWidth=(ws[i]+ws[i+1])*.62;ctx.beginPath();ctx.moveTo(pts[i][0],pts[i][1]);ctx.lineTo(pts[i+1][0],pts[i+1][1]);ctx.stroke()}
+ const seed=f.drift*1000,edge=(i,s,q)=>{const e=s>0?left[i]:right[i],p=pts[i];return [p[0]+(e[0]-p[0])*q,p[1]+(e[1]-p[1])*q]};
+ if(lk.pattern==='spots3'){ctx.fillStyle='rgba(20,25,20,.6)';for(const t of [.38,.58,.76]){const i=Math.round(t*(N-1));for(const s of [1,-1]){const q=edge(i,s,.62);ctx.beginPath();ctx.arc(q[0],q[1],ws[i]*.24,0,Math.PI*2);ctx.fill()}}}
+ else if(lk.pattern==='bars'){ctx.strokeStyle='rgba(28,44,36,.3)';for(let k=0;k<6;k++){const i=3+k*2;if(i>=N-1)break;ctx.lineWidth=ws[i]*.35;ctx.beginPath();ctx.moveTo(left[i][0],left[i][1]);ctx.lineTo(right[i][0],right[i][1]);ctx.stroke()}}
+ else if(lk.pattern==='mottle'){ctx.fillStyle='rgba(16,24,12,.45)';for(let k=0;k<14;k++){const r1=hash2(seed+k,3.1),r2=hash2(k,seed*.7),i=1+Math.floor(r1*(N-3)),q=edge(i,r2>.5?1:-1,.2+.6*Math.abs(r2-.5)*2);ctx.beginPath();ctx.ellipse(q[0],q[1],ws[i]*.32,ws[i]*.2,r1*3,0,Math.PI*2);ctx.fill()}}
+ else if(lk.pattern==='lines'){ctx.fillStyle='rgba(110,58,10,.55)';for(let i=3;i<N-2;i++)for(const s of [1,-1])for(const qq of [.45,.75]){const q=edge(i,s,qq);ctx.beginPath();ctx.arc(q[0],q[1],.55,0,Math.PI*2);ctx.fill()}}
+ else if(lk.pattern==='eel'){ctx.save();ctx.globalAlpha*=.55;ctx.strokeStyle=lk.belly;ctx.lineWidth=1.8;body();ctx.stroke();ctx.restore()}
+ else if(lk.pattern==='scales'){ctx.strokeStyle='rgba(200,240,255,.35)';ctx.lineWidth=.6;for(let i=1;i<N-1;i++)for(const qq of [-.55,0,.55]){const q=edge(i,qq>=0?1:-1,Math.abs(qq)),a=Math.atan2(pts[i+1][1]-pts[i][1],pts[i+1][0]-pts[i][0]);ctx.beginPath();ctx.arc(q[0],q[1],ws[i]*.32,a-1.2,a+1.2);ctx.stroke()}}
+ // Escamas discretas nos peixes ósseos.
+ if(!lk.shark&&!lk.eel){ctx.strokeStyle='rgba(255,255,255,.09)';ctx.lineWidth=.4;for(let i=2;i<N-3;i++)for(const qq of [-.5,0,.5]){const q=edge(i,qq>=0?1:-1,Math.abs(qq));ctx.beginPath();ctx.arc(q[0],q[1],ws[i]*.22,1.9,4.4);ctx.stroke()}}
+ // Brilho da luz do sol no dorso e crista da nadadeira dorsal.
+ ctx.strokeStyle='rgba(255,255,255,.2)';ctx.lineWidth=.9;ctx.beginPath();for(let i=1;i<Math.round(N*.6);i++){const q=edge(i,1,.38);if(i===1)ctx.moveTo(q[0],q[1]);else ctx.lineTo(q[0],q[1])}ctx.stroke();
+ if(!lk.shark&&!lk.eel){ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=.8;ctx.beginPath();for(let i=4;i<=9;i++){if(i===4)ctx.moveTo(pts[i][0],pts[i][1]);else ctx.lineTo(pts[i][0],pts[i][1])}ctx.stroke();
+   if(lk.dorsalSpines){ctx.strokeStyle='rgba(0,0,0,.3)';ctx.lineWidth=.5;for(let i=4;i<=9;i++){ctx.beginPath();ctx.moveTo(pts[i][0]-1,pts[i][1]-1);ctx.lineTo(pts[i][0]+1,pts[i][1]+1);ctx.stroke()}}}
+ if(lk.shark){ctx.strokeStyle='rgba(30,40,48,.55)';ctx.lineWidth=.5;for(const s of [1,-1])for(let g=0;g<4;g++){const q=edge(3,s,.55),q2=edge(3,s,.9);ctx.beginPath();ctx.moveTo(q[0]-g*1.3,q[1]);ctx.lineTo(q2[0]-g*1.3,q2[1]);ctx.stroke()}}
+ ctx.restore();
+ // Barbatana dorsal do tubarão: vertical, aparece inclinada para o lado da sombra.
+ if(lk.shark){ctx.fillStyle='#3f4e5a';ctx.beginPath();ctx.moveTo(pts[5][0],pts[5][1]);ctx.quadraticCurveTo(pts[6][0]+1,pts[6][1]+W*.4,pts[7][0]-2,pts[7][1]+W*1.05);ctx.lineTo(pts[7][0],pts[7][1]);ctx.closePath();ctx.fill()}
+ // Espinhos ao longo das costas do Sea Beast.
+ if(lk.beast){ctx.fillStyle='#123554';for(let i=2;i<N-2;i+=1){const a=Math.atan2(pts[i+1][1]-pts[i][1],pts[i+1][0]-pts[i][0]),s=ws[i]*.55;ctx.beginPath();ctx.moveTo(pts[i][0]-Math.sin(a)*s*.5,pts[i][1]+Math.cos(a)*s*.5);ctx.lineTo(pts[i][0]-Math.cos(a)*s*1.6,pts[i][1]-Math.sin(a)*s*1.6);ctx.lineTo(pts[i][0]+Math.sin(a)*s*.5,pts[i][1]-Math.cos(a)*s*.5);ctx.closePath();ctx.fill()}}
+ // Olhos dos dois lados da cabeça.
+ for(const s of [1,-1]){const q=edge(1,s,.74),ex=q[0]+(lk.shark?2:1),ey=q[1],r=lk.shark?1.1:lk.beast?2.2:lk.eel?.9:Math.max(1,W*.22);
+   ctx.fillStyle=lk.shark?'#101316':lk.beast?'#ffd34d':'#efe7c6';ctx.beginPath();ctx.arc(ex,ey,r,0,Math.PI*2);ctx.fill();
+   if(!lk.shark){ctx.fillStyle='#0b0f12';ctx.beginPath();if(lk.beast)ctx.ellipse(ex,ey,r*.25,r*.8,0,0,Math.PI*2);else ctx.arc(ex+.2,ey,r*.6,0,Math.PI*2);ctx.fill()}
+   ctx.fillStyle='rgba(255,255,255,.85)';ctx.beginPath();ctx.arc(ex+r*.3,ey-r*.3,r*.28,0,Math.PI*2);ctx.fill()}
+ // Barbilhões do bagre.
+ if(lk.barbels){ctx.strokeStyle='rgba(225,230,225,.8)';ctx.lineWidth=.6;const sw=Math.sin(ph*.8)*1.5;for(const s of [1,-1]){ctx.beginPath();ctx.moveTo(nose[0]-1,nose[1]+s*1.2);ctx.quadraticCurveTo(nose[0]+3,nose[1]+s*W*1.1,nose[0]-W*1.6,nose[1]+s*W*2.1+sw);ctx.moveTo(nose[0]-.5,nose[1]+s*.6);ctx.quadraticCurveTo(nose[0]+2,nose[1]+s*W*.5,nose[0]-W*.4,nose[1]+s*W*1.1+sw*.5);ctx.stroke()}}
+ // Descarga elétrica ocasional da enguia.
+ if(lk.eel&&!lk.beast){const g=Math.pow(Math.max(0,Math.sin(now*.004+f.drift*5)),6);if(g>.02){ctx.strokeStyle=`rgba(160,240,255,${(g*.85).toFixed(3)})`;ctx.lineWidth=1.1;ctx.beginPath();for(let i=1;i<N-1;i++){const j=(hash2(i,Math.floor(now/90))-.5)*ws[i]*1.2;if(i===1)ctx.moveTo(pts[i][0],pts[i][1]+j);else ctx.lineTo(pts[i][0],pts[i][1]+j)}ctx.stroke()}}
+ // Véu de água: quanto mais fundo, mais "submerso" o peixe parece.
+ ctx.fillStyle=`rgba(10,85,115,${(.06+.07*f.sp.depth).toFixed(3)})`;body();ctx.fill();
+}
+
+// ---------- Barco de pesca realista visto de cima ----------
+function hullPath(k){
+ ctx.beginPath();ctx.moveTo(36-k*1.8,0);ctx.bezierCurveTo(30-k*1.5,-9+k*.6,18,-13.5+k,4,-13.5+k);ctx.lineTo(-26+k*.4,-12.5+k);ctx.quadraticCurveTo(-29+k,-12.5+k,-29+k,-9.5+k);
+ ctx.lineTo(-29+k,9.5-k);ctx.quadraticCurveTo(-29+k,12.5-k,-26+k*.4,12.5-k);ctx.lineTo(4,13.5-k);ctx.bezierCurveTo(18,13.5-k,30-k*1.5,9-k*.6,36-k*1.8,0);ctx.closePath();
+}
+const FISHER_POS={x:-3,y:0},ROD_LEN=26,BOAT_SCALE=1.3;
+// Ponta da vara (em coordenadas de tela) apontando para (tx,ty); usada também como origem da linha.
+function rodTipFor(pose,tx,ty){
+ const k=pose.k||1,ca=Math.cos(pose.a),sa=Math.sin(pose.a),dx=tx-pose.x,dy=ty-pose.y,lx=(dx*ca+dy*sa)/k,ly=(-dx*sa+dy*ca)/k;
+ const la=Math.atan2(ly-FISHER_POS.y,lx-FISHER_POS.x),tlx=(FISHER_POS.x+Math.cos(la)*ROD_LEN)*k,tly=(FISHER_POS.y+Math.sin(la)*ROD_LEN)*k;
+ return {x:pose.x+tlx*ca-tly*sa,y:pose.y+tlx*sa+tly*ca,la};
+}
+function drawBoat(pose,rod){
+ const v=Math.hypot(world.boat.vx,world.boat.vy),s=Math.min(1,v/.425),now=performance.now();
+ ctx.save();ctx.translate(pose.x,pose.y);ctx.rotate(pose.a);ctx.scale(pose.k||1,pose.k||1);
+ // Sombra na água.
+ ctx.save();ctx.translate(4*Math.cos(pose.a)+8*Math.sin(pose.a),-4*Math.sin(pose.a)+8*Math.cos(pose.a));ctx.fillStyle='rgba(0,18,30,.32)';hullPath(-1);ctx.fill();ctx.restore();
+ // Espuma colada ao casco (linha d'água) — mais forte em velocidade.
+ ctx.strokeStyle=`rgba(235,252,255,${(.22+.35*s).toFixed(3)})`;ctx.lineWidth=2.2+s*1.5;ctx.setLineDash([5,4]);ctx.lineDashOffset=-now*.02*(.3+s);hullPath(-1.2);ctx.stroke();ctx.setLineDash([]);
+ // Onda de proa e água revolta da hélice.
+ if(s>.05){ctx.lineCap='round';ctx.lineWidth=2;
+   for(const sd of [-1,1]){ctx.strokeStyle=`rgba(240,253,255,${(.55*s).toFixed(3)})`;ctx.beginPath();ctx.moveTo(35,sd*1.5);ctx.quadraticCurveTo(26,sd*(13+4*s),8,sd*(20+10*s));ctx.stroke();
+     ctx.strokeStyle=`rgba(240,253,255,${(.32*s).toFixed(3)})`;ctx.beginPath();ctx.moveTo(30,sd*6);ctx.quadraticCurveTo(18,sd*(17+5*s),-2,sd*(24+12*s));ctx.stroke()}
+   ctx.fillStyle=`rgba(240,253,255,${(.45*s).toFixed(3)})`;for(let i=0;i<6;i++){const r=hash2(i,Math.floor(now/80));ctx.beginPath();ctx.ellipse(-41-i*4-r*3,(r-.5)*6,3+i*.8,1.6+i*.5,0,0,Math.PI*2);ctx.fill()}}
+ // Costado azul (lateral do casco vista de cima) e borda branca.
+ const sideG=ctx.createLinearGradient(0,-14,0,14);sideG.addColorStop(0,'#2f77a3');sideG.addColorStop(.5,'#1d5a82');sideG.addColorStop(1,'#123f5e');
+ ctx.fillStyle=sideG;hullPath(0);ctx.fill();ctx.strokeStyle='#0c2e45';ctx.lineWidth=.8;ctx.stroke();
+ const rim=ctx.createLinearGradient(0,-13,0,13);rim.addColorStop(0,'#ffffff');rim.addColorStop(1,'#cbd5da');ctx.fillStyle=rim;hullPath(1.3);ctx.fill();
+ // Convés de madeira com tábuas longitudinais, sombra das bordas e proa coberta em fibra.
+ ctx.save();hullPath(2.6);ctx.clip();
+ ctx.fillStyle='#b5875a';ctx.fillRect(-32,-15,72,30);
+ ctx.strokeStyle='rgba(92,58,32,.5)';ctx.lineWidth=.5;for(let y=-12;y<=12;y+=2.4){ctx.beginPath();ctx.moveTo(-32,y);ctx.lineTo(38,y);ctx.stroke()}
+ ctx.strokeStyle='rgba(92,58,32,.35)';for(let i=0;i<12;i++){const x=-26+((i*13.7)%56),y=-12+((i*5.3)%24);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+2.4);ctx.stroke()}
+ const sh=ctx.createLinearGradient(0,-12,0,12);sh.addColorStop(0,'rgba(0,0,0,.3)');sh.addColorStop(.18,'rgba(0,0,0,0)');sh.addColorStop(.82,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.22)');ctx.fillStyle=sh;ctx.fillRect(-32,-15,72,30);
+ ctx.fillStyle='#e8eef0';ctx.beginPath();ctx.moveTo(16,-15);ctx.quadraticCurveTo(20.5,0,16,15);ctx.lineTo(40,15);ctx.lineTo(40,-15);ctx.closePath();ctx.fill();
+ ctx.strokeStyle='rgba(0,0,0,.12)';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(16,-15);ctx.quadraticCurveTo(20.5,0,16,15);ctx.stroke();
+ ctx.restore();
+ // Proa: escotilha da âncora, cabo enrolado e cunho.
+ ctx.strokeStyle='#9aa6ab';ctx.lineWidth=.6;ctx.strokeRect(21,-3,6,6);
+ ctx.strokeStyle='#a0763f';ctx.lineWidth=1;for(let r=1;r<=3;r++){ctx.beginPath();ctx.arc(29.5,0,r*.9,0,Math.PI*2);ctx.stroke()}
+ ctx.fillStyle='#7f8a90';ctx.fillRect(33,-.6,2,1.2);
+ // Luzes de navegação: bombordo vermelho, boreste verde.
+ ctx.fillStyle='#ff3b30';ctx.beginPath();ctx.arc(19,-10.8,1.1,0,Math.PI*2);ctx.fill();ctx.fillStyle='#34d058';ctx.beginPath();ctx.arc(19,10.8,1.1,0,Math.PI*2);ctx.fill();
+ // Console central com para-brisa, painel e timão.
+ ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.roundRect(1.5,-5.5,11,12,2);ctx.fill();
+ const cg=ctx.createLinearGradient(0,-5,0,5);cg.addColorStop(0,'#fbfdfd');cg.addColorStop(1,'#cdd6da');ctx.fillStyle=cg;ctx.beginPath();ctx.roundRect(0,-6,11,12,2);ctx.fill();
+ const gl=ctx.createLinearGradient(10,-6,13,6);gl.addColorStop(0,'#9fd6ea');gl.addColorStop(.5,'#e8fbff');gl.addColorStop(1,'#5aa7c4');ctx.fillStyle=gl;ctx.beginPath();ctx.moveTo(9.5,-6.5);ctx.quadraticCurveTo(14,0,9.5,6.5);ctx.lineTo(11.5,6.8);ctx.quadraticCurveTo(16.2,0,11.5,-6.8);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#2a3238';ctx.fillRect(6.5,-3,2.2,6);ctx.strokeStyle='#1b1f22';ctx.lineWidth=.9;ctx.beginPath();ctx.arc(4.5,0,2.2,0,Math.PI*2);ctx.stroke();
+ // Banco, caixa térmica e tanque de combustível.
+ ctx.fillStyle='#1f5e86';ctx.beginPath();ctx.roundRect(-11,-5.5,5,11,1.5);ctx.fill();ctx.fillStyle='rgba(255,255,255,.18)';ctx.fillRect(-10.5,-5,1.2,10);
+ ctx.fillStyle='#f4f6f6';ctx.beginPath();ctx.roundRect(-21,-4.5,7,9,1);ctx.fill();ctx.fillStyle='#2a6f97';ctx.fillRect(-21,-4.5,2,9);
+ ctx.fillStyle='#c8372d';ctx.beginPath();ctx.roundRect(-26.5,4,4,5,1);ctx.fill();
+ // Motor de popa com capô, faixa e reflexo.
+ ctx.fillStyle='#3a3f44';ctx.fillRect(-31,-2.2,3,4.4);
+ const mg=ctx.createLinearGradient(0,-5,0,5);mg.addColorStop(0,'#4a5157');mg.addColorStop(.5,'#16191c');mg.addColorStop(1,'#0b0d0f');ctx.fillStyle=mg;ctx.beginPath();ctx.roundRect(-39,-4.6,9,9.2,3);ctx.fill();
+ ctx.fillStyle='rgba(255,255,255,.22)';ctx.beginPath();ctx.ellipse(-35,-2.2,3,1,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#d33';ctx.fillRect(-38.2,-.4,7,.8);
+ // Varas guardadas nos suportes da popa quando não está pescando.
+ if(!rod){ctx.strokeStyle='#22272b';ctx.lineWidth=.9;for(const sd of [-1,1]){ctx.beginPath();ctx.moveTo(-23,sd*9.5);ctx.lineTo(-45,sd*19);ctx.stroke();ctx.fillStyle='#6b7378';ctx.beginPath();ctx.arc(-25.5,sd*10.6,1.1,0,Math.PI*2);ctx.fill()}}
+ // Pescador visto de cima: colete, braços e boné; vira para a isca quando está pescando.
+ const fx=FISHER_POS.x,fy=FISHER_POS.y,fa=rod?rod.la:0;
+ ctx.save();ctx.translate(fx,fy);ctx.rotate(fa);
+ ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.ellipse(-1,1.2,3.6,5.6,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#e07a2e';ctx.beginPath();ctx.ellipse(0,0,3.2,5.2,0,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#b85f1f';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(-2.4,0);ctx.lineTo(2.4,0);ctx.stroke();
+ ctx.strokeStyle='#d9a47a';ctx.lineWidth=1.6;ctx.lineCap='round';ctx.beginPath();
+ if(rod){ctx.moveTo(.5,-4);ctx.lineTo(4.5,-.8);ctx.moveTo(.5,4);ctx.lineTo(4.5,.8)}else{ctx.moveTo(.5,-4);ctx.lineTo(5.5,-2);ctx.moveTo(.5,4);ctx.lineTo(5.5,2)}ctx.stroke();
+ ctx.fillStyle='#6b4a32';ctx.beginPath();ctx.arc(0,0,2.3,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#f2f2ea';ctx.beginPath();ctx.arc(.2,0,2.1,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#d6d6cc';ctx.beginPath();ctx.ellipse(2.3,0,1.4,1.9,0,-Math.PI/2,Math.PI/2);ctx.fill();
+ ctx.restore();
+ // Vara na mão, envergando conforme a tensão da linha.
+ if(rod){const ca=Math.cos(rod.la),sa=Math.sin(rod.la),hx=fx+ca*4.5,hy=fy+sa*4.5,tx=fx+ca*ROD_LEN,ty=fy+sa*ROD_LEN,bend=rod.bend||0,mx=(hx+tx)/2-sa*bend*7,my=(hy+ty)/2+ca*bend*7;
+   ctx.strokeStyle='#22272b';ctx.lineWidth=1.3;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(hx,hy);ctx.quadraticCurveTo(mx,my,tx,ty);ctx.stroke();
+   ctx.fillStyle='#8d969b';ctx.beginPath();ctx.arc(hx+ca*2,hy+sa*2,1.3,0,Math.PI*2);ctx.fill()}
+ ctx.restore();
+}
+
+// ---------- Painel da briga com o peixe ----------
+function drawFightUI(){
+ const L=world.line;if(!L||L.state!=='fight'||!L.fight||!L.visualFish)return;const F=L.fight,f=L.visualFish,now=Date.now();
+ const w=Math.min(440,W-32),h=104,x=(W-w)/2,y=W>=760?14:Math.max(14,Math.min(H-h-170,H/2+60));
+ ctx.save();ctx.fillStyle='rgba(3,24,36,.92)';ctx.strokeStyle=F.surge>0?'#ff7b7b':'#79e8df';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x,y,w,h,12);ctx.fill();ctx.stroke();
+ const known=game.journal[f.sp.name];ctx.fillStyle='#fff';ctx.font='800 14px system-ui';ctx.textAlign='left';ctx.textBaseline='alphabetic';
+ ctx.fillText((known?f.sp.emoji+' '+f.sp.name:'🐟 ???'),x+14,y+22);
+ const dl=stars(F.diff),nw=ctx.measureText((known?f.sp.emoji+' '+f.sp.name:'🐟 ???')+'  ').width;ctx.font='800 11px system-ui';ctx.fillStyle=F.diff<.6?'#8ff0c8':F.diff<1.5?'#ffe08a':F.diff<3?'#ffb072':'#ff7b7b';ctx.fillText('Dificuldade '+dl,x+14+nw,y+22);
+ ctx.textAlign='right';ctx.font='700 11px system-ui';ctx.fillStyle='#a9cbd7';ctx.fillText('Vara aguenta '+rodCap()+' kg',x+w-14,y+22);
+ const bx=x+14,bw=w-28;
+ ctx.textAlign='left';ctx.fillStyle='#cfe7ee';ctx.font='700 10px system-ui';ctx.fillText('TENSÃO DA LINHA',bx,y+40);
+ ctx.fillStyle='#0b3447';ctx.beginPath();ctx.roundRect(bx,y+45,bw,12,6);ctx.fill();
+ const tg=ctx.createLinearGradient(bx,0,bx+bw,0);tg.addColorStop(0,'#5fe0a0');tg.addColorStop(.6,'#ffd36b');tg.addColorStop(.85,'#ff8a5b');tg.addColorStop(1,'#ff4f4f');
+ ctx.fillStyle=tg;ctx.beginPath();ctx.roundRect(bx,y+45,Math.max(8,bw*F.tension),12,6);ctx.fill();
+ ctx.strokeStyle='#ffffffaa';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(bx+bw*.85,y+42);ctx.lineTo(bx+bw*.85,y+60);ctx.stroke();
+ if(F.overload>0){ctx.fillStyle=`rgba(255,80,80,${(.35+.35*Math.sin(now/50)).toFixed(3)})`;ctx.beginPath();ctx.roundRect(bx,y+45,bw,12,6);ctx.fill()}
+ ctx.fillStyle='#cfe7ee';ctx.fillText('PEIXE ATÉ O BARCO',bx,y+72);
+ ctx.fillStyle='#0b3447';ctx.beginPath();ctx.roundRect(bx,y+77,bw,8,4);ctx.fill();ctx.fillStyle='#4fd7ff';ctx.beginPath();ctx.roundRect(bx,y+77,Math.max(6,bw*F.progress),8,4);ctx.fill();
+ let hint='Segure E / clique para puxar',col='#e8f8ff';
+ if(F.surge>0){hint='SOLTE! O peixe está puxando';col=Math.floor(now/150)%2?'#ff7b7b':'#ffd0d0'}
+ else if(F.warn>0){hint='⚠ Ele vai puxar... prepare-se para soltar';col='#ffd36b'}
+ else if(F.tension>.85){hint='Linha no limite: solte um pouco!';col='#ff9d7b'}
+ else if(F.slack>1200){hint='Linha frouxa: puxe ou o peixe escapa!';col='#ffd36b'}
+ ctx.textAlign='center';ctx.font='900 12px system-ui';ctx.fillStyle=col;ctx.fillText(hint,x+w/2,y+h-6);
+ ctx.restore();
+}
+
+// ---------- Ciclo da linha: voo → espera → mordida → briga → captura ----------
+let seaBeastTimer=0,autoDockState='',marketSale=null,popTimer=5000,pointerReel=false,reelPointerId=null,btnReel=false,suppressClick=false,joy={x:0,y:0},hitCooldown=0;
+function isReeling(){return !!(keys.e||keys.E||keys[' ']||pointerReel||btnReel)}
+function updateLine(dt){
+ const L=world.line;if(!L)return;L.time+=dt;
+ if(L.state==='flight'){L.flightTime+=dt;if(L.flightTime>=560){L.state='wait';L.waitTime=0;playSound('plop');addSplash(world.target.x,world.target.y,8,.7)}}
+ else if(L.state==='wait'){
+   L.waitTime+=dt;const lure=world.target,rad=attractRadius(L.baitType);let approaching=false;
+   // Cada peixe dentro do raio decide uma vez por arremesso, conforme a isca preferida da espécie.
+   for(const f of fish){
+     if(!f.alive)continue;if(f.approachingLure){approaching=true;continue}if(f.ignoredThisCast)continue;
+     if(dist(f,lure)<=rad){f.ignoredThisCast=true;const pref=(f.sp.baitPref||[50,50,50,50])[L.baitType]??50;
+       if(Math.random()*100<pref){f.approachingLure=true;f.lureSpeed=.105;approaching=true}
+       else{const key=f.sp.name+'|'+L.baitType;world.baitIgnores=world.baitIgnores||{};world.baitIgnores[key]=(world.baitIgnores[key]||0)+1;
+         if(world.baitIgnores[key]===3){const best=(f.sp.baitPref||[]).map((v,i)=>({v,i})).filter(o=>o.i!==L.baitType).sort((a,b)=>b.v-a.v)[0];const nm=game.journal[f.sp.name]?f.sp.name:'Um peixe desconhecido';if(best)toast(nm+' ignorou a isca 3 vezes. Tente '+BAITS[best.i].name.toLowerCase()+'.')}}}
+   }
+   if(L.waitTime>15000&&!approaching)retrieveLine('Nenhum peixe se interessou por aqui. Tente outro ponto ou outra isca.');
+ }
+ else if(L.state==='bite'){
+   L.biteTime+=dt;const f=L.visualFish;if(!f||!f.alive){L.state='wait';L.visualFish=null;return}
+   // A boca fica na isca: o corpo fica atrás, mordiscando.
+   const md=mouthDist(f);f.x=world.target.x-Math.cos(f.heading)*md+Math.sin(L.time*.03)*2.5;f.y=world.target.y-Math.sin(f.heading)*md+Math.cos(L.time*.025)*2;f.phase+=dt*.02;
+   // Janela generosa para fisgar; se passar, o peixe solta e a isca continua na água.
+   if(L.biteTime>6000){f.heading+=Math.PI;L.visualFish=null;L.state='wait';L.waitTime=Math.min(L.waitTime,9000);toast('O peixe soltou a isca. Fique atento à próxima mordida!')}
+ }
+ else if(L.state==='fight')updateFight(dt);
+ else if(L.state==='retrieve'){L.retrieveTime+=dt;L.reelSound=(L.reelSound||0)+dt;if(L.reelSound>=430){L.reelSound=0;playSound('reel')}if(L.retrieveTime>=1200){world.line=null;world.target=null}}
+}
+function startBite(f){
+ const L=world.line,md=mouthDist(f),h=Math.atan2(world.target.y-f.y,world.target.x-f.x);f.approachingLure=false;f.heading=h;f.x=world.target.x-Math.cos(h)*md;f.y=world.target.y-Math.sin(h)*md;L.state='bite';L.visualFish=f;L.biteTime=0;
+ for(const o of fish)if(o!==f)o.approachingLure=false;
+ playSound('bite');addSplash(f.x,f.y,6,.5);
+ const nm=game.journal[f.sp.name]?' ('+f.sp.name+')':'';
+ toast('🎣 Mordeu'+nm+'! Aperte E ou clique para fisgar. Briga '+stars(fightDifficulty(f))+'.');
+}
+function startFight(){
+ const L=world.line;if(!L||L.state!=='bite'||!L.visualFish)return;const f=L.visualFish;
+ L.state='fight';L.fight={progress:0,tension:.25,diff:fightDifficulty(f),surge:0,warn:0,nextSurge:1600+Math.random()*1400,overload:0,slack:0,reelSound:400};
+ f.escapeHold=0;playSound('reel');
+ if(f.sp.name==='Sea Beast'&&!beastReady()){L.fight.doomed=true;toast('😱 O Sea Beast é forte demais! Sem Vara, Molinete, Linha e Anzol no nível '+BEAST_LV+', ele vai arrebentar a linha.');return}
+ if(!game.tutorialFight){game.tutorialFight=true;toast('Segure E (ou o botão / clique) para puxar. Solte quando a barra ficar vermelha ou quando o peixe puxar!')}
+ else toast('Fisgado! Segure para puxar e solte quando ele puxar.');
+}
+// Equilíbrio: soltando, a tensão cai mais rápido do que sobe puxando, e o "puxão" sempre
+// avisa antes. Com teto de dificuldade 4,5, qualquer peixe é capturável com paciência.
+function updateFight(dt){
+ const L=world.line,F=L.fight,f=L.visualFish,s=dt/1000;if(!f||!f.alive){world.line=null;world.target=null;return}
+ const lt=1+.12*(game.gear.Linha.lv-1),mol=1+.15*(game.gear.Molinete.lv-1);
+ const beast=f.sp.name==='Sea Beast';
+ if(F.doomed){F.doomT=(F.doomT||0)+dt;if(F.doomT>4200)return fightEnd(false,'beast')}
+ if(F.surge>0){F.surge-=dt;if(F.surge<=0){F.surge=0;F.nextSurge=(Math.max(1300,3600-F.diff*380)+Math.random()*1600)*(beast?.75:1)}}
+ else if(F.warn>0){F.warn-=dt;if(F.warn<=0){F.warn=0;F.surge=550+Math.random()*600+F.diff*140;addSplash(f.x,f.y,10,.9);playSound('splash')}}
+ else{F.nextSurge-=dt;if(F.nextSurge<=0)F.warn=500}
+ const surging=F.surge>0,pull=.8+.5*Math.min(F.diff,4.5),reeling=isReeling();
+ // No puxão, a fricção do molinete "canta" soltando linha.
+ if(surging){F.dragSound=(F.dragSound||0)+dt;if(F.dragSound>=85){F.dragSound=0;playSound('drag')}}
+ if(reeling){
+   F.tension+=.18*pull*(surging?2.6:1)/lt*s;
+   F.progress+=.22*mol/(.6+.4*Math.min(F.diff,4))*(surging?.35:1)*(beast?.42:1)*(F.doomed?0:1)*s;
+   F.reelSound+=dt;if(F.reelSound>=380){F.reelSound=0;playSound('reel')}
+ }else{F.tension-=(surging?.3:.7)*s;if(surging)F.progress-=.012*F.diff*s}
+ F.tension=Math.max(0,Math.min(1,F.tension));F.progress=Math.max(0,Math.min(1,F.progress));
+ if(F.tension>=.999)F.overload+=dt;else F.overload=Math.max(0,F.overload-dt*2);
+ if(F.tension<.06)F.slack+=dt;else F.slack=Math.max(0,F.slack-dt*2);
+ // O peixe real é arrastado pela linha, debatendo-se de lado.
+ const tg=world.target,b=world.boat,dx=b.x-tg.x,dy=b.y-tg.y,len=Math.hypot(dx,dy)||1,px=-dy/len,py=dx/len,e=F.progress;
+ const thr=Math.sin(L.time*(surging?.02:.007))*(surging?16:5);
+ f.x=tg.x+dx*e*.94+px*thr;f.y=tg.y+dy*e*.94+py*thr;
+ f.heading=surging?Math.atan2(-dy,-dx)+Math.sin(L.time*.03)*.4:Math.atan2(dy,dx)+Math.sin(L.time*.012)*.25;f.phase+=dt*(surging?.03:.012);
+ if(F.overload>600+100*(game.gear.Linha.lv-1))return fightEnd(false,'break');
+ if(F.slack>3000+500*(game.gear.Anzol.lv-1))return fightEnd(false,'slack');
+ if(F.progress>=1)return fightEnd(true);
+}
+function fightEnd(win,reason){
+ const L=world.line,f=L.visualFish;
+ // Guarda isca e zona onde foi fisgado (usadas pelas missões).
+ f.caughtBait=L.baitType;f.caughtZone=world.target?depthAt(world.target.x,world.target.y):depthAt(f.x,f.y);
+ world.line=null;world.target=null;for(const o of fish)o.approachingLure=false;
+ if(win){game.fightFails=0;catchFish(f);return}
+ game.fightFails=(game.fightFails||0)+1;missionsOnFail();
+ world.escapeAnim={fish:f,x:f.x,y:f.y,heading:f.heading,time:0};f.escapeHold=850;
+ if(reason==='beast'){playSound('snap');wearGear(4);game.gear.Linha.hp=Math.max(0,game.gear.Linha.hp-12);toast('💥 O Sea Beast arrebentou sua linha! Só com os quatro equipamentos no nível '+BEAST_LV+' ou mais dá para encará-lo.')}
+ else if(reason==='break'||reason==='far'){playSound('snap');wearGear(1.5);game.gear.Linha.hp=Math.max(0,game.gear.Linha.hp-6);toast(reason==='far'?'💥 Você se afastou demais e a linha arrebentou.':'💥 A linha arrebentou! Solte quando a tensão chegar no vermelho.')}
+ else{playSound('miss');wearGear(1);toast('O peixe se soltou: a linha ficou frouxa por muito tempo.')}
+ if(f.sp.attack)damageBoat(f.sp.attack*5);
+ if(game.fightFails>=2)toast('Dica: a próxima briga fica um pouco mais fácil. Melhorar Vara, Linha e Molinete também ajuda.');
+ renderHUD();
+}
+function catchFish(f){
+ const sp=f.sp,weight=f.weight,length=fishLength(sp,weight),value=fishValue(sp,weight);
+ game.catch.push({name:sp.name,emoji:sp.emoji,weight:+weight.toFixed(1),length,value});f.alive=false;
+ playSound('catch');wearGear(2.5+sp.depth*1.8);
+ const b=world.boat;addSplash(b.x,b.y,16+Math.min(20,weight/10),1+Math.min(1.2,weight/200));addFloat(b.x,b.y,'+'+weight.toFixed(1).replace('.',',')+' kg','#bff8ff');
+ if(weight>50)world.shake=Math.min(16,4+weight/40);
+ const j=game.journal[sp.name];
+ if(!j){game.journal[sp.name]={count:1,best:weight};toast('📖 Nova espécie na coleção: '+sp.name+'!')}
+ else{j.count++;if(weight>j.best){j.best=weight;toast('🏆 Novo recorde de '+sp.name+': '+weight.toFixed(1).replace('.',',')+' kg!')}}
+ toast('Pegou '+sp.emoji+' '+sp.name+' • '+weight.toFixed(1).replace('.',',')+' kg • '+length+' cm • vale R$ '+fmt(value));
+ progressMissions({name:sp.name,weight,bait:f.caughtBait??game.baitType,zone:f.caughtZone??depthAt(f.x,f.y)});
+ if(sp.attack)damageBoat(sp.attack*(sp.name==='Sea Beast'?14:8));
+ if(game.catch.length>=game.holdCap)toast('Porão cheio! Venda os peixes no cais do mercado.');
+ renderHUD();
+}
+function retrieveLine(msg){
+ const L=world.line;if(!L||L.state==='fight'||L.state==='retrieve')return;
+ for(const o of fish)o.approachingLure=false;L.state='retrieve';L.retrieveTime=0;L.reelSound=430;L.visualFish=null;wearGear(.4);if(msg)toast(msg);
+}
+function action(){
+ if(game.over)return;const L=world.line;
+ if(!L){toast('Clique no mar, dentro do círculo pontilhado, para arremessar.');return}
+ if(L.state==='bite')startFight();
+ else if(L.state==='flight'||L.state==='wait')retrieveLine('Recolhendo a isca...');
+}
+function wearGear(n){let broke=false;for(const g of Object.values(game.gear)){const before=g.hp;g.hp=Math.max(0,g.hp-n*(.75+Math.random()*.5));if(before>0&&g.hp===0)broke=true}if(broke)toast('Uma peça quebrou! Volte à loja da ilha para trocar.');renderHUD()}
+function damageBoat(n){playSound('hit');game.hull=Math.max(0,game.hull-n);world.shake=Math.max(world.shake||0,8);toast('Ataque! O casco perdeu '+n+' pontos.');if(game.hull===0){game.over=true;setTimeout(openGameOver,500)}renderHUD()}
+
+// ---------- Barco: colisão com a ilha e os cais ----------
+function collideBoat(b){
+ const R=26,rx=224+R*.6,ry=158+R*.6,ex=(b.x-2400)/rx,ey=(b.y-1800)/ry,k=ex*ex+ey*ey;
+ if(k<1){const s=1/Math.sqrt(Math.max(k,1e-6));let nx=ex/rx,ny=ey/ry;const nl=Math.hypot(nx,ny)||1;nx/=nl;ny/=nl;b.x=2400+(b.x-2400)*s;b.y=1800+(b.y-1800)*s;bounceBoat(b,nx,ny)}
+ for(const pxc of [2335,2458]){
+   const cx=Math.max(pxc-14.5,Math.min(pxc+14.5,b.x)),cy=Math.max(1830,Math.min(1990,b.y));let dx=b.x-cx,dy=b.y-cy,d=Math.hypot(dx,dy);
+   if(d<R){if(d<1e-3){dx=0;dy=1;d=1}const nx=dx/d,ny=dy/d;b.x=cx+nx*R;b.y=cy+ny*R;bounceBoat(b,nx,ny)}
+ }
+}
+function bounceBoat(b,nx,ny){
+ const vn=b.vx*nx+b.vy*ny;if(vn>=0)return;b.vx-=1.3*vn*nx;b.vy-=1.3*vn*ny;
+ if(-vn>.2&&hitCooldown<=0){hitCooldown=900;const dmg=Math.round((-vn-.15)*45);game.hull=Math.max(0,game.hull-dmg);playSound('hit');world.shake=6;addSplash(b.x,b.y,10,.8);
+   toast('Batida! O casco perdeu '+dmg+' pontos. Navegue devagar perto da ilha.');if(game.hull===0){game.over=true;setTimeout(openGameOver,500)}}
+}
+// Repõe peixes longe do barco para o mar nunca esvaziar.
+// Mínimo de cada espécie no mar, para nenhuma missão ficar impossível.
+const MIN_POP={'Piava':6,'Tilápia':5,'Traíra':4,'Bagre':4,'Dourado':3,'Enguia elétrica':3,'Tubarão':3};
+function maintainPopulation(){
+ const hooked=world.line&&world.line.visualFish;
+ // No máximo um Sea Beast no mar (saves antigos podiam acumular vários).
+ fish.filter(f=>f.alive&&f.sp.name==='Sea Beast'&&f!==hooked).slice(hooked&&hooked.sp.name==='Sea Beast'?0:1).forEach(f=>{f.alive=false});
+ fish=fish.filter(f=>f.alive||f===hooked);
+ const count={};for(const f of fish)if(f.alive)count[f.sp.name]=(count[f.sp.name]||0)+1;
+ const wanted=new Set((game.missions||[]).filter(m=>!m.done).flatMap(missionSpecies));
+ let spawned=0;
+ for(const sp of species){
+   if(sp.name==='Sea Beast')continue;
+   let need=MIN_POP[sp.name]||2;if(wanted.has(sp.name))need=Math.max(need,4);
+   for(let k=count[sp.name]||0;k<need&&spawned<6;k++){spawnFish(sp,true);spawned++}
+ }
+ const alive=fish.filter(f=>f.alive&&f.sp.name!=='Sea Beast').length;
+ for(let n=0;alive+n<50&&n<3;n++)spawnFish(null,true);
+}
+
+// O Sea Beast é raro: emerge na zona abissal a cada ~8–14 min de jogo e mergulha após 4 min.
+function updateSeaBeast(dt){
+ if(game.beastTimer==null)game.beastTimer=480000+Math.random()*240000;
+ const beast=fish.find(f=>f.alive&&f.sp.name==='Sea Beast'),hooked=beast&&world.line&&world.line.visualFish===beast;
+ if(beast){
+   if(game.beastStay==null)game.beastStay=180000;if(!hooked)game.beastStay-=dt;
+   if(game.beastStay<=0&&!hooked){beast.alive=false;game.beastStay=null;game.beastTimer=540000+Math.random()*300000;toast('🌊 O Sea Beast mergulhou de volta às profundezas...')}
+ }else{
+   game.beastTimer-=dt;
+   if(game.beastTimer<=0){spawnFish(species.find(s=>s.name==='Sea Beast'),true);game.beastStay=240000;game.beastTimer=0;
+     toast(beastReady()?'⚠️ Um Sea Beast emergiu na zona abissal! Ele mergulha em 4 minutos — siga o ponto vermelho no radar.':'⚠️ Um Sea Beast emergiu na zona abissal! Só quem tem os quatro equipamentos no nível '+BEAST_LV+' aguenta a briga.')}
+ }
+}
+function frameUpdate(dt){
+ if(game.over)return;
+ if(marketSale){marketSale.time+=dt;if(marketSale.time>=marketSale.duration){game.money+=marketSale.total;game.catch=[];playSound('coin');addFloat(2458,1960,'+R$ '+fmt(marketSale.total));toast('Venda concluída: '+marketSale.count+' peixes vendidos por R$ '+fmt(marketSale.total)+'.');marketSale=null}}
+ if(world.escapeAnim){world.escapeAnim.time+=dt;const ef=world.escapeAnim.fish;if(ef&&ef.alive){if(world.escapeAnim.time<620){ef.x=world.escapeAnim.x+Math.sin(world.escapeAnim.time*.035)*2;ef.y=world.escapeAnim.y+Math.sin(world.escapeAnim.time*.045)*2;ef.heading=world.escapeAnim.heading+Math.sin(world.escapeAnim.time*.05)*.32}else{ef.heading=world.escapeAnim.heading+Math.PI+Math.sin(world.escapeAnim.time*.018)*.25;ef.x+=Math.cos(ef.heading)*ef.speed*dt*1.8;ef.y+=Math.sin(ef.heading)*ef.speed*dt*1.8}}if(world.escapeAnim.time>1150)world.escapeAnim=null}
+ updateMissions(dt);updateSeaBeast(dt);
+ popTimer+=dt;if(popTimer>5000){popTimer=0;maintainPopulation()}
+ updateFx(dt);updateWake(dt);if(hitCooldown>0)hitCooldown-=dt;
+ const b=world.boat,accel=.0019*dt,max=.425;
+ const up=keys.ArrowUp||keys.w||keys.W,down=keys.ArrowDown||keys.s||keys.S,left=keys.ArrowLeft||keys.a||keys.A,right=keys.ArrowRight||keys.d||keys.D,joyOn=Math.hypot(joy.x,joy.y)>.12;
+ if(up)b.vy-=accel;if(down)b.vy+=accel;if(left)b.vx-=accel;if(right)b.vx+=accel;if(joyOn){b.vx+=accel*joy.x;b.vy+=accel*joy.y}
+ const steering=up||down||left||right||joyOn,drag=steering?Math.pow(.997,dt):Math.pow(.975,dt);
+ b.vx*=drag;b.vy*=drag;let v=Math.hypot(b.vx,b.vy);if(v>max){b.vx=b.vx/v*max;b.vy=b.vy/v*max}
+ b.x=Math.max(35,Math.min(world.w-35,b.x+b.vx*dt));b.y=Math.max(280,Math.min(world.h-35,b.y+b.vy*dt));if(v>.03)b.angle=Math.atan2(b.vy,b.vx);
+ collideBoat(b);
+ game.maxDepth=Math.max(game.maxDepth||0,depthAt(b.x,b.y));
+ updateLine(dt);
+ for(let f of fish){
+   if(!f.alive)continue;
+   if(f.escapeHold>0){f.escapeHold=Math.max(0,f.escapeHold-dt);f.phase+=dt*.018}
+   const L=world.line;
+   if(L&&L.visualFish===f&&(L.state==='bite'||L.state==='fight'))continue;
+   if(f.approachingLure){
+     if(L&&L.state==='wait'&&world.target){const dx=world.target.x-f.x,dy=world.target.y-f.y,d=Math.hypot(dx,dy)||1;f.heading=Math.atan2(dy,dx);f.phase+=dt*.012;
+       if(d<mouthDist(f)+6){startBite(f);continue}const step=Math.min(d,(f.lureSpeed||.105)*dt);f.x+=dx/d*step;f.y+=dy/d*step;continue}
+     f.approachingLure=false;
+   }
+   f.changeIn-=dt;
+   if(f.sp.name==='Sea Beast'){if(f.changeIn<=0){f.heading+=(Math.random()-.5)*1.2;f.changeIn=1000+Math.random()*2400}f.heading+=Math.sin(f.phase*.7+f.drift)*f.turnRate*dt;f.phase+=dt*.0018}
+   else{if(f.changeIn<=0){f.heading+=(Math.random()-.5)*1.9;f.changeIn=800+Math.random()*3000}f.heading+=Math.sin(f.phase*.7+f.drift)*f.turnRate*dt;f.phase+=dt*.0015}
+   f.x+=Math.cos(f.heading)*f.speed*dt;f.y+=Math.sin(f.heading)*f.speed*dt;
+   if(isIslandLand(f.x,f.y)){const dx=f.x-2400,dy=f.y-1800;f.x=2400+dx*1.035;f.y=1800+dy*1.035;f.heading=Math.atan2(dy,dx)+(Math.random()-.5)*.55}
+   if(f.x<35){f.x=35;f.heading=Math.random()*1.4-0.7}if(f.x>world.w-35){f.x=world.w-35;f.heading=Math.PI+(Math.random()-.5)*1.4}
+   if(f.y<35){f.y=35;f.heading=Math.random()*Math.PI*.8+.6}if(f.y>world.h-30){f.y=world.h-30;f.heading=-Math.random()*Math.PI*.8-.3}
+ }
+ // Atracação automática: vale o cais mais próximo (evita alternar entre os dois).
+ const shopDock=Math.hypot(b.x-2335,b.y-1990),marketDock=Math.hypot(b.x-2458,b.y-1990);
+ if(!world.line&&Math.hypot(b.vx,b.vy)<.09&&Math.min(shopDock,marketDock)<72){
+   const which=shopDock<=marketDock?'shop':'market';
+   if(autoDockState!==which){autoDockState=which;if(which==='shop'){toast('Atracou no cais da loja.');openShop()}else if(game.catch.length)sellCatch();else toast('Mercado: seu porão está vazio.')}
+ }
+ if(shopDock>100&&marketDock>100)autoDockState='';
+ if(world.line&&world.target&&dist(b,world.target)>lineRange()+30){if(world.line.state==='fight')fightEnd(false,'far');else{world.line=null;world.target=null;toast('Você se afastou demais e a linha foi recolhida.')}}
+ renderHUD();
+}
+
+// ---------- Arremesso e controles ----------
+function castAt(x,y){
+ if(game.over)return;
+ if(world.line){if(world.line.state==='wait'||world.line.state==='flight')toast('Já há uma linha na água. Aperte E para recolher.');return}
+ if(marketSale){toast('Aguarde a descarga do porão terminar.');return}
+ const b=world.boat,range=lineRange();if(dist(b,{x,y})>range){toast('Fora do alcance! A linha alcança '+range+' m.');return}
+ if(isIslandLand(x,y)){toast('Arremesse na água, não na ilha.');return}
+ if(Object.values(game.gear).some(g=>g.hp<=0)){toast('Há equipamento quebrado. Volte à loja da ilha para trocar a peça.');return}
+ if(game.catch.length>=game.holdCap){toast('Porão cheio! Venda os peixes no cais do mercado.');return}
+ // Sem isca nenhuma e sem dinheiro: um pescador local ajuda, para o jogo nunca travar.
+ if(game.baits.every(n=>n<=0)&&game.money<BAITS[0].price&&!game.catch.length){game.baits[0]+=5;toast('Um pescador da ilha te deu 5 sardinhas. Boa sorte!')}
+ if(game.baits[game.baitType]<=0){const alt=game.baits.findIndex(n=>n>0);if(alt<0){toast('Sem iscas! Compre na loja da ilha.');return}toast('Sem '+BAITS[game.baitType].name.toLowerCase()+'. Usando '+BAITS[alt].name.toLowerCase()+'.');game.baitType=alt}
+ const used=game.baitType,bt=BAITS[used];if(!(bt.reuse&&Math.random()<bt.reuse))game.baits[used]--;
+ for(const f of fish){f.ignoredThisCast=false;f.approachingLure=false}
+ world.target={x,y};world.line={state:'flight',time:0,flightTime:0,visualFish:null,baitType:used};playSound('cast');renderHUD();
+}
+canvas.addEventListener('pointerdown',e=>{const L=world.line;if(!L)return;if(L.state==='bite'){startFight();pointerReel=true;reelPointerId=e.pointerId;suppressClick=true}else if(L.state==='fight'){pointerReel=true;reelPointerId=e.pointerId;suppressClick=true}});
+const endPointerReel=e=>{if(e.pointerId===reelPointerId){pointerReel=false;reelPointerId=null}};
+window.addEventListener('pointerup',endPointerReel);window.addEventListener('pointercancel',endPointerReel);
+canvas.addEventListener('click',e=>{if(suppressClick){suppressClick=false;return}const r=canvas.getBoundingClientRect(),c=camera();castAt(e.clientX-r.left+c.x,e.clientY-r.top+c.y)});
+const actionBtnEl=document.getElementById('actionBtn');
+actionBtnEl.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();try{actionBtnEl.setPointerCapture(e.pointerId)}catch(err){}audioReady();const L=world.line,st=L?L.state:'';if(st==='bite'){startFight();btnReel=true}else if(st==='fight')btnReel=true;else action();updateActionBtn()});
+const endBtnReel=()=>{btnReel=false;updateActionBtn()};actionBtnEl.addEventListener('pointerup',endBtnReel);actionBtnEl.addEventListener('pointercancel',endBtnReel);actionBtnEl.addEventListener('lostpointercapture',endBtnReel);actionBtnEl.addEventListener('contextmenu',e=>e.preventDefault());
+// Joystick virtual (telas de toque).
+const joyEl=document.getElementById('joy'),joyKnob=document.getElementById('joyKnob');let joyId=null;
+function joyMove(e){const r=joyEl.getBoundingClientRect(),R=r.width/2;let dx=(e.clientX-r.left-R)/R,dy=(e.clientY-r.top-R)/R;const m=Math.hypot(dx,dy);if(m>1){dx/=m;dy/=m}joy.x=dx;joy.y=dy;joyKnob.style.transform=`translate(${(dx*R*.6).toFixed(1)}px,${(dy*R*.6).toFixed(1)}px)`}
+joyEl.addEventListener('pointerdown',e=>{e.preventDefault();joyId=e.pointerId;try{joyEl.setPointerCapture(e.pointerId)}catch(err){}joyMove(e);audioReady()});
+joyEl.addEventListener('pointermove',e=>{if(e.pointerId===joyId)joyMove(e)});
+const joyEnd=e=>{if(e.pointerId!==joyId)return;joyId=null;joy.x=0;joy.y=0;joyKnob.style.transform=''};joyEl.addEventListener('pointerup',joyEnd);joyEl.addEventListener('pointercancel',joyEnd);
+function keyDown(e){
+ // Na abertura/perfis, o teclado é da tela de abertura (inclui digitar o nome).
+ if(splashOpen()){if(!document.getElementById('splash').classList.contains('panel')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();toPanel()}return}
+ // Durante o guia, o teclado só navega entre os passos.
+ if(onboardingActive()){if(['ArrowRight','Enter',' '].includes(e.key)){e.preventDefault();if(!e.repeat)obGo(1)}else if(e.key==='ArrowLeft'){e.preventDefault();obGo(-1)}else if(e.key==='Escape')endOnboarding(false);return}
+ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','w','a','s','d','W','A','S','D'].includes(e.key))e.preventDefault();
+ keys[e.key]=true;if(e.repeat)return;const k=e.key.toLowerCase(),L=world.line;
+ if(k==='e'||e.key===' '){if(L&&L.state==='bite')startFight();else if(k==='e'&&!(L&&L.state==='fight'))action()}
+ if(k==='r')changeBait();
+ if(e.key==='Escape'){if(document.getElementById('modal').style.display==='flex')closeModal();else openMenu()}
+}
+function keyUp(e){keys[e.key]=false;if(e.key.length===1){keys[e.key.toLowerCase()]=false;keys[e.key.toUpperCase()]=false}}
+window.addEventListener('keydown',keyDown);window.addEventListener('keyup',keyUp);
+window.addEventListener('blur',()=>{keys={};pointerReel=false;btnReel=false});
+// Tira o foco dos botões após o clique, para o Espaço não "clicar" neles durante a briga.
+document.addEventListener('click',e=>{const bt=e.target.closest&&e.target.closest('button');if(bt)bt.blur()});
+function changeBait(index){game.baitType=Number.isInteger(index)?Math.max(0,Math.min(3,index)):(game.baitType+1)%4;renderHUD();toast('Isca selecionada: '+BAITS[game.baitType].name+' (× '+game.baits[game.baitType]+').')}
+
+// ---------- Janelas: loja, porão, coleção, menu ----------
+function openModal(content,kind=''){const m=document.getElementById('modal'),box=document.getElementById('modalbox'),keep=kind&&m.style.display==='flex'&&box.dataset.kind===kind,st=box.scrollTop;box.innerHTML=content;box.dataset.kind=kind;m.style.display='flex';if(keep)box.scrollTop=st}
+function closeModal(){document.getElementById('modal').style.display='none'}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+function shopRow(title,desc,btn){return `<div class="shopitem"><div><b>${title}</b><small>${desc}</small></div>${btn}</div>`}
+function openShop(){
+ if(Math.hypot(world.boat.x-2335,world.boat.y-1990)>105){toast('Aproxime o barco do cais da loja para acessar.');return}
+ const hullCost=Math.max(25,Math.round((game.maxHull-game.hull)*1.2)),holdCost=150+(game.holdCap-8)*45;
+ let h=`<h2>⚒ Loja da Ilha</h2><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;margin:10px 0 6px;border:1px solid #d9b957;border-radius:10px;background:linear-gradient(120deg,#254c3c,#183b3e)"><span style="color:#ffe49a;font-weight:800">💰 SEU SALDO</span><strong style="font-size:24px;color:#ffe58a">R$ ${fmt(game.money)}</strong></div>`;
+ h+='<h3>🧰 Equipamentos</h3><p class="muted">Subir nível melhora a peça de verdade (veja o efeito abaixo). Trocar peça restaura a durabilidade para 100%.</p>';
+ for(const [n,g] of Object.entries(game.gear)){
+   const cls=g.hp<35?'critical':g.hp<60?'warning':'';
+   const status=g.hp<=0?'<span class="status bad">QUEBRADO — NÃO FUNCIONA</span>':g.hp<35?'<span class="status bad">CRÍTICO — TROQUE AGORA</span>':g.hp<60?'<span class="status warn">DESGASTADO</span>':'<span class="status good">EM FUNCIONAMENTO</span>';
+   h+=`<div class="shopitem ${cls}"><div><b>${n} • Nível ${g.lv}</b><small>${status}<br>Agora: ${gearInfo(n,g.lv)}<br><span style="color:#8ff0c8">Nível ${g.lv+1}: ${gearInfo(n,g.lv+1)}</span><br>Durabilidade: ${Math.round(g.hp)}%</small></div><div class="actions" style="flex-direction:column;align-items:stretch"><button class="btn secondary" onclick="upgradeGear('${n}')">⬆ Nível ${g.lv+1} • R$ ${fmt(upgradeCost(g))}</button><button class="btn ${g.hp<35?'red':'gold'}" onclick="replaceGear('${n}')" ${g.hp>=100?'disabled':''}>${g.hp<=0?'Comprar peça':'Trocar peça'} • R$ ${fmt(replaceCost(g))}</button></div></div>`;
+ }
+ h+='<h3>🦐 Iscas</h3>';
+ BAITS.forEach((bt,i)=>{h+=shopRow(`${bt.emoji} ${bt.name} (${bt.qty} un.) — você tem ${game.baits[i]}`,bt.desc,`<button class="btn gold" onclick="buyBait(${i})">R$ ${bt.price}</button>`)});
+ h+='<h3>⛵ Barco</h3>';
+ h+=shopRow('Reparar casco','Casco: '+Math.round(game.hull)+' / '+game.maxHull,`<button class="btn gold" onclick="repairBoat()" ${game.hull>=game.maxHull?'disabled':''}>R$ ${fmt(hullCost)}</button>`);
+ h+=shopRow('Reforçar casco','+50 de resistência máxima',`<button class="btn gold" onclick="upgradeBoat()">R$ ${fmt(300+game.boatLevel*250)}</button>`);
+ h+=shopRow('Ampliar porão','Capacidade: '+game.holdCap+' → '+(game.holdCap+4)+' peixes',`<button class="btn gold" onclick="upgradeHold()">R$ ${fmt(holdCost)}</button>`);
+ h+='<div class="actions" style="margin-top:14px"><button class="btn secondary" onclick="closeModal()">Fechar</button></div>';
+ openModal(h,'shop');
+}
+function upgradeGear(n){const g=game.gear[n],cost=upgradeCost(g);if(game.money<cost){toast('Dinheiro insuficiente.');return}game.money-=cost;g.lv++;g.hp=Math.min(100,g.hp+25);playSound('coin');toast(n+' melhorado para nível '+g.lv+': '+gearInfo(n,g.lv)+'.');openShop();renderHUD()}
+function replaceGear(n){const g=game.gear[n],cost=replaceCost(g);if(game.money<cost){if(g.hp<30){g.hp=30;toast('Sem dinheiro: o lojista fez um reparo improvisado no(a) '+n+' (30%).');openShop();renderHUD();return}toast('Dinheiro insuficiente.');return}game.money-=cost;g.hp=100;playSound('coin');toast(n+' substituído.');openShop();renderHUD()}
+function repairBoat(){const cost=Math.max(25,Math.round((game.maxHull-game.hull)*1.2));if(game.money<cost){if(game.hull<game.maxHull*.35){game.hull=Math.round(game.maxHull*.35);toast('Sem dinheiro: remendo improvisado no casco (35%).');openShop();renderHUD();return}toast('Dinheiro insuficiente para reparar.');return}game.money-=cost;game.hull=game.maxHull;playSound('coin');toast('Casco reparado.');openShop();renderHUD()}
+function upgradeBoat(){const cost=300+game.boatLevel*250;if(game.money<cost){toast('Dinheiro insuficiente.');return}game.money-=cost;game.boatLevel++;game.maxHull+=50;game.hull=Math.min(game.maxHull,game.hull+50);playSound('coin');toast('Casco reforçado!');openShop();renderHUD()}
+function upgradeHold(){const cost=150+(game.holdCap-8)*45;if(game.money<cost){toast('Dinheiro insuficiente.');return}game.money-=cost;game.holdCap+=4;playSound('coin');toast('Porão ampliado para '+game.holdCap+' peixes.');openShop();renderHUD()}
+function buyBait(i){const bt=BAITS[i];if(game.money<bt.price){toast('Dinheiro insuficiente para comprar '+bt.name.toLowerCase()+'.');return}game.money-=bt.price;game.baits[i]+=bt.qty;playSound('coin');toast('Você comprou '+bt.qty+' × '+bt.name.toLowerCase()+'.');openShop();renderHUD()}
+function sellCatch(){
+ if(Math.hypot(world.boat.x-2458,world.boat.y-1990)>95){toast('Aproxime e atraque no cais do mercado para vender.');return}
+ if(!game.catch.length){toast('Mercado: seu porão está vazio.');return}
+ if(marketSale){toast('A descarga já está em andamento.');return}
+ const items=game.catch.map(f=>({...f})),sum=items.reduce((a,f)=>a+f.value,0),n=items.length,stagger=Math.max(160,Math.min(520,3200/n)),flight=800;
+ marketSale={items,total:sum,count:n,time:0,stagger,flight,duration:520+(n-1)*stagger+flight+200};
+ toast('Porão aberto! Descarregando '+n+' peixes no mercado...');playSound('click');
+}
+function showBag(){
+ const total=game.catch.reduce((a,f)=>a+f.value,0);
+ openModal(`<h2>🐟 Porão do barco (${game.catch.length}/${game.holdCap})</h2>${game.catch.length?game.catch.map(f=>`<div class="catch">${f.emoji} <b>${f.name}</b> — ${String(f.weight).replace('.',',')} kg · ${f.length} cm <span style="float:right">R$ ${fmt(f.value)}</span></div>`).join('')+`<p><b>Total estimado: R$ ${fmt(total)}</b></p>`:'<p>Seu porão está vazio. Clique no mar perto dos peixes para arremessar.</p>'}<p class="muted">Para vender, atraque no cais do mercado; a descarga acontece automaticamente.</p><button class="btn secondary" onclick="closeModal()">Fechar</button>`,'bag');
+}
+function showCollection(){
+ const known=species.filter(s=>game.journal[s.name]).length;
+ let h=`<h2>📖 Coleção de espécies (${known}/${species.length})</h2><div class="collection">`;
+ for(const s of species){const j=game.journal[s.name],fav=BAITS[s.baitPref.indexOf(Math.max(...s.baitPref))].name;
+   h+=j?`<div class="specCard"><span class="big">${s.emoji}</span><b>${s.name}</b>Capturados: ${j.count}<br>Recorde: ${j.best.toFixed(1).replace('.',',')} kg<br><span class="tag">${zoneName(s.depth)}</span> <span class="tag">Isca favorita: ${fav}</span></div>`
+        :`<div class="specCard unknown"><span class="big">❔</span><b>???</b>Ainda não capturado<br><span class="tag">Vive em: ${zoneName(s.depth)}</span></div>`}
+ h+='</div><h3>🎯 Pedidos ativos</h3>'+game.missions.map(m=>shopRow((m.icon||'🎯')+' '+missionText(m),(m.client||'')+' · '+(m.done?'Entregue!':'Progresso: '+missionProgress(m)),`<b style="color:#ffe08a;white-space:nowrap">R$ ${fmt(m.reward)}</b>`)).join('');
+ h+='<div class="actions" style="margin-top:12px"><button class="btn secondary" onclick="closeModal()">Fechar</button></div>';
+ openModal(h,'collection');
+}
+
+// ---------- Salvar / carregar ----------
+function persistGame(showMessage=false){
+ if(!profile||!game)return false;
+ try{
+   const payload={version:4,savedAt:Date.now(),game,boat:{...world.boat},fish:fish.filter(f=>f.alive).map(f=>({...f,sp:f.sp.name,lureTarget:null,approachingLure:false,ignoredThisCast:false}))};
+   localStorage.setItem(saveKeyFor(profile.id),JSON.stringify(payload));if(showMessage)toast('Progresso de '+profile.name+' salvo neste navegador.');return true;
+ }catch(err){if(showMessage)toast('Não foi possível salvar neste navegador.');return false}
+}
+function saveGame(){persistGame(true)}
+function restoreGame(showMessage=true){
+ try{
+   if(!profile)return false;
+   const raw=localStorage.getItem(saveKeyFor(profile.id));if(!raw){if(showMessage)toast('Nenhum jogo salvo para este perfil.');return false}
+   const data=JSON.parse(raw);if(!data||!data.game||!data.boat||!Array.isArray(data.fish))throw new Error('save inválido');
+   const g=data.game,old=(data.version||2)<3;
+   // Migração de saves antigos (v66): isca única, sem porão limitado, valores da economia antiga.
+   if(!Array.isArray(g.baits))g.baits=[Number.isFinite(g.bait)?g.bait:12,6,0,0];delete g.bait;
+   g.catch=Array.isArray(g.catch)?g.catch:[];
+   if(!g.holdCap)g.holdCap=Math.max(8,Math.ceil(g.catch.length/4)*4);
+   g.journal=g.journal||{};g.missions=Array.isArray(g.missions)?g.missions:[];g.maxDepth=g.maxDepth||0;g.fightFails=0;g.playTime=g.playTime||0;
+   // Missões do formato antigo (v67–v71) ganham cliente e tipo novo.
+   g.missions=g.missions.map(m=>m.client?m:{...m,type:m.type==='weight'?'big':(m.type||'count'),client:'Mercado do Porto',icon:'🏪',id:Math.random().toString(36).slice(2,8)});
+   for(const it of g.catch){const sp=species.find(s=>s.name===it.name);if(sp){it.value=fishValue(sp,it.weight);it.length=fishLength(sp,it.weight)}}
+   game=g;world.boat={vx:0,vy:0,angle:0,...data.boat};world.target=null;world.line=null;world.escapeAnim=null;world.fx=[];world.wake=[];world.shake=0;
+   fish=data.fish.map(f=>{const name=typeof f.sp==='string'?f.sp:(f.sp&&f.sp.name),sp=species.find(s=>s.name===name);if(!sp)return null;
+     const o={...f,sp,alive:f.alive!==false,approachingLure:false,ignoredThisCast:false,escapeHold:0};
+     if(!Number.isFinite(o.weight))o.weight=+(sp.min+Math.pow(Math.random(),2)*(sp.max-sp.min)).toFixed(1);return o}).filter(f=>f&&f.alive);
+   while(game.missions.length<3)game.missions.push(genMission());
+   marketSale=null;renderHUD();
+   if(showMessage){closeModal();toast('Jogo salvo carregado.')}
+   if(old)toast('Novidades: briga com o peixe, iscas separadas, porão limitado, coleção e missões!');
+   return true;
+ }catch(err){if(showMessage)toast('O salvamento não pôde ser carregado.');return false}
+}
+function loadGame(){restoreGame(true);if(game.over)openGameOver()}
+function restartGame(){if(confirm('Reiniciar a pescaria? O progresso atual será perdido, mas o salvamento será mantido.')){fresh();closeModal();toast('Novo jogo iniciado. O salvamento anterior foi preservado.')}}
+function openMenu(){openModal(`<h2>☰ Menu da pescaria</h2><p>Explore o mar, descubra as espécies e cumpra as missões.</p><p><b>Como pescar:</b> clique no mar dentro do círculo pontilhado. Quando a boia afundar e aparecer "!", aperte <b>E</b> (ou clique / toque no botão 🎣) para fisgar. Na briga, <b>segure</b> para puxar e <b>solte</b> quando a tensão ficar vermelha ou o peixe der um puxão.</p><p><b>Controles:</b> setas ou WASD para pilotar (joystick na tela de toque); R troca a isca; Esc abre este menu.</p><div class="actions"><button class="btn secondary" onclick="closeModal()">Continuar</button><button class="btn" onclick="saveGame()">💾 Salvar</button><button class="btn secondary" onclick="loadGame()">↩ Carregar</button><button class="btn gold" onclick="startOnboarding()">📘 Ver guia</button><button class="btn secondary" onclick="switchProfile()">👤 Trocar perfil</button><button class="btn red" onclick="restartGame()">⟲ Reiniciar jogo</button></div>`,'menu')}
+function openGameOver(){const canBuy=game.money>=250;openModal(`<h2>☠️ Barco afundou</h2><p>O casco foi destruído e os peixes do porão se perderam.</p>${canBuy?'<p>Você pode comprar um barco novo por <b>R$ 250</b> e manter equipamentos, iscas, coleção e missões.</p>':'<p>Você não tem dinheiro para um barco novo (R$ 250).</p>'}<div class="actions">${canBuy?'<button class="btn gold" onclick="buyNewBoat()">⛵ Comprar barco novo (R$ 250)</button>':''}<button class="btn ${canBuy?'secondary':'gold'}" onclick="fresh();closeModal()">Começar de novo</button></div>`,'over')}
+function buyNewBoat(){game.money-=250;game.catch=[];game.boatLevel=1;game.maxHull=250;game.hull=250;game.over=false;world.boat={x:2700,y:2040,vx:0,vy:0,angle:.3};world.line=null;world.target=null;closeModal();toast('Barco novo na água! Boa pescaria.');renderHUD()}
+function dock(){const ds=Math.hypot(world.boat.x-2335,world.boat.y-1990),dm=Math.hypot(world.boat.x-2458,world.boat.y-1990);if(ds<90&&ds<=dm){toast('Atracado no cais da loja.');openShop()}else if(dm<90)sellCatch();else if(Math.hypot(world.boat.x-2400,world.boat.y-1800)<320)toast('Aproxime-se de um dos dois cais, na parte de baixo da ilha.');else toast('Navegue até a ilha no centro do mapa para atracar.')}
+
+// ---------- Guia de primeira vez (onboarding) ----------
+const OB_KEY='pes_guia_v1';
+const OB_STEPS=[
+ {icon:'🎣',title:'Bem-vindo a Pesque e Sobreviva!',html:`<p>Você é um pescador em mar aberto. Seu objetivo: <b>pescar</b>, <b>vender</b> os peixes, <b>melhorar</b> o equipamento e <b>sobreviver</b> sem deixar o barco afundar.</p><p>Este guia rápido mostra tudo em cerca de 1 minuto.</p>`},
+ {icon:'🛥',title:'Pilotando o barco',target:'boat',html:`<p>Este é o seu barco. Use <span class="key">↑</span><span class="key">↓</span><span class="key">←</span><span class="key">→</span> ou <span class="key">WASD</span> para navegar.</p><p>No celular, use o <b>joystick</b> no canto inferior esquerdo.</p><p>Cuidado: bater na ilha em alta velocidade <b>danifica o casco</b>.</p>`},
+ {icon:'🎯',title:'Arremessando a isca',target:'ring',html:`<p>O <b>círculo pontilhado</b> é o alcance da sua linha. <b>Clique no mar</b> dentro dele para arremessar.</p><p>Os peixes perto da isca podem se interessar e nadar até ela.</p>`},
+ {icon:'🦐',title:'Escolha a isca certa',target:'.righttop .baitChoices',html:`<p>Cada espécie prefere uma isca. Troque clicando aqui ou com <span class="key">R</span>.</p><p>Cada arremesso gasta 1 isca. Quando acabar, compre mais na loja.</p>`},
+ {icon:'❗',title:'Mordeu? Fisgue!',html:`<div class="obMock obBob"><span>🔴</span> <b style="color:#ffe08a">!</b></div><p>Quando a <b>boia afundar</b> e aparecer <b>"!"</b>, aperte <span class="key">E</span>, clique no mar ou toque no botão <b>🎣 FISGAR</b>.</p><p>Você tem alguns segundos, sem pressa.</p>`},
+ {icon:'💪',title:'A briga com o peixe',html:`<div class="obMock"><div class="obBar"><i></i></div><div class="obLabel"><b class="hold">SEGURE para puxar</b><b class="rel">SOLTE no vermelho</b></div></div><p><b>Segure</b> <span class="key">E</span> (ou o clique) para puxar o peixe: a <b>tensão</b> da linha sobe.</p><p><b>Solte</b> quando a barra ficar vermelha ou quando aparecer <b>"SOLTE! O peixe está puxando"</b>. Linha frouxa por muito tempo também deixa o peixe escapar.</p>`},
+ {icon:'📡',title:'Radar e sombras',target:'.radarPanel',html:`<p>Peixes raros e grandes vivem <b>longe da ilha</b>, em águas mais escuras.</p><p>De longe você só vê <b>sombras</b>. No radar, os <b style="color:#ff6262">pontos vermelhos</b> são peixes com mais de 100 kg.</p>`},
+ {icon:'⚓',title:'Loja e mercado',target:'docks',html:`<p>Na parte de baixo da ilha há dois cais. Pare o barco perto deles:</p><p>⚒ <b>Loja</b> (esquerda): iscas, equipamentos e reparos.<br>💰 <b>Mercado</b> (direita): vende todos os peixes do porão.</p>`},
+ {icon:'🐟',title:'Porão do barco',target:'#fishCount',html:`<p>O porão tem <b>espaço limitado</b>. Quando encher, volte ao mercado para vender. Dá para ampliá-lo na loja.</p>`},
+ {icon:'🧰',title:'Equipamentos',target:'.leftbottom',html:`<p>Cada pescaria <b>desgasta</b> o equipamento, e peça quebrada impede de pescar. Troque na loja.</p><p>Subir de nível ajuda de verdade: a <b>Vara</b> aguenta peixes mais pesados, o <b>Molinete</b> puxa mais rápido, a <b>Linha</b> alcança mais longe e o <b>Anzol</b> segura melhor o peixe.</p>`},
+ {icon:'❤️',title:'Sobreviva!',target:'#hullText',html:`<p>Esta barra é o <b>casco</b> do barco. Enguias, tubarões e o temido <b>Sea Beast</b> atacam quando fisgados, e batidas também causam dano.</p><p>Se o casco chegar a zero, o barco afunda. Faça reparos na loja!</p>`},
+ {icon:'🎯',title:'Missões e coleção',target:'.missions',html:`<p>Cumpra <b>missões</b> para ganhar dinheiro extra. Cada espécie nova entra na sua <b>📖 Coleção</b>, com o recorde de peso.</p>`},
+ {icon:'🌊',title:'Boa pescaria!',last:true,html:`<p>Pronto! Comece perto da ilha com <b>sardinha</b> e vá se afastando conforme melhorar o equipamento.</p><p class="muted">Para rever este guia: <b>⚙ Configurações → 📘 Guia</b> ou o menu (<span class="key">Esc</span>).</p>`}
+];
+let obIdx=-1;
+function onboardingActive(){return obIdx>=0}
+function ensureObDom(){
+ if(document.getElementById('ob'))return;const d=document.createElement('div');d.id='ob';d.className='ob';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label','Guia do jogo');
+ d.innerHTML='<div class="obHole none" id="obHole"></div><div class="obCard" id="obCard"></div>';document.body.appendChild(d);
+ d.addEventListener('click',e=>{const a=e.target.closest('[data-ob]');if(!a)return;const k=a.dataset.ob;if(k==='next')obGo(1);else if(k==='prev')obGo(-1);else if(k==='skip')endOnboarding(false)});
+}
+function startOnboarding(){ensureObDom();closeModal();keys={};pointerReel=false;btnReel=false;obIdx=0;document.getElementById('ob').classList.add('on');renderOb()}
+function endOnboarding(done){obIdx=-1;const o=document.getElementById('ob');if(o)o.classList.remove('on');try{localStorage.setItem(profile?guideKeyFor(profile.id):OB_KEY,'1')}catch(e){}if(done)toast('Boa pescaria! Clique no mar dentro do círculo pontilhado para arremessar.')}
+function obGo(d){const n=obIdx+d;if(n<0||obIdx<0)return;if(n>=OB_STEPS.length){endOnboarding(true);return}obIdx=n;renderOb()}
+// Área a destacar: pontos do mapa (barco, alcance, cais) ou elementos da interface.
+function obTargetRect(t){
+ if(!t)return null;const cr=canvas.getBoundingClientRect(),c=camera();
+ if(t==='boat'||t==='ring'){const x=cr.left+sx(world.boat.x,c),y=cr.top+sy(world.boat.y,c),r=t==='boat'?62:lineRange()+10;return {x:x-r,y:y-r,w:r*2,h:r*2,round:'50%'}}
+ if(t==='docks'){const x=cr.left+sx(2396,c),y=cr.top+sy(1880,c),rr={x:x-140,y:y-140,w:280,h:280,round:'18px'};return (rr.x<cr.left||rr.y<cr.top||rr.x+rr.w>cr.right||rr.y+rr.h>cr.bottom)?null:rr}
+ let el=document.querySelector(t);if(!el)return null;if(t==='#hullText'||t==='#fishCount')el=el.parentElement;
+ const b=el.getBoundingClientRect();if(!b.width||!b.height)return null;return {x:b.left-6,y:b.top-6,w:b.width+12,h:b.height+12,round:'12px'};
+}
+function renderOb(){
+ const s=OB_STEPS[obIdx],card=document.getElementById('obCard');
+ card.innerHTML=`<div class="obStep">${s.icon} Passo ${obIdx+1} de ${OB_STEPS.length}</div><h2>${s.title}</h2>${s.html}<div class="obNav"><div class="obDots">${OB_STEPS.map((_,i)=>`<i class="${i===obIdx?'on':''}"></i>`).join('')}</div>${s.last?'':'<button class="obSkip" data-ob="skip">Pular guia</button>'}${obIdx>0?'<button class="btn secondary" data-ob="prev">Voltar</button>':''}<button class="btn gold" data-ob="next">${s.last?'Começar a pescar!':'Próximo →'}</button></div>`;
+ card.style.animation='none';void card.offsetWidth;card.style.animation='';
+ placeOb();
+}
+// Posiciona o cartão ao lado do destaque, sem sair da tela (no celular fica embaixo).
+function placeOb(){
+ if(obIdx<0)return;const s=OB_STEPS[obIdx],card=document.getElementById('obCard'),hole=document.getElementById('obHole'),r=obTargetRect(s.target),vw=innerWidth,vh=innerHeight,m=12;
+ if(r){hole.classList.remove('none');Object.assign(hole.style,{left:r.x+'px',top:r.y+'px',width:r.w+'px',height:r.h+'px',borderRadius:r.round})}else hole.classList.add('none');
+ if(vw<=600){card.style.left='';card.style.top='';return}
+ const cw=card.offsetWidth,ch=card.offsetHeight;let x=(vw-cw)/2,y=(vh-ch)/2;
+ if(r){const cands=[[r.x+r.w+16,r.y+r.h/2-ch/2],[r.x-cw-16,r.y+r.h/2-ch/2],[r.x+r.w/2-cw/2,r.y+r.h+16],[r.x+r.w/2-cw/2,r.y-ch-16]];
+   const pick=cands.find(([cx,cy])=>cx>=m&&cy>=m&&cx+cw<=vw-m&&cy+ch<=vh-m)||[r.x+r.w/2<vw/2?vw-cw-m:m,r.y+r.h/2<vh/2?vh-ch-m:m];[x,y]=pick}
+ card.style.left=Math.max(m,Math.min(vw-cw-m,x))+'px';card.style.top=Math.max(m,Math.min(vh-ch-m,y))+'px';
+}
+window.addEventListener('resize',()=>placeOb());
+
+let prev=performance.now(),autoSaveElapsed=0;function loop(t){let dt=Math.max(0,Math.min(40,t-prev));prev=Math.max(prev,t);frameUpdate(dt);updateBoatAudio(dt);autoSaveElapsed+=dt;if(autoSaveElapsed>=5000){autoSaveElapsed=0;persistGame(false)}requestAnimationFrame(loop)}
+// ---------- Perfis (salvos só neste navegador) ----------
+const PROF_KEY='pes_profiles',MAX_PROFILES=8,AVATARS=['🎣','🐟','🦈','🐙','🦀','🐬','⚓','🏝️','🐢','🦭'];
+let profile=null,gameStarted=false;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function loadProfiles(){try{const p=JSON.parse(localStorage.getItem(PROF_KEY)||'null');if(p&&Array.isArray(p.list))return p}catch(e){}return {list:[],current:null}}
+function saveProfiles(p){try{localStorage.setItem(PROF_KEY,JSON.stringify(p))}catch(e){}}
+function saveKeyFor(id){return 'pes_save_'+id}
+function guideKeyFor(id){return 'pes_guia_'+id}
+// Quem já jogava antes dos perfis vira o perfil "Jogador 1", com o mesmo save.
+function migrateLegacy(){
+ const p=loadProfiles();if(p.list.length)return;let raw=null;try{raw=localStorage.getItem(SAVE_KEY)}catch(e){}if(!raw)return;
+ const id='p'+Date.now().toString(36);p.list.push({id,name:'Jogador 1',avatar:'🎣',created:Date.now(),last:Date.now()});p.current=id;
+ try{localStorage.setItem(saveKeyFor(id),raw);if(localStorage.getItem(OB_KEY))localStorage.setItem(guideKeyFor(id),'1');localStorage.removeItem(SAVE_KEY)}catch(e){}
+ saveProfiles(p);
+}
+function profileSummary(id){try{const d=JSON.parse(localStorage.getItem(saveKeyFor(id))||'null');if(!d||!d.game)return null;const g=d.game;return {money:g.money||0,species:Object.keys(g.journal||{}).length,gear:Math.min(...Object.values(g.gear||{}).map(x=>x.lv||1))}}catch(e){return null}}
+function renderProfiles(mode='list',arg){
+ const p=loadProfiles(),el=document.getElementById('spPanel');
+ if(mode==='new'){
+   el.innerHTML=`<h3>✨ Novo perfil</h3><div class="spForm"><input id="spName" maxlength="16" placeholder="Nome do pescador" autocomplete="off" aria-label="Nome do perfil"><div class="spAvatars" id="spAvs">${AVATARS.map((a,i)=>`<button type="button" data-av="${a}" class="${i===0?'on':''}" aria-label="Avatar ${a}">${a}</button>`).join('')}</div><div class="spErr" id="spErr"></div><div class="spRow">${p.list.length?'<button class="btn secondary" data-sp="back">Voltar</button>':''}<button class="btn gold" data-sp="create" style="margin-left:auto">Criar e jogar ▶</button></div></div>`;
+   setTimeout(()=>{const i=document.getElementById('spName');if(i)i.focus()},60);return;
+ }
+ if(mode==='del'){
+   const pr=p.list.find(x=>x.id===arg);if(!pr)return renderProfiles();
+   el.innerHTML=`<h3>🗑 Excluir perfil</h3><p>Tem certeza que quer excluir o perfil <b>${esc(pr.avatar+' '+pr.name)}</b>?</p><p class="muted">Todo o progresso dele — dinheiro, equipamentos, coleção e pedidos — será apagado deste navegador. <b>Isso não pode ser desfeito.</b></p><div class="spRow" style="margin-top:12px"><button class="btn secondary" data-sp="back">Cancelar</button><button class="btn red" data-sp="delok" data-id="${pr.id}" style="margin-left:auto">Excluir para sempre</button></div>`;return;
+ }
+ if(!p.list.length)return renderProfiles('new');
+ const cards=p.list.slice().sort((a,b)=>(b.last||0)-(a.last||0)).map(pr=>{const s=profileSummary(pr.id),info=s?`R$ ${fmt(s.money)} · ${s.species}/${species.length} espécies · equip. nv ${s.gear}`:'Jogo novo',when=pr.last?' · '+new Date(pr.last).toLocaleDateString('pt-BR'):'';
+   return `<div class="spRow"><button class="spCard" data-sp="play" data-id="${pr.id}"><span class="spAv">${pr.avatar}</span><span class="spInfo"><b>${esc(pr.name)}</b><small>${info}${when}</small></span><span class="spPlay">▶</span></button><button class="spDel" data-sp="del" data-id="${pr.id}" title="Excluir perfil" aria-label="Excluir perfil ${esc(pr.name)}">🗑</button></div>`}).join('');
+ el.innerHTML=`<h3>🎣 Quem vai pescar?</h3><div class="spList">${cards}</div>${p.list.length<MAX_PROFILES?'<button class="btn gold spNew" data-sp="new">＋ Novo perfil</button>':'<p class="muted">Limite de '+MAX_PROFILES+' perfis.</p>'}<p class="muted" style="margin:10px 0 0;font-size:11px">Os perfis ficam salvos só neste navegador.</p>`;
+}
+function createProfile(){
+ const inp=document.getElementById('spName'),err=document.getElementById('spErr'),name=(inp.value||'').trim().replace(/\s+/g,' '),p=loadProfiles();
+ if(!name){err.textContent='Digite um nome para o perfil.';inp.focus();return}
+ if(p.list.some(x=>x.name.toLowerCase()===name.toLowerCase())){err.textContent='Já existe um perfil com esse nome.';inp.focus();return}
+ if(p.list.length>=MAX_PROFILES){err.textContent='Limite de '+MAX_PROFILES+' perfis.';return}
+ const on=document.querySelector('#spAvs button.on'),id='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+ p.list.push({id,name,avatar:on?on.dataset.av:'🎣',created:Date.now(),last:Date.now()});saveProfiles(p);playProfile(id);
+}
+function deleteProfile(id){
+ const p=loadProfiles();p.list=p.list.filter(x=>x.id!==id);if(p.current===id)p.current=null;saveProfiles(p);
+ try{localStorage.removeItem(saveKeyFor(id));localStorage.removeItem(guideKeyFor(id))}catch(e){}
+ if(profile&&profile.id===id){profile=null;document.getElementById('profileName').textContent=''}
+ renderProfiles();
+}
+function playProfile(id){
+ const p=loadProfiles(),pr=p.list.find(x=>x.id===id);if(!pr)return renderProfiles();
+ if(onboardingActive())endOnboarding(false);
+ if(profile&&gameStarted&&profile.id!==id)persistGame(false);
+ profile=pr;p.current=id;pr.last=Date.now();saveProfiles(p);closeModal();
+ const had=restoreGame(false);if(!had)fresh();
+ document.getElementById('profileName').textContent=pr.avatar+' '+pr.name;
+ hideSplash();
+ if(!gameStarted){gameStarted=true;prev=performance.now();draw();requestAnimationFrame(loop)}
+ audioReady();if(engineEnabled)startEngine();
+ if(had){toast('Bem-vindo de volta, '+pr.name+'!');if(game.over)openGameOver()}else toast('Boa pescaria, '+pr.name+'!');
+ let seen=false;try{seen=!!localStorage.getItem(guideKeyFor(id))}catch(e){}if(!had&&!seen)setTimeout(startOnboarding,800);
+}
+function switchProfile(){persistGame(false);closeModal();showSplash(true)}
+
+// ---------- Abertura animada ----------
+let splashRAF=0,splashT0=0,splashAuto=0,splashInit=false;
+function splashOpen(){const s=document.getElementById('splash');return s&&!s.classList.contains('gone')}
+function buildTitle(){
+ const mk=(txt,cls,d0)=>`<div class="${cls}">`+[...txt].map((ch,i)=>`<span style="--d:${(d0+i*.07).toFixed(2)}s${ch===' '?';width:.35em':''}">${ch===' '?'&nbsp;':ch}</span>`).join('')+'</div>';
+ document.getElementById('spTitle').innerHTML=mk('PESQUE','spLine1',.5)+mk('E SOBREVIVA','spLine2',1.0)+'<div class="spTag">uma aventura de pesca em mar aberto</div>';
+}
+function splashFrameFactory(){
+ const cv=document.getElementById('splashCanvas'),c2=cv.getContext('2d');let w=0,h=0;
+ const bubbles=Array.from({length:60},()=>({x:Math.random(),y:Math.random(),r:1+Math.random()*4,s:.02+Math.random()*.05,w:Math.random()*6}));
+ const plankton=Array.from({length:90},()=>({x:Math.random(),y:Math.random(),s:Math.random()}));
+ const school=Array.from({length:24},(_,i)=>({o:i/24+Math.random()*.02,dy:(Math.random()-.5)*.14,sz:.6+Math.random()*.6,ph:Math.random()*6}));
+ const weeds=Array.from({length:20},(_,i)=>({x:i/19+(Math.random()-.5)*.04,hh:.08+Math.random()*.15,ph:Math.random()*6}));
+ function rs(){const d=Math.min(devicePixelRatio||1,2);w=cv.clientWidth;h=cv.clientHeight;cv.width=Math.floor(w*d);cv.height=Math.floor(h*d);c2.setTransform(d,0,0,d,0,0)}
+ rs();window.addEventListener('resize',rs);
+ const fishShape=(x,y,s,a,col)=>{c2.save();c2.translate(x,y);c2.rotate(a);c2.scale(s,s);c2.fillStyle=col;c2.beginPath();c2.ellipse(0,0,14,5,0,0,Math.PI*2);c2.fill();c2.beginPath();c2.moveTo(-11,0);c2.lineTo(-21,-6);c2.lineTo(-21,6);c2.closePath();c2.fill();c2.restore()};
+ return function frame(t){
+  if(!splashOpen()){splashRAF=0;return}
+  const T=(t-splashT0)/1000;
+  const g=c2.createLinearGradient(0,0,0,h);g.addColorStop(0,'#0f6f8f');g.addColorStop(.25,'#08506e');g.addColorStop(.6,'#052f48');g.addColorStop(1,'#020d18');c2.fillStyle=g;c2.fillRect(0,0,w,h);
+  // Superfície ondulada vista de baixo.
+  c2.save();c2.globalAlpha=.55;c2.strokeStyle='#bff6ff';c2.lineWidth=2;c2.beginPath();for(let x=0;x<=w;x+=10){const y=16+Math.sin(x*.012+T*1.4)*6+Math.sin(x*.031-T*2)*3;if(x)c2.lineTo(x,y);else c2.moveTo(x,y)}c2.stroke();c2.restore();
+  // Raios de sol atravessando a água.
+  c2.save();c2.globalCompositeOperation='lighter';for(let i=0;i<7;i++){const x=w*(.06+i*.15)+Math.sin(T*.4+i)*40,a=.05+.04*Math.sin(T*.8+i*1.7),lg=c2.createLinearGradient(0,0,0,h*.85);lg.addColorStop(0,`rgba(190,250,255,${(a+.05).toFixed(3)})`);lg.addColorStop(1,'rgba(190,250,255,0)');c2.fillStyle=lg;c2.beginPath();c2.moveTo(x-20,0);c2.lineTo(x+30,0);c2.lineTo(x+160+Math.sin(T*.3+i)*30,h*.85);c2.lineTo(x-90,h*.85);c2.closePath();c2.fill()}c2.restore();
+  c2.fillStyle='rgba(200,240,255,.35)';for(const p of plankton){const x=((p.x+T*.004*(p.s+.2))%1)*w,y=(p.y+Math.sin(T*.5+p.s*9)*.01)*h;c2.fillRect(x,y,1.3,1.3)}
+  // Silhueta do Sea Beast passando ao fundo, com olhos brilhando.
+  const bp=(T%16)/16,bx=w*(1.35-bp*1.9),by=h*.76,body=u=>by+Math.sin(u*9-T*2)*h*.03*(.3+u);
+  c2.save();c2.globalAlpha=.6;c2.fillStyle='#01121f';c2.beginPath();for(let i=0;i<=40;i++){const u=i/40;c2.lineTo(bx+u*w*.55,body(u)-h*.035*(1-u*.85))}for(let i=40;i>=0;i--){const u=i/40;c2.lineTo(bx+u*w*.55,body(u)+h*.035*(1-u*.85))}c2.closePath();c2.fill();
+  c2.globalAlpha=.95;c2.fillStyle='#ffd34d';c2.shadowColor='#ffd34d';c2.shadowBlur=14;const ey=body(0);c2.beginPath();c2.arc(bx+h*.014,ey-h*.012,2.6,0,Math.PI*2);c2.arc(bx+h*.014,ey+h*.012,2.6,0,Math.PI*2);c2.fill();c2.restore();
+  // Fundo do mar: pedras e algas balançando.
+  c2.fillStyle='#010a12';c2.beginPath();c2.moveTo(0,h);for(let x=0;x<=w+40;x+=40)c2.lineTo(x,h-18-Math.abs(Math.sin(x*.013))*30-Math.abs(Math.sin(x*.041))*14);c2.lineTo(w,h);c2.closePath();c2.fill();
+  c2.strokeStyle='#0b3a2c';c2.lineCap='round';c2.lineWidth=4;for(const s of weeds){const x=s.x*w,hh=s.hh*h;c2.beginPath();c2.moveTo(x,h-10);c2.quadraticCurveTo(x+Math.sin(T*1.2+s.ph)*18,h-10-hh*.5,x+Math.sin(T*1.2+s.ph+1)*26,h-10-hh);c2.stroke()}
+  // Cardume atravessando a tela.
+  for(const f of school){const u=(f.o+T*.045)%1,x=-80+u*(w+160),y=h*(.52+f.dy)+Math.sin(u*12+f.ph)*18;fishShape(x,y,f.sz*1.3,Math.cos(u*12+f.ph)*.25,'rgba(8,60,80,.9)')}
+  // Bolhas subindo.
+  for(const b of bubbles){b.y-=b.s*.016;if(b.y<-.05){b.y=1.05;b.x=Math.random()}const x=b.x*w+Math.sin(T*2+b.w)*6,y=b.y*h;c2.strokeStyle='rgba(220,250,255,.55)';c2.lineWidth=1;c2.beginPath();c2.arc(x,y,b.r,0,Math.PI*2);c2.stroke();c2.fillStyle='rgba(255,255,255,.6)';c2.beginPath();c2.arc(x-b.r*.35,y-b.r*.35,b.r*.25,0,Math.PI*2);c2.fill()}
+  // Linha e anzol descendo até o título.
+  const tr=document.getElementById('spTitle').getBoundingClientRect(),hookY=Math.min(1,T/1.4)*Math.max(30,tr.top-12),hx=w/2+Math.sin(T*1.3)*6;
+  c2.strokeStyle='rgba(240,250,255,.8)';c2.lineWidth=1.2;c2.beginPath();c2.moveTo(w/2,0);c2.lineTo(hx,hookY);c2.stroke();
+  c2.strokeStyle='#e8eef2';c2.lineWidth=3;c2.lineCap='round';c2.beginPath();c2.moveTo(hx,hookY);c2.lineTo(hx,hookY+16);c2.arc(hx-7,hookY+16,7,0,Math.PI,false);c2.lineTo(hx-11,hookY+10);c2.stroke();
+  // Vinheta e entrada a partir do escuro.
+  const vg=c2.createRadialGradient(w/2,h/2,Math.min(w,h)*.3,w/2,h/2,Math.max(w,h)*.75);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,5,10,.6)');c2.fillStyle=vg;c2.fillRect(0,0,w,h);
+  if(T<1){c2.fillStyle=`rgba(2,13,24,${(1-T).toFixed(3)})`;c2.fillRect(0,0,w,h)}
+  splashRAF=requestAnimationFrame(frame);
+ };
+}
+let splashFrame=null;
+function showSplash(panelNow){
+ const s=document.getElementById('splash');s.classList.remove('hide','gone');s.style.display='';
+ if(!splashFrame)splashFrame=splashFrameFactory();
+ if(!splashRAF){splashT0=performance.now();splashRAF=requestAnimationFrame(splashFrame)}
+ clearTimeout(splashAuto);
+ if(panelNow)toPanel();else{s.classList.remove('panel');splashAuto=setTimeout(toPanel,4300)}
+}
+function toPanel(){const s=document.getElementById('splash');clearTimeout(splashAuto);if(!s.classList.contains('panel')){s.classList.add('panel');playSound('plop')}renderProfiles()}
+function hideSplash(){const s=document.getElementById('splash');clearTimeout(splashAuto);s.classList.add('hide');setTimeout(()=>{s.classList.add('gone');s.style.display='none'},700)}
+if(!splashInit){splashInit=true;
+ const sp=document.getElementById('splash');
+ sp.addEventListener('click',e=>{audioReady();if(!sp.classList.contains('panel')){toPanel();return}
+   const b=e.target.closest('[data-sp],[data-av]');if(!b)return;
+   if(b.dataset.av){document.querySelectorAll('#spAvs button').forEach(x=>x.classList.toggle('on',x===b));return}
+   const k=b.dataset.sp,id=b.dataset.id;
+   if(k==='new')renderProfiles('new');else if(k==='back')renderProfiles();else if(k==='del')renderProfiles('del',id);else if(k==='delok')deleteProfile(id);else if(k==='create')createProfile();else if(k==='play')playProfile(id)});
+ sp.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='spName'){e.preventDefault();createProfile()}});
+}
+
+resize();migrateLegacy();buildTitle();document.getElementById('spVer').textContent='versão '+GAME_VERSION;showSplash(false);
+window.addEventListener('beforeunload',()=>persistGame(false));document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persistGame(false)});
+</script><script>
+// O navegador só libera o áudio após um gesto: clique, toque ou tecla.
+function unlockGameAudio(){audioReady();document.removeEventListener('pointerdown',unlockGameAudio);document.removeEventListener('keydown',unlockGameAudio)}
+document.addEventListener('pointerdown',unlockGameAudio);document.addEventListener('keydown',unlockGameAudio);
+// Aba escondida: pausa todo o som (motor não fica roncando em segundo plano).
+document.addEventListener('visibilitychange',()=>{if(!audioCtx)return;if(document.visibilityState==='hidden')audioCtx.suspend();else if(soundEnabled)audioCtx.resume()});
+</script></body></html>

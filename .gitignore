@@ -1,0 +1,8 @@
+# Compilados e logs do servidor local
+bin/
+logs/
+*.log
+
+# Ferramentas do Cloudflare / Node
+.wrangler/
+node_modules/
