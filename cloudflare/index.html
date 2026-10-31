@@ -75,12 +75,13 @@
 .spLine1,.spLine2{font-weight:900;letter-spacing:.06em;line-height:1;white-space:nowrap}
 .spLine1{font-size:clamp(46px,11vw,128px);color:#f6fffb;text-shadow:0 4px 0 #0b5d74,0 8px 0 #073f52,0 14px 30px #000a}
 .spLine2{font-size:clamp(26px,6vw,64px);color:#ffe08a;text-shadow:0 3px 0 #8a5a12,0 10px 24px #000a;margin-top:.15em}
-.spTitle span{display:inline-block;opacity:0;animation:spDrop .75s cubic-bezier(.2,1.5,.4,1) forwards,spWave 3.2s ease-in-out infinite;animation-delay:var(--d),calc(var(--d) + .9s)}
+.spTitle span{display:inline-block;opacity:0}
+.splash.ready .spTitle span{animation:spDrop .75s cubic-bezier(.2,1.5,.4,1) forwards,spWave 3.2s ease-in-out infinite;animation-delay:var(--d),calc(var(--d) + .9s)}
 @keyframes spDrop{from{opacity:0;transform:translateY(-90px) rotate(-14deg) scale(.5)}to{opacity:1;transform:none}}
 @keyframes spWave{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-.spTag{margin-top:14px;font-size:clamp(11px,1.7vw,16px);color:#9fd6e6;letter-spacing:.3em;text-transform:uppercase;opacity:0;animation:spFade 1s 1.9s forwards}
+.spTag{margin-top:14px;font-size:clamp(11px,1.7vw,16px);color:#9fd6e6;letter-spacing:.3em;text-transform:uppercase;opacity:0}.splash.ready .spTag{animation:spFade 1s 1.9s forwards}
 @keyframes spFade{to{opacity:1}}
-.spHint{position:absolute;bottom:11vh;color:#e8f8ff;font-weight:800;letter-spacing:.14em;font-size:14px;text-transform:uppercase;opacity:0;animation:spFade .8s 2.6s forwards,spPulse 1.6s 3.4s ease-in-out infinite}
+.spHint{position:absolute;bottom:11vh;color:#e8f8ff;font-weight:800;letter-spacing:.14em;font-size:14px;text-transform:uppercase;opacity:0}.splash.ready .spHint{animation:spFade .8s 2.6s forwards,spPulse 1.6s 3.4s ease-in-out infinite}
 @keyframes spPulse{50%{opacity:.3}}
 .splash.panel .spHint{display:none}
 .spPanel{position:relative;display:none;width:min(560px,100%);max-height:58vh;overflow:auto;margin-top:6px;padding:16px;border-radius:18px;background:rgba(4,30,44,.85);border:1px solid #3d7f93;box-shadow:0 18px 50px #000b;backdrop-filter:blur(6px);color:#e8f8ff}
@@ -134,9 +135,9 @@
 <div class="modal" id="modal"><div class="modalbox" id="modalbox"></div></div>
 </main>
 <footer class="foot"><span>🎣 Pesque e Sobreviva · <b id="profileName"></b></span><span><a href="https://pesque-e-sobreviva.serverfrontend.workers.dev/" target="_blank" rel="noopener">☁ Jogar online (Cloudflare)</a> · <a id="repoLink" href="https://github.com/joaoluispoffo/pesqueesobreviva" target="_blank" rel="noopener">@joaoluispoffo/pesqueesobreviva</a></span><span id="gameVersion"></span></footer></div>
-<div id="splash" class="splash" role="dialog" aria-label="Abertura do jogo"><canvas id="splashCanvas"></canvas><div class="spSkip">Clique para pular</div><div class="spTitle" id="spTitle"></div><div class="spHint">Toque ou clique para começar</div><div class="spPanel" id="spPanel"></div><div class="spVer" id="spVer"></div></div>
+<div id="splash" class="splash" role="dialog" aria-label="Abertura do jogo"><canvas id="splashCanvas"></canvas><div class="spSkip" id="spSkip">🔊 Clique para ligar o som · clique de novo para pular</div><div class="spTitle" id="spTitle"></div><div class="spHint">Toque ou clique para começar</div><div class="spPanel" id="spPanel"></div><div class="spVer" id="spVer"></div></div>
 <script>
-const GAME_VERSION='v72';document.getElementById('gameVersion').textContent='versão '+GAME_VERSION;
+const GAME_VERSION='v73';document.getElementById('gameVersion').textContent='versão '+GAME_VERSION;
 const canvas=document.getElementById('game');let ctx=canvas.getContext('2d');let W=1000,H=700,scale=1;
 const world={w:4800,h:3600,island:{x:2400,y:1800,rx:205,ry:140},boat:{x:2700,y:2040,vx:0,vy:0,angle:.3},target:null,line:null};
 // lenK: fator de comprimento (cm) em relação à raiz cúbica do peso.
@@ -1707,7 +1708,28 @@ function playProfile(id){
 function switchProfile(){persistGame(false);closeModal();showSplash(true)}
 
 // ---------- Abertura animada ----------
-let splashRAF=0,splashT0=0,splashAuto=0,splashInit=false;
+let splashRAF=0,splashT0=0,splashAuto=0,splashInit=false,splashCinema=false,splashReadyAt=null,splashRoar=false,splashSoundAsked=false;
+// Rugido do Sea Beast na abertura (só toca se o som já estiver liberado por um clique).
+function playRoar(){
+ if(!audioCtx||audioCtx.state!=='running'||!bus||!soundEnabled)return;const ac=audioCtx,t=ac.currentTime;
+ const o=ac.createOscillator(),o2=ac.createOscillator(),g=ac.createGain(),f=ac.createBiquadFilter(),lfo=ac.createOscillator(),lg=ac.createGain();
+ o.type='sawtooth';o2.type='square';o.frequency.setValueAtTime(95,t);o.frequency.exponentialRampToValueAtTime(46,t+1.6);o2.frequency.setValueAtTime(61,t);o2.frequency.exponentialRampToValueAtTime(31,t+1.6);
+ f.type='lowpass';f.frequency.setValueAtTime(400,t);f.frequency.linearRampToValueAtTime(1500,t+.5);f.frequency.exponentialRampToValueAtTime(260,t+1.7);f.Q.value=4;
+ lfo.frequency.value=23;lg.gain.value=.25;lfo.connect(lg);lg.connect(g.gain);
+ g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.3,t+.25);g.gain.exponentialRampToValueAtTime(.0001,t+1.8);
+ o.connect(f);o2.connect(f);f.connect(g);g.connect(bus.sfx);for(const n of [o,o2,lfo]){n.start(t);n.stop(t+1.9)}
+ noiseBurst({dur:1.6,type:'bandpass',f0:350,f1:170,q:1.5,vol:.16,attack:.2,brown:true});
+ tone(55,.7,'sine',.22,-25,1.2); // a engolida
+}
+// Trajetória 3D do Sea Beast na abertura: [tempo, x, y, profundidade]. Entra pela direita,
+// vai para o fundo da cena, faz a curva e avança contra a câmera.
+const BEAST_PATH=[[0,9,.6,4],[1,4,.4,5.5],[2,1,0,8.5],[2.8,-1.4,-.3,10.5],[3.5,-.6,-.5,9],[4.2,0,-.2,5],[4.8,0,0,2],[5.3,0,.1,.8],[5.7,0,.15,.35]];
+function beastPathAt(t){
+ if(t<=0)return [9-t*5,.6,4];const K=BEAST_PATH,last=K[K.length-1];if(t>=last[0])return [last[1],last[2],last[3]];
+ let i=0;while(K[i+1][0]<t)i++;
+ const p0=K[Math.max(0,i-1)],p1=K[i],p2=K[i+1],p3=K[Math.min(K.length-1,i+2)],u=(t-p1[0])/(p2[0]-p1[0]),u2=u*u,u3=u2*u;
+ return [1,2,3].map(j=>.5*(2*p1[j]+(-p0[j]+p2[j])*u+(2*p0[j]-5*p1[j]+4*p2[j]-p3[j])*u2+(-p0[j]+3*p1[j]-3*p2[j]+p3[j])*u3));
+}
 function splashOpen(){const s=document.getElementById('splash');return s&&!s.classList.contains('gone')}
 function buildTitle(){
  const mk=(txt,cls,d0)=>`<div class="${cls}">`+[...txt].map((ch,i)=>`<span style="--d:${(d0+i*.07).toFixed(2)}s${ch===' '?';width:.35em':''}">${ch===' '?'&nbsp;':ch}</span>`).join('')+'</div>';
@@ -1722,6 +1744,72 @@ function splashFrameFactory(){
  function rs(){const d=Math.min(devicePixelRatio||1,2);w=cv.clientWidth;h=cv.clientHeight;cv.width=Math.floor(w*d);cv.height=Math.floor(h*d);c2.setTransform(d,0,0,d,0,0)}
  rs();window.addEventListener('resize',rs);
  const fishShape=(x,y,s,a,col)=>{c2.save();c2.translate(x,y);c2.rotate(a);c2.scale(s,s);c2.fillStyle=col;c2.beginPath();c2.ellipse(0,0,14,5,0,0,Math.PI*2);c2.fill();c2.beginPath();c2.moveTo(-11,0);c2.lineTo(-21,-6);c2.lineTo(-21,6);c2.closePath();c2.fill();c2.restore()};
+ // ----- Sea Beast em perspectiva -----
+ const mix=(a,b,t)=>`rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')})`;
+ const SKIN=[28,82,120],SKIN_HI=[95,170,205],DARK=[10,40,62],WATER=[6,40,62];
+ const proj=p=>{const F=Math.min(w,h)*.5;return {x:w/2+p[0]*F/p[2],y:h*.5+p[1]*F/p[2],s:F/p[2],z:p[2]}};
+ const fogAt=z=>Math.min(.78,Math.max(0,(z-2)/12));
+ function sideHead(x,y,S,ang,fog){
+   c2.save();c2.translate(x,y);c2.rotate(ang);if(Math.cos(ang)<0)c2.scale(1,-1);
+   c2.fillStyle=mix(DARK,WATER,fog);c2.beginPath();c2.moveTo(S*.1,-S*.5);c2.lineTo(-S*.75,-S*1.05);c2.lineTo(-S*.35,-S*.42);c2.closePath();c2.fill();
+   c2.fillStyle=mix(SKIN,WATER,fog);c2.beginPath();c2.moveTo(S*1.5,0);c2.quadraticCurveTo(S*1.2,-S*.55,0,-S*.62);c2.quadraticCurveTo(-S*.7,-S*.5,-S*.8,0);c2.quadraticCurveTo(-S*.7,S*.55,0,S*.5);c2.quadraticCurveTo(S*1.1,S*.45,S*1.5,0);c2.fill();
+   c2.strokeStyle='rgba(0,0,0,.5)';c2.lineWidth=Math.max(1,S*.05);c2.beginPath();c2.moveTo(S*1.45,S*.05);c2.quadraticCurveTo(S*.6,S*.2,S*.05,S*.12);c2.stroke();
+   c2.fillStyle='#efe6c8';for(let k=0;k<5;k++){const tx=S*(1.25-k*.24);c2.beginPath();c2.moveTo(tx,S*.08);c2.lineTo(tx-S*.05,S*.22);c2.lineTo(tx-S*.1,S*.08);c2.fill()}
+   c2.save();c2.shadowColor='#ffd34d';c2.shadowBlur=Math.max(4,S*.4);c2.fillStyle='#ffd34d';c2.beginPath();c2.ellipse(S*.55,-S*.22,S*.13,S*.09,0,0,Math.PI*2);c2.fill();c2.restore();
+   c2.fillStyle='#000';c2.beginPath();c2.ellipse(S*.57,-S*.22,S*.03,S*.08,0,0,Math.PI*2);c2.fill();
+   c2.restore();
+ }
+ // Cara de frente: bocarra abrindo (m de 0 a 1), fileiras de dentes afiados e olhos em brasa.
+ function face(x,y,S,m){
+   c2.save();c2.translate(x,y);
+   const top=-S*.05,mh=S*(.12+1.1*m),bot=top+mh,mw=S*(.72+.32*m);
+   // Espinhos em volta do crânio.
+   c2.fillStyle='#0b2a40';for(let k=0;k<9;k++){const a=Math.PI*(1.05+k*.9/8),cx=0,cy=top-S*.5,rx=S*1.12,ry=S*.92,bx=cx+Math.cos(a)*rx,by=cy+Math.sin(a)*ry,tx=cx+Math.cos(a)*rx*(1.42+.1*(k%2)),ty=cy+Math.sin(a)*ry*(1.42+.1*(k%2)),px=-Math.sin(a)*S*.13,py=Math.cos(a)*S*.13;
+     c2.beginPath();c2.moveTo(bx+px,by+py);c2.lineTo(tx,ty);c2.lineTo(bx-px,by-py);c2.closePath();c2.fill()}
+   // Mandíbula de baixo.
+   let g=c2.createLinearGradient(0,top,0,bot+S*.45);g.addColorStop(0,'#1c5478');g.addColorStop(1,'#071c2c');c2.fillStyle=g;
+   c2.beginPath();c2.moveTo(-mw*1.14,top);c2.quadraticCurveTo(-mw*1.16,bot+S*.36,0,bot+S*.44);c2.quadraticCurveTo(mw*1.16,bot+S*.36,mw*1.14,top);c2.closePath();c2.fill();
+   // Goela: escura no centro, vermelha nas bordas.
+   const cg=c2.createRadialGradient(0,top+mh*.6,0,0,top+mh*.5,Math.max(mw,mh));cg.addColorStop(0,'#000');cg.addColorStop(.35,'#1a0207');cg.addColorStop(.75,'#5c0d1a');cg.addColorStop(1,'#8a1a2a');c2.fillStyle=cg;
+   c2.beginPath();c2.moveTo(-mw,top);c2.quadraticCurveTo(-mw*1.02,bot,0,bot+S*.05);c2.quadraticCurveTo(mw*1.02,bot,mw,top);c2.quadraticCurveTo(0,top-S*.06,-mw,top);c2.fill();
+   if(m>.3){c2.fillStyle='#b8344a';c2.beginPath();c2.moveTo(-mw*.4,bot);c2.quadraticCurveTo(0,bot-mh*.42,mw*.4,bot);c2.closePath();c2.fill();c2.strokeStyle='rgba(60,0,10,.6)';c2.lineWidth=Math.max(1,S*.012);c2.beginPath();c2.moveTo(0,bot-mh*.2);c2.lineTo(0,bot);c2.stroke()}
+   const teeth=(upper)=>{const n=upper?12:10;for(let k=0;k<n;k++){const u=(k+.5)/n*2-1,x=u*mw*.9,base=upper?top-S*.02*(1-u*u):top+(bot-top)*(1-u*u)*.97,fang=Math.abs(Math.abs(u)-.55)<.13,len=S*(fang?.44:.2)*(.6+.4*m)*(1-.35*Math.abs(u))*(upper?1:.8),wd=S*(fang?.11:.07);
+     const tip=upper?base+len:base-len,tg=c2.createLinearGradient(0,base,0,tip);tg.addColorStop(0,'#c9bf9c');tg.addColorStop(1,'#fffbea');c2.fillStyle=tg;
+     c2.beginPath();c2.moveTo(x-wd,base);c2.quadraticCurveTo(x-wd*.25,(base+tip)/2,x,tip);c2.quadraticCurveTo(x+wd*.25,(base+tip)/2,x+wd,base);c2.closePath();c2.fill();c2.strokeStyle='rgba(40,20,10,.5)';c2.lineWidth=Math.max(.6,S*.008);c2.stroke()}};
+   teeth(false);
+   // Crânio por cima, com o lábio superior.
+   const sg=c2.createRadialGradient(-S*.3,top-S*.8,S*.1,0,top-S*.45,S*1.35);sg.addColorStop(0,'#5aa8cf');sg.addColorStop(.55,'#1f5a82');sg.addColorStop(1,'#0a2438');c2.fillStyle=sg;
+   c2.beginPath();c2.moveTo(-mw*1.12,top+S*.02);c2.quadraticCurveTo(-S*1.28,top-S*.95,0,top-S*1.08);c2.quadraticCurveTo(S*1.28,top-S*.95,mw*1.12,top+S*.02);c2.quadraticCurveTo(0,top-S*.12,-mw*1.12,top+S*.02);c2.fill();
+   c2.strokeStyle='rgba(180,230,255,.18)';c2.lineWidth=Math.max(1,S*.02);for(let k=0;k<5;k++){c2.beginPath();c2.arc(-S*.5+k*S*.25,top-S*.72+(k%2)*S*.08,S*.12,Math.PI*1.1,Math.PI*1.9);c2.stroke()}
+   teeth(true);
+   // Fios de saliva quando escancarada.
+   if(m>.55){c2.strokeStyle='rgba(220,240,255,.35)';c2.lineWidth=Math.max(1,S*.012);for(const sx2 of [-.45,.3]){c2.beginPath();c2.moveTo(mw*sx2,top+S*.08);c2.quadraticCurveTo(mw*sx2+S*.05,(top+bot)/2+S*.15,mw*sx2+S*.02,bot-S*.06);c2.stroke()}}
+   // Narinas, olhos em brasa e sobrancelhas furiosas.
+   c2.fillStyle='#04121d';for(const sgn of [-1,1]){c2.beginPath();c2.ellipse(sgn*S*.14,top-S*.22,S*.05,S*.03,sgn*.4,0,Math.PI*2);c2.fill()}
+   for(const sgn of [-1,1]){const ex=sgn*S*.52,ey=top-S*.52;c2.save();c2.shadowColor='#ffcc33';c2.shadowBlur=Math.max(6,S*.35);c2.fillStyle='#ffd34d';c2.beginPath();c2.ellipse(ex,ey,S*.17,S*.1,sgn*.25,0,Math.PI*2);c2.fill();c2.restore();
+     c2.fillStyle='#120600';c2.beginPath();c2.ellipse(ex,ey,S*.03,S*.09,0,0,Math.PI*2);c2.fill();
+     c2.strokeStyle='#061826';c2.lineWidth=S*.07;c2.lineCap='round';c2.beginPath();c2.moveTo(ex-sgn*S*.24,ey-S*.08);c2.lineTo(ex+sgn*S*.2,ey-S*.26);c2.stroke()}
+   c2.restore();
+ }
+ function drawBeast(bt){
+   const N=34,pts=[];
+   for(let i=0;i<=N;i++){const p=beastPathAt(bt-i*.055);if(p[2]<.2)continue;const q=proj(p);q.i=i;pts.push(q)}
+   const segs=[];for(let k=0;k<pts.length-1;k++){const a=pts[k],b=pts[k+1];if(b.i===a.i+1)segs.push([a,b,(a.z+b.z)/2])}
+   segs.sort((A,B)=>B[2]-A[2]);
+   c2.lineCap='round';
+   for(const [a,b,z] of segs){
+     const tt=a.i/N,r=.42*(1-.72*tt)*(a.s+b.s)/2,fog=fogAt(z);
+     c2.strokeStyle=mix(SKIN,WATER,fog);c2.lineWidth=r*2;c2.beginPath();c2.moveTo(a.x,a.y);c2.lineTo(b.x,b.y);c2.stroke();
+     c2.strokeStyle=mix(SKIN_HI,WATER,fog);c2.lineWidth=r*.55;c2.beginPath();c2.moveTo(a.x,a.y-r*.38);c2.lineTo(b.x,b.y-r*.38);c2.stroke();
+     if(a.i%3===0&&a.i>1){const dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1;let nx=-dy/L,ny=dx/L;if(ny>0){nx=-nx;ny=-ny}
+       c2.fillStyle=mix(DARK,WATER,fog);c2.beginPath();c2.moveTo(a.x+nx*r*.6-dx/L*r*.45,a.y+ny*r*.6-dy/L*r*.45);c2.lineTo(a.x+nx*r*1.75,a.y+ny*r*1.75);c2.lineTo(a.x+nx*r*.6+dx/L*r*.5,a.y+ny*r*.6+dy/L*r*.5);c2.closePath();c2.fill()}
+   }
+   const h0=beastPathAt(bt);if(h0[2]<.2)return;
+   const h1=beastPathAt(bt+.03),d=[h1[0]-h0[0],h1[1]-h0[1],h1[2]-h0[2]],dl=Math.hypot(d[0],d[1],d[2])||1,facing=-d[2]/dl,H=proj(h0),S=.62*H.s;
+   if(facing>.5)face(H.x,H.y,S,Math.max(0,Math.min(1,(5.5-h0[2])/4.2)));
+   else{const H2=proj(h1);sideHead(H.x,H.y,S,Math.atan2(H2.y-H.y,H2.x-H.x),fogAt(h0[2]))}
+ }
+ const burst=[];
  return function frame(t){
   if(!splashOpen()){splashRAF=0;return}
   const T=(t-splashT0)/1000;
@@ -1731,10 +1819,12 @@ function splashFrameFactory(){
   // Raios de sol atravessando a água.
   c2.save();c2.globalCompositeOperation='lighter';for(let i=0;i<7;i++){const x=w*(.06+i*.15)+Math.sin(T*.4+i)*40,a=.05+.04*Math.sin(T*.8+i*1.7),lg=c2.createLinearGradient(0,0,0,h*.85);lg.addColorStop(0,`rgba(190,250,255,${(a+.05).toFixed(3)})`);lg.addColorStop(1,'rgba(190,250,255,0)');c2.fillStyle=lg;c2.beginPath();c2.moveTo(x-20,0);c2.lineTo(x+30,0);c2.lineTo(x+160+Math.sin(T*.3+i)*30,h*.85);c2.lineTo(x-90,h*.85);c2.closePath();c2.fill()}c2.restore();
   c2.fillStyle='rgba(200,240,255,.35)';for(const p of plankton){const x=((p.x+T*.004*(p.s+.2))%1)*w,y=(p.y+Math.sin(T*.5+p.s*9)*.01)*h;c2.fillRect(x,y,1.3,1.3)}
-  // Silhueta do Sea Beast passando ao fundo, com olhos brilhando.
-  const bp=(T%16)/16,bx=w*(1.35-bp*1.9),by=h*.76,body=u=>by+Math.sin(u*9-T*2)*h*.03*(.3+u);
+  // Depois da cena principal, a silhueta do Sea Beast volta a passar bem ao fundo.
+  if(!splashCinema&&splashReadyAt!=null){
+  const T2=T-splashReadyAt+9,bp=(T2%16)/16,bx=w*(1.35-bp*1.9),by=h*.76,body=u=>by+Math.sin(u*9-T*2)*h*.03*(.3+u);
   c2.save();c2.globalAlpha=.6;c2.fillStyle='#01121f';c2.beginPath();for(let i=0;i<=40;i++){const u=i/40;c2.lineTo(bx+u*w*.55,body(u)-h*.035*(1-u*.85))}for(let i=40;i>=0;i--){const u=i/40;c2.lineTo(bx+u*w*.55,body(u)+h*.035*(1-u*.85))}c2.closePath();c2.fill();
   c2.globalAlpha=.95;c2.fillStyle='#ffd34d';c2.shadowColor='#ffd34d';c2.shadowBlur=14;const ey=body(0);c2.beginPath();c2.arc(bx+h*.014,ey-h*.012,2.6,0,Math.PI*2);c2.arc(bx+h*.014,ey+h*.012,2.6,0,Math.PI*2);c2.fill();c2.restore();
+  }
   // Fundo do mar: pedras e algas balançando.
   c2.fillStyle='#010a12';c2.beginPath();c2.moveTo(0,h);for(let x=0;x<=w+40;x+=40)c2.lineTo(x,h-18-Math.abs(Math.sin(x*.013))*30-Math.abs(Math.sin(x*.041))*14);c2.lineTo(w,h);c2.closePath();c2.fill();
   c2.strokeStyle='#0b3a2c';c2.lineCap='round';c2.lineWidth=4;for(const s of weeds){const x=s.x*w,hh=s.hh*h;c2.beginPath();c2.moveTo(x,h-10);c2.quadraticCurveTo(x+Math.sin(T*1.2+s.ph)*18,h-10-hh*.5,x+Math.sin(T*1.2+s.ph+1)*26,h-10-hh);c2.stroke()}
@@ -1742,13 +1832,29 @@ function splashFrameFactory(){
   for(const f of school){const u=(f.o+T*.045)%1,x=-80+u*(w+160),y=h*(.52+f.dy)+Math.sin(u*12+f.ph)*18;fishShape(x,y,f.sz*1.3,Math.cos(u*12+f.ph)*.25,'rgba(8,60,80,.9)')}
   // Bolhas subindo.
   for(const b of bubbles){b.y-=b.s*.016;if(b.y<-.05){b.y=1.05;b.x=Math.random()}const x=b.x*w+Math.sin(T*2+b.w)*6,y=b.y*h;c2.strokeStyle='rgba(220,250,255,.55)';c2.lineWidth=1;c2.beginPath();c2.arc(x,y,b.r,0,Math.PI*2);c2.stroke();c2.fillStyle='rgba(255,255,255,.6)';c2.beginPath();c2.arc(x-b.r*.35,y-b.r*.35,b.r*.25,0,Math.PI*2);c2.fill()}
-  // Linha e anzol descendo até o título.
-  const tr=document.getElementById('spTitle').getBoundingClientRect(),hookY=Math.min(1,T/1.4)*Math.max(30,tr.top-12),hx=w/2+Math.sin(T*1.3)*6;
-  c2.strokeStyle='rgba(240,250,255,.8)';c2.lineWidth=1.2;c2.beginPath();c2.moveTo(w/2,0);c2.lineTo(hx,hookY);c2.stroke();
-  c2.strokeStyle='#e8eef2';c2.lineWidth=3;c2.lineCap='round';c2.beginPath();c2.moveTo(hx,hookY);c2.lineTo(hx,hookY+16);c2.arc(hx-7,hookY+16,7,0,Math.PI,false);c2.lineTo(hx-11,hookY+10);c2.stroke();
+  // Cena principal: o Sea Beast entra pela lateral, vai ao fundo, faz a curva e avança
+  // contra a tela de bocarra aberta até "engolir" o jogador; depois surge o título.
+  let dark=0;
+  if(splashCinema){
+    const bt=T-.6;
+    if(bt<5.6){c2.save();if(bt>4)c2.translate((Math.random()-.5)*Math.min(16,(bt-4)*11),(Math.random()-.5)*Math.min(16,(bt-4)*11));drawBeast(bt);c2.restore()}
+    if(bt>4.2&&!splashRoar){splashRoar=true;playRoar()}
+    if(bt>5.35)dark=Math.min(1,(bt-5.35)/.3);if(bt>6)dark=Math.max(0,1-(bt-6)/.9);
+    if(bt>5.8&&splashReadyAt==null){markSplashReady(T);for(let k=0;k<40;k++)burst.push({x:w/2+(Math.random()-.5)*w*.5,y:h*(.6+Math.random()*.4),r:2+Math.random()*7,v:120+Math.random()*260,life:0})}
+    if(bt>7)splashCinema=false;
+  }
+  // Bolhas da "engolida".
+  for(let k=burst.length-1;k>=0;k--){const b=burst[k];b.life+=1/60;b.y-=b.v/60;if(b.life>2.2){burst.splice(k,1);continue}c2.strokeStyle=`rgba(220,250,255,${(.7*(1-b.life/2.2)).toFixed(3)})`;c2.lineWidth=1.4;c2.beginPath();c2.arc(b.x+Math.sin(b.life*6+k)*5,b.y,b.r,0,Math.PI*2);c2.stroke()}
+  // Linha e anzol descendo até o título (depois que ele aparece).
+  if(splashReadyAt!=null){
+    const tr=document.getElementById('spTitle').getBoundingClientRect(),hookY=Math.min(1,(T-splashReadyAt)/1.4)*Math.max(30,tr.top-12),hx=w/2+Math.sin(T*1.3)*6;
+    c2.strokeStyle='rgba(240,250,255,.8)';c2.lineWidth=1.2;c2.beginPath();c2.moveTo(w/2,0);c2.lineTo(hx,hookY);c2.stroke();
+    c2.strokeStyle='#e8eef2';c2.lineWidth=3;c2.lineCap='round';c2.beginPath();c2.moveTo(hx,hookY);c2.lineTo(hx,hookY+16);c2.arc(hx-7,hookY+16,7,0,Math.PI,false);c2.lineTo(hx-11,hookY+10);c2.stroke();
+  }
   // Vinheta e entrada a partir do escuro.
   const vg=c2.createRadialGradient(w/2,h/2,Math.min(w,h)*.3,w/2,h/2,Math.max(w,h)*.75);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,5,10,.6)');c2.fillStyle=vg;c2.fillRect(0,0,w,h);
   if(T<1){c2.fillStyle=`rgba(2,13,24,${(1-T).toFixed(3)})`;c2.fillRect(0,0,w,h)}
+  if(dark>0){c2.fillStyle=`rgba(0,0,0,${dark.toFixed(3)})`;c2.fillRect(0,0,w,h)}
   splashRAF=requestAnimationFrame(frame);
  };
 }
@@ -1756,15 +1862,31 @@ let splashFrame=null;
 function showSplash(panelNow){
  const s=document.getElementById('splash');s.classList.remove('hide','gone');s.style.display='';
  if(!splashFrame)splashFrame=splashFrameFactory();
- if(!splashRAF){splashT0=performance.now();splashRAF=requestAnimationFrame(splashFrame)}
  clearTimeout(splashAuto);
- if(panelNow)toPanel();else{s.classList.remove('panel');splashAuto=setTimeout(toPanel,4300)}
+ if(panelNow){if(!splashRAF){splashT0=performance.now();splashRAF=requestAnimationFrame(splashFrame)}toPanel()}
+ else{
+   // Abertura completa: reinicia o relógio para a cena do Sea Beast.
+   s.classList.remove('panel','ready');splashCinema=true;splashReadyAt=null;splashRoar=false;splashSoundAsked=false;splashT0=performance.now();
+   const sk=document.getElementById('spSkip');if(sk)sk.textContent='🔊 Clique para ligar o som · clique de novo para pular';
+   if(!splashRAF)splashRAF=requestAnimationFrame(splashFrame);
+   splashAuto=setTimeout(toPanel,14000); // segurança, caso a animação não rode
+ }
 }
-function toPanel(){const s=document.getElementById('splash');clearTimeout(splashAuto);if(!s.classList.contains('panel')){s.classList.add('panel');playSound('plop')}renderProfiles()}
+// Fim da cena: o título cai e, alguns segundos depois, aparecem os perfis.
+function markSplashReady(T){const s=document.getElementById('splash');splashReadyAt=T;s.classList.add('ready');clearTimeout(splashAuto);splashAuto=setTimeout(toPanel,3200)}
+function toPanel(){
+ const s=document.getElementById('splash');clearTimeout(splashAuto);
+ if(splashReadyAt==null)splashReadyAt=(performance.now()-splashT0)/1000;
+ splashCinema=false;s.classList.add('ready');
+ if(!s.classList.contains('panel')){s.classList.add('panel');playSound('plop')}renderProfiles();
+}
 function hideSplash(){const s=document.getElementById('splash');clearTimeout(splashAuto);s.classList.add('hide');setTimeout(()=>{s.classList.add('gone');s.style.display='none'},700)}
 if(!splashInit){splashInit=true;
  const sp=document.getElementById('splash');
- sp.addEventListener('click',e=>{audioReady();if(!sp.classList.contains('panel')){toPanel();return}
+ sp.addEventListener('click',e=>{audioReady();
+   // Durante a cena: o 1º clique liga o som (para ouvir o rugido); o 2º pula.
+   if(splashCinema&&!splashSoundAsked){splashSoundAsked=true;const sk=document.getElementById('spSkip');if(sk)sk.textContent='Clique de novo para pular';return}
+   if(!sp.classList.contains('panel')){toPanel();return}
    const b=e.target.closest('[data-sp],[data-av]');if(!b)return;
    if(b.dataset.av){document.querySelectorAll('#spAvs button').forEach(x=>x.classList.toggle('on',x===b));return}
    const k=b.dataset.sp,id=b.dataset.id;
